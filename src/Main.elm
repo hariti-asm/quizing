@@ -4,13 +4,15 @@ import Browser
 import Html exposing (Html, button, div, input, label, text)
 import Html.Attributes exposing (class, for, id, name, src, style, type_)
 import Html.Events exposing (onClick)
+import Json.Decode as Decode
+import Json.Encode as Encode
 import Msg exposing (Msg(..))
 
 
 type Msg
-    = MakeQuestions String
-    | AddQuestion
-    | GetQuestions (Maybe String)
+    = MakeQuiz String
+    | AddQuestion String
+    | GetQuiz String
 
 
 type alias Question =
@@ -43,7 +45,7 @@ type alias Model =
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
-        MakeQuestions name ->
+        MakeQuiz name ->
             let
                 newQuestion =
                     { text = name
@@ -53,15 +55,11 @@ update msg model =
             in
             ( { model | questions = newQuestion :: model.questions }, Cmd.none )
 
-        AddQuestion ->
+        AddQuestion _ ->
             ( model, Cmd.none )
 
-        GetQuestions maybeName ->
+        GetQuiz name ->
             ( model, Cmd.none )
-
-
-
--- questionView index question =
 
 
 main : Program () Model Msg
@@ -84,16 +82,43 @@ subscriptions _ =
     Debug.todo "TODO"
 
 
+encodeQuestions : List Question -> Encode.Value
+encodeQuestions questionss =
+    Encode.list questionEncoder questionss
+
+
+decodeQuestions : Decode.Decoder (List Question)
+decodeQuestions =
+    Decode.list questionDecoder
+
+
+questionEncoder : Question -> Encode.Value
+questionEncoder question =
+    Encode.object
+        [ ( "text", Encode.string question.text )
+        , ( "options", Encode.list Encode.string question.options )
+        , ( "correctAnswer", Encode.int question.correctAnswer )
+        ]
+
+
+questionDecoder : Decode.Decoder Question
+questionDecoder =
+    Decode.map3 Question
+        (Decode.field "text" Decode.string)
+        (Decode.field "options" (Decode.list Decode.string))
+        (Decode.field "correctAnswer" Decode.int)
+
+
 view : Model -> Html Msg
 view model =
     div []
         [ div [] [ text "Quiz" ]
         , div []
-            [ button [ onClick AddQuestion ] [ text "Add Question" ]
-            , button [ onClick (GetQuestions Nothing) ] [ text "Get Questions" ]
+            [ button [ onClick MakeQuiz ] [ text "Make Quiz" ]
+            , button [ onClick GetQuiz ] [ text "Get Quiz" ]
             ]
         , div []
-            (List.indexedMap questionView model.questions)
+            (List.indexedMap (\index question -> questionView index question) model.questions)
         ]
 
 
