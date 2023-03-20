@@ -1,16 +1,16 @@
 module Main exposing (main)
 
 import Browser
-import Html exposing (Html, div, input, label, text)
-import Html.Attributes exposing (id, name, src, style, type_)
+import Html exposing (Html, button, div, input, label, text)
+import Html.Attributes exposing (class, for, id, name, src, style, type_)
+import Html.Events exposing (onClick)
 import Msg exposing (Msg(..))
-import VitePluginHelper
 
 
 type Msg
     = MakeQuestions String
     | AddQuestion
-    | GetQuestions
+    | GetQuestions (Maybe String)
 
 
 type alias Question =
@@ -56,38 +56,67 @@ update msg model =
         AddQuestion ->
             ( model, Cmd.none )
 
-        GetQuestions ->
+        GetQuestions maybeName ->
             ( model, Cmd.none )
+
+
+
+-- questionView index question =
+
+
+main : Program () Model Msg
+main =
+    Browser.element
+        { init = init
+        , view = view
+        , update = update
+        , subscriptions = subscriptions
+        }
+
+
+init : () -> ( Model, Cmd Msg )
+init _ =
+    ( { questions = questions }, Cmd.none )
+
+
+subscriptions : Model -> Sub Msg
+subscriptions _ =
+    Debug.todo "TODO"
 
 
 view : Model -> Html Msg
 view model =
     div []
-        [ div [] [ text "Exam Questions" ]
-        , div [] (List.indexedMap questionView model.questions)
+        [ div [] [ text "Quiz" ]
+        , div []
+            [ button [ onClick AddQuestion ] [ text "Add Question" ]
+            , button [ onClick (GetQuestions Nothing) ] [ text "Get Questions" ]
+            ]
+        , div []
+            (List.indexedMap questionView model.questions)
         ]
 
 
 questionView : Int -> Question -> Html Msg
 questionView index question =
-    div [ style [ ( "margin-bottom", "20px" ) ] ]
-        [ div [] [ text <| String.fromInt (index + 1) ++ ". " ++ question.text ]
-        , div [] (List.indexedMap optionView question.options)
+    div [ id (String.fromInt index) ]
+        [ div [] [ text question.text ]
+        , div []
+            (List.indexedMap (optionView question.correctAnswer) question.options)
         ]
 
 
-optionView : Int -> String -> Html Msg
-optionView index option =
-    div [ style [ ( "margin-left", "20px" ) ] ]
-        [ input [ type_ "radio", name "option", id <| "option-" ++ String.fromInt index ] []
-        , label [ "option-" ++ String.fromInt ] [ text option ]
+optionView : Int -> Int -> String -> Html Msg
+optionView correctAnswer index option =
+    let
+        styleClass =
+            if correctAnswer == index then
+                "correct"
+
+            else
+                "incorrect"
+    in
+    div [ class styleClass ]
+        [ label [ for (String.fromInt index) ] [ text option ]
+        , input [ type_ "radio", name (String.fromInt index) ] []
         ]
-
-
-main : Program () Model Msg
-main =
-    Browser.sandbox
-        { init = ( { questions = questions }, Cmd.none )
-        , update = update
-        , view = view
-        }
