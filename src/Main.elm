@@ -146,11 +146,11 @@ view model =
     div []
         [ div [] [ text "Quiz" ]
         , div []
-            [ button [] [ text "Next" ]
-            , button [] [ text "pREVIOUS" ]
-            ]
-        , div []
             (List.indexedMap (\index question -> questionView index question) model.questions)
+        , div []
+            [ button [] [ text "Next" ]
+            , button [] [ text "Previous " ]
+            ]
         ]
 
 
@@ -176,5 +176,5 @@ optionView ( option1, option2 ) =
     in
     div [ class styleClass ]
         [ label [ for option1 ] [ text option2 ]
-        , input [ type_ "radio", name option1 ] []
+        , input [ type_ "checkbox", name option1 ] []
         ]
