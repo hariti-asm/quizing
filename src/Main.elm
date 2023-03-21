@@ -9,15 +9,22 @@ import Json.Encode as Encode
 import Msg exposing (Msg(..))
 
 
-type Msg
-    = MakeQuiz
-    | GetQuiz
+type
+    Msg
+    -- = MakeQuiz
+    = GetQuiz
+
+
+
+-- | NextQuestion
+-- | PreviousQuestion
 
 
 type alias Question =
     { text : String
     , options : List ( String, String )
     , correctAnswer : String
+    , index : Int
     }
 
 
@@ -26,37 +33,61 @@ questions =
     [ { text = "What is the capital of France?"
       , options = [ ( "A", "Paris" ), ( "B", "Madrid" ), ( "C", "Rome" ), ( "C", "Berlin" ) ]
       , correctAnswer = "A"
+      , index = 0
       }
     , { text = "What is the largest organ in the human body?"
       , options = [ ( "A", "Heart" ), ( "B", "Lungs" ) ]
       , correctAnswer = "B"
+      , index = 1
       }
-
-    -- add more questions
     ]
+
+
+
+-- add more questions
 
 
 type alias Model =
     { questions : List Question
+    , currentIndex : Int
     }
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
-        MakeQuiz ->
-            -- ( model, Cmd.none )
-            let
-                newQuestion =
-                    { text = ""
-                    , options = []
-                    , correctAnswer = ""
-                    }
-            in
-            ( { model | questions = newQuestion :: model.questions }, Cmd.none )
-
+        -- MakeQuiz ->
+        --     let
+        --         newQuestion =
+        --             { text = ""
+        --             , options = []
+        --             , correctAnswer = ""
+        --             }
+        --     in
+        --     ( { model | questions = newQuestion :: model.questions }, Cmd.none )
         GetQuiz ->
             ( model, Cmd.none )
+
+
+
+-- NextQuestion ->
+--     let
+--         nextIndex =
+--             if model.currentIndex < (List.length model.questions - 1) then
+--                 model.currentIndex + 1
+--             else
+--                 model.currentIndex
+--     in
+--     ( { model | currentIndex = nextIndex }, Cmd.none )
+-- PreviousQuestion ->
+--     let
+--         prevIndex =
+--             if model.currentIndex > 0 then
+--                 model.currentIndex - 1
+--             else
+--                 model.currentIndex
+--     in
+--     ( { model | currentIndex = prevIndex }, Cmd.none )
 
 
 main : Program Value Model Msg
@@ -102,7 +133,7 @@ init _ =
     --             |> Result.withDefault []
     -- in
     -- ( { questions = initialModel }, Cmd.none )
-    ( { questions = questions }, Cmd.none )
+    ( { questions = questions, currentIndex = 0 }, Cmd.none )
 
 
 subscriptions : Model -> Sub Msg
@@ -115,8 +146,8 @@ view model =
     div []
         [ div [] [ text "Quiz" ]
         , div []
-            [ button [ onClick MakeQuiz ] [ text "Make Quiz" ]
-            , button [] [ text "Get Quiz" ]
+            [ button [] [ text "Next" ]
+            , button [] [ text "pREVIOUS" ]
             ]
         , div []
             (List.indexedMap (\index question -> questionView index question) model.questions)

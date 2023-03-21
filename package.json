@@ -11,7 +11,7 @@
     "build": "vite build",
     "serve": "vite preview",
     "lint": "elm-review",
-    "test": "elm-test-rs" ,
+    "test": "elm-test-rs",
     "css:watch": "npx tailwindcss -i ./src/tailwind.css -o static/tailwind.build.css --watch"
   },
   "devDependencies": {
