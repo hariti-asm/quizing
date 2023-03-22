@@ -9,15 +9,10 @@ import Json.Encode as Encode
 import Msg exposing (Msg(..))
 
 
-type
-    Msg
-    -- = MakeQuiz
+type Msg
     = GetQuiz
-
-
-
--- | NextQuestion
--- | PreviousQuestion
+    | NextQuestion
+    | PreviousQuestion
 
 
 type alias Question =
@@ -37,6 +32,11 @@ questions =
       }
     , { text = "What is the largest organ in the human body?"
       , options = [ ( "A", "Heart" ), ( "B", "Lungs" ) ]
+      , correctAnswer = "B"
+      , index = 1
+      }
+    , { text = "What is the largest continent?"
+      , options = [ ( "A", "assia" ), ( "B", "america" ) ]
       , correctAnswer = "B"
       , index = 1
       }
@@ -68,26 +68,27 @@ update msg model =
         GetQuiz ->
             ( model, Cmd.none )
 
+        NextQuestion ->
+            let
+                nextIndex =
+                    if model.currentIndex < (List.length model.questions - 1) then
+                        model.currentIndex + 1
 
+                    else
+                        model.currentIndex
+            in
+            ( { model | currentIndex = nextIndex }, Cmd.none )
 
--- NextQuestion ->
---     let
---         nextIndex =
---             if model.currentIndex < (List.length model.questions - 1) then
---                 model.currentIndex + 1
---             else
---                 model.currentIndex
---     in
---     ( { model | currentIndex = nextIndex }, Cmd.none )
--- PreviousQuestion ->
---     let
---         prevIndex =
---             if model.currentIndex > 0 then
---                 model.currentIndex - 1
---             else
---                 model.currentIndex
---     in
---     ( { model | currentIndex = prevIndex }, Cmd.none )
+        PreviousQuestion ->
+            let
+                prevIndex =
+                    if model.currentIndex > 0 then
+                        model.currentIndex - 1
+
+                    else
+                        model.currentIndex
+            in
+            ( { model | currentIndex = prevIndex }, Cmd.none )
 
 
 main : Program Value Model Msg
@@ -143,15 +144,23 @@ subscriptions _ =
 
 view : Model -> Html Msg
 view model =
-    div []
-        [ div [] [ text "Quiz" ]
-        , div []
-            (List.indexedMap (\index question -> questionView index question) model.questions)
-        , div []
-            [ button [] [ text "Next" ]
-            , button [] [ text "Previous " ]
-            ]
-        ]
+    let
+        maybeQuestion =
+            List.head model.questions
+    in
+    case maybeQuestion of
+        Just question ->
+            div []
+                [ div [] [ text "Quiz" ]
+                , questionView 0 question
+                , div []
+                    [ button [ onClick NextQuestion ] [ text "Next" ]
+                    , button [ onClick PreviousQuestion ] [ text "Previous " ]
+                    ]
+                ]
+
+        Nothing ->
+            div [] [ text "No questions found." ]
 
 
 questionView : Int -> Question -> Html Msg
