@@ -1,57 +1,47 @@
 module Main exposing (main)
 
 import Browser
-import Html exposing (Html, button, div, input, label, text)
-import Html.Attributes exposing (checked, class, disabled, for, id, list, name, src, style, type_, value)
+import Html exposing (Html, button, div, input, label, span, text)
+import Html.Attributes exposing (checked, class, classList, disabled, id, name, type_, value)
 import Html.Events exposing (onClick)
 import Json.Decode exposing (Value)
 import Msg exposing (Msg(..))
-import Set exposing (Set)
 
 
 type Msg
-    = GetQuiz
-    | NextQuestion
+    = NextQuestion
     | PreviousQuestion
-    | SelectOption String
+    | SelectOption Int String
 
 
 type alias Question =
     { text : String
     , options : List ( String, String )
     , correctAnswer : String
-    , index : Int
     , mark : Int
-    , answeredCorrectly : Bool
-    , answer : Maybe String
+    , answers : List String
     }
 
 
 questions : List Question
 questions =
-    [ { text = "What is the capital of France?"
+    [ { text = "If M is mass of water that rises in capillary tube of radius ‘r’, then mass of water rising in a capillary tube of radius ‘2r’ is?"
       , options = [ ( "A", "Paris" ), ( "B", "Madrid" ), ( "C", "Rome" ), ( "D", "Berlin" ) ]
       , correctAnswer = "A"
-      , index = 0
       , mark = 2
-      , answeredCorrectly = False
-      , answer = Nothing
+      , answers = []
       }
     , { text = "What is the largest organ in the human body?"
       , options = [ ( "A", "Heart" ), ( "B", "Lungs" ) ]
       , correctAnswer = "B"
-      , index = 1
       , mark = 2
-      , answeredCorrectly = False
-      , answer = Nothing
+      , answers = []
       }
     , { text = "What is the largest continent?"
       , options = [ ( "A", "assia" ), ( "B", "america" ) ]
       , correctAnswer = "B"
-      , index = 1
       , mark = 2
-      , answeredCorrectly = False
-      , answer = Nothing
+      , answers = []
       }
     ]
 
@@ -70,9 +60,6 @@ type alias Model =
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
-        GetQuiz ->
-            ( model, Cmd.none )
-
         NextQuestion ->
             let
                 nextIndex =
@@ -95,13 +82,24 @@ update msg model =
             in
             ( { model | currentIndex = prevIndex }, Cmd.none )
 
-        SelectOption selectedOption ->
+        SelectOption index_ selectedOption ->
             let
                 question =
                     List.indexedMap
                         (\index q ->
-                            if index == model.currentIndex then
-                                { q | answer = Just selectedOption }
+                            if index == index_ then
+                                { q
+                                    | answers =
+                                        if List.member selectedOption q.answers then
+                                            let
+                                                khassoYb9a =
+                                                    \label -> selectedOption /= label
+                                            in
+                                            List.filter khassoYb9a q.answers
+
+                                        else
+                                            selectedOption :: q.answers
+                                }
 
                             else
                                 q
@@ -128,7 +126,7 @@ init _ =
 
 subscriptions : Model -> Sub Msg
 subscriptions _ =
-    Debug.todo "TODO"
+    Sub.none
 
 
 view : Model -> Html Msg
@@ -141,19 +139,24 @@ view model =
         Just question ->
             let
                 isAnswerSelected =
-                    case question.answer of
-                        Just _ ->
-                            True
-
-                        Nothing ->
-                            False
+                    List.length question.answers > 0
             in
-            div []
-                [ div [] [ text "Quiz" ]
-                , questionView 0 question
-                , div []
-                    [ button [ onClick NextQuestion, disabled (not isAnswerSelected) ] [ text "Next" ]
-                    , button [ onClick PreviousQuestion ] [ text "Previous " ]
+            div [ class "flex  flex-col items-center mt-[200px] font-Rubik " ]
+                [ div [ class " font-bold text-3xl " ] [ text "Quiz" ]
+                , questionView model.currentIndex
+                    question
+                , div
+                    [ class " flex space-x-28" ]
+                    [ if model.currentIndex == 0 then
+                        text ""
+
+                      else
+                        button [ onClick PreviousQuestion, class "  w-48 h-16 mt-10 focus:bg-[#FFC700]" ] [ text "Previous" ]
+                    , if model.currentIndex == (List.length model.questions - 1) then
+                        text ""
+
+                      else
+                        button [ onClick NextQuestion, disabled (not isAnswerSelected), class "bg-[#FFC700] w-48 h-16 mt-10" ] [ text "Next" ]
                     ]
                 ]
 
@@ -164,20 +167,33 @@ view model =
 questionView : Int -> Question -> Html Msg
 questionView index question =
     div [ id (String.fromInt index) ]
-        [ div [] [ text question.text ]
-        , div []
-            (List.map viewOption question.options)
+        [ div [ class " text-xl mb-10" ] [ text (String.fromInt (index + 1) ++ ") " ++ question.text) ]
+        , div [ class " flex flex-col  gap-6" ]
+            (List.map
+                (\( optionLabel, optionValue ) ->
+                    viewOption
+                        { optionValue = optionValue
+                        , optionLabel = optionLabel
+                        , isChecked =
+                            List.member optionLabel question.answers
+                        , onSelect = SelectOption index
+                        }
+                )
+                question.options
+            )
         ]
 
 
-viewOption : ( String, String ) -> Html Msg
-viewOption ( optionText, optionValue ) =
-    label []
-        [ input
-            [ type_ "radio"
-            , name "option"
-            , value optionValue
+viewOption : { optionLabel : String, optionValue : String, isChecked : Bool, onSelect : String -> msg } -> Html msg
+viewOption { optionLabel, optionValue, isChecked, onSelect } =
+    label
+        [ classList
+            [ ( "bg-[#8419FF] text-white", isChecked )
+            , ( "border border-solid  border-1.5 solid border-[#F0EBF5]  rounded-xl gap-6 px-10 w-full py-4 focus:bg-[#8419FF]"
+              , True
+              )
             ]
-            []
-        , text optionText
+        , onClick
+            (onSelect optionLabel)
         ]
+        [ span [ class "text-[#F0EBF5]" ] [ text optionLabel ], text (" " ++ optionValue) ]
