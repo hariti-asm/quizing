@@ -265,3 +265,19 @@ any f xss =
 
             else
                 any f others
+
+
+unzip : List ( a, b ) -> ( List a, List b )
+unzip xs =
+    unzipHeper xs ( [], [] )
+
+
+unzipHeper : List ( a, b ) -> ( List a, List b ) -> ( List a, List b )
+unzipHeper xs ( as_, bs ) =
+    case xs of
+        [] ->
+            ( as_, bs )
+
+        ( a, b ) :: others ->
+            unzipHeper others
+                ( a :: as_, b :: bs )
