@@ -105,8 +105,28 @@ update msg model =
                                 q
                         )
                         model.questions
+
+                isLastQuestion =
+                    model.currentIndex == (List.length model.questions - 1)
             in
-            ( { model | questions = question }, Cmd.none )
+            if isLastQuestion then
+                let
+                    score =
+                        List.foldl
+                            (\q acc ->
+                                if List.sort q.answers == List.sort [ q.correctAnswer ] then
+                                    acc + q.mark
+
+                                else
+                                    acc
+                            )
+                            0
+                            model.questions
+                in
+                ( { model | score = score }, Cmd.none )
+
+            else
+                ( { model | questions = question }, Cmd.none )
 
 
 main : Program Value Model Msg
@@ -140,6 +160,9 @@ view model =
             let
                 isAnswerSelected =
                     List.length question.answers > 0
+
+                isLastQuestion =
+                    model.currentIndex == (List.length model.questions - 1)
             in
             div [ class "flex  flex-col items-center mt-[200px] font-Rubik " ]
                 [ div [ class " font-bold text-3xl " ] [ text "Quiz" ]
@@ -153,11 +176,17 @@ view model =
                       else
                         button [ onClick PreviousQuestion, class "  w-48 h-16 mt-10 focus:bg-[#FFC700]" ] [ text "Previous" ]
                     , if model.currentIndex == (List.length model.questions - 1) then
-                        text ""
+                        button [ class "  w-48 h-16 mt-10 focus:bg-[#FFC700]" ] [ text "Done" ]
 
                       else
                         button [ onClick NextQuestion, disabled (not isAnswerSelected), class "bg-[#FFC700] w-48 h-16 mt-10" ] [ text "Next" ]
                     ]
+                , if isLastQuestion then
+                    div [ class "mt-10" ]
+                        [ text ("Your score is: " ++ String.fromInt model.score) ]
+
+                  else
+                    text ""
                 ]
 
         Nothing ->
