@@ -1,8 +1,8 @@
 port module Main exposing (main)
 
 import Browser
-import Html exposing (Html, button, div, input, label, span, text)
-import Html.Attributes exposing (checked, class, classList, disabled, for, id, name, type_, value)
+import Html exposing (Html, a, button, div, input, label, span, text)
+import Html.Attributes exposing (checked, class, classList, disabled, for, href, id, name, type_, value)
 import Html.Events exposing (onClick, onInput)
 import Json.Decode as Decode exposing (Decoder, Value)
 import Json.Encode as Encode
@@ -271,9 +271,7 @@ view model =
             div [ class "flex flex-col items-center mt-96 gap-12" ]
                 [ div [ class "text-3xl italic" ]
                     [ text "No questions found." ]
-                , button
-                    [ class "italic font-semibold text-xl w-48 h-16 bg-[#8419FF] focus:bg-[#FFC700] rounded-md", onClick AddQuiz ]
-                    [ text "Add quiz" ]
+                , a [ href "/quiz-page", class " text-center italic font-semibold text-xl w-48 h-16 bg-[#8419FF] focus:bg-[#FFC700] rounded-md pt-4", onClick AddQuiz ] [ text "Add Quiz" ]
                 ]
 
 
