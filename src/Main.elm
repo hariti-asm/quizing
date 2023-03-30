@@ -2,8 +2,8 @@ port module Main exposing (main)
 
 import Browser
 import Html exposing (Html, button, div, input, label, span, text)
-import Html.Attributes exposing (checked, class, classList, disabled, id, name, type_, value)
-import Html.Events exposing (onClick)
+import Html.Attributes exposing (checked, class, classList, disabled, for, id, name, type_, value)
+import Html.Events exposing (onClick, onInput)
 import Json.Decode as Decode exposing (Decoder, Value)
 import Json.Encode as Encode
 import Msg exposing (Msg(..))
@@ -13,6 +13,8 @@ type Msg
     = NextQuestion
     | PreviousQuestion
     | SelectOption Int String
+    | AddQuestion
+    | AddQuiz
 
 
 type alias Question =
@@ -24,35 +26,13 @@ type alias Question =
     }
 
 
-questions : List Question
-questions =
-    [ { text = "If M is mass of water that rises in capillary tube of radius ‘r’, then mass of water rising in a capillary tube of radius ‘2r’ is?"
-      , options = [ ( "A", "Paris" ), ( "B", "Madrid" ), ( "C", "Rome" ), ( "D", "Berlin" ) ]
-      , correctAnswer = "A"
-      , mark = 2
-      , answers = []
-      }
-    , { text = "What is the largest organ in the human body?"
-      , options = [ ( "A", "Heart" ), ( "B", "Lungs" ) ]
-      , correctAnswer = "B"
-      , mark = 2
-      , answers = []
-      }
-    , { text = "What is the largest continent?"
-      , options = [ ( "A", "assia" ), ( "B", "america" ) ]
-      , correctAnswer = "B"
-      , mark = 2
-      , answers = []
-      }
-    ]
-
-
 
 -- add more questions
 
 
 type alias Model =
-    { questions : List Question
+    { title : String
+    , questions : List Question
     , currentIndex : Int
     , score : Int
     }
@@ -137,6 +117,29 @@ update msg model =
             else
                 ( { model | questions = question }, Cmd.none )
 
+        AddQuestion ->
+            let
+                newQuestion =
+                    { text = ""
+                    , options = [ ( "", "" ), ( "", "" ), ( "", "" ) ]
+                    , correctAnswer = ""
+                    , mark = 0
+                    , answers = []
+                    }
+            in
+            ( { model | questions = model.questions ++ [ newQuestion ] }, Cmd.none )
+
+        AddQuiz ->
+            let
+                newQuiz =
+                    { title = ""
+                    , questions = []
+                    , currentIndex = 0
+                    , score = 0
+                    }
+            in
+            ( { model | questions = model.questions ++ [], title = "", currentIndex = 0, score = 0 }, Cmd.none )
+
 
 main : Program Value Model Msg
 main =
@@ -153,7 +156,7 @@ init flags =
     let
         initialModel =
             Decode.decodeValue decodeModel flags
-                |> Result.withDefault { questions = [], currentIndex = 0, score = 0 }
+                |> Result.withDefault { title = "", questions = [], currentIndex = 0, score = 0 }
     in
     ( initialModel, saveModel (encodeModel initialModel) )
 
@@ -188,7 +191,7 @@ optionDecoder : Decoder ( String, String )
 optionDecoder =
     Decode.map2
         Tuple.pair
-        (Decode.field "labdel" Decode.string)
+        (Decode.field "label" Decode.string)
         (Decode.field " value " Decode.string)
 
 
@@ -203,7 +206,8 @@ optionEncoder ( label, value ) =
 encodeModel : Model -> Encode.Value
 encodeModel model =
     Encode.object
-        [ ( "questions", Encode.list questionEncoder model.questions )
+        [ ( "title", Encode.string model.title )
+        , ( "questions", Encode.list questionEncoder model.questions )
         , ( "currentIndex", Encode.int model.currentIndex )
         , ( "score", Encode.int model.score )
         ]
@@ -211,7 +215,8 @@ encodeModel model =
 
 decodeModel : Decode.Decoder Model
 decodeModel =
-    Decode.map3 Model
+    Decode.map4 Model
+        (Decode.field "title" Decode.string)
         (Decode.field "questions" (Decode.list questionDecoder))
         (Decode.field "currentIndex" Decode.int)
         (Decode.field "score" Decode.int)
@@ -232,33 +237,44 @@ view model =
                 isLastQuestion =
                     model.currentIndex == (List.length model.questions - 1)
             in
-            div [ class "flex  flex-col items-center mt-[200px] font-Rubik " ]
-                [ div [ class " font-bold text-4xl " ] [ text "Quiz" ]
-                , questionView model.currentIndex
-                    question
-                , div
-                    [ class " flex space-x-28" ]
-                    [ if model.currentIndex == 0 then
-                        text ""
-
-                      else
-                        button [ onClick PreviousQuestion, class "  w-48 h-16 mt-10 focus:bg-[#FFC700]" ] [ text "Previous" ]
-                    , if model.currentIndex == (List.length model.questions - 1) then
-                        button [ class "  w-48 h-16 mt-10 focus:bg-[#FFC700]" ] [ text "Done" ]
-
-                      else
-                        button [ onClick NextQuestion, disabled (not isAnswerSelected), class "bg-[#FFC700] w-48 h-16 mt-10" ] [ text "Next" ]
+            div []
+                [ div []
+                    [ label [ for "title-input" ] [ text "Title" ]
+                    , input
+                        [ type_ "text", value model.title ]
+                        []
                     ]
-                , if isLastQuestion then
-                    div [ class "mt-10 text-2xl font-semibold italic  " ]
-                        [ text ("Your score is: " ++ String.fromInt model.score) ]
+                , div
+                    [ class "flex  flex-col items-center mt-[200px] font-Rubik" ]
+                    [ div [ class "font-bold text-4xl" ] [ text "Quiz" ]
+                    , questionView model.currentIndex question
+                    , div
+                        [ class "flex space-x-28" ]
+                        [ button [ onClick PreviousQuestion, class "w-48 h-16 mt-10 focus:bg-[#FFC700]" ] [ text "Previous" ]
+                        , button
+                            [ onClick NextQuestion
+                            , disabled (not isAnswerSelected)
+                            , class "bg-[#FFC700] w-48 h-16 mt-10"
+                            ]
+                            [ text "Next" ]
+                        ]
+                    , if isLastQuestion then
+                        div [ class "mt-10 text-2xl font-semibold italic" ]
+                            [ text ("Your score is: " ++ String.fromInt model.score) ]
 
-                  else
-                    text ""
+                      else
+                        text ""
+                    ]
                 ]
 
         Nothing ->
-            div [] [ text "No questions found." ]
+            div [ class "flex flex-col items-center mt-96 gap-12" ]
+                [ div [ class "text-3xl italic" ]
+                    [ text "No questions found." ]
+                , button
+                    [ class "italic font-semibold text-xl w-48 h-16 bg-[#8419FF] focus:bg-[#FFC700] rounded-md", onClick AddQuiz ]
+                    [ text "Add quiz" ]
+                ]
 
 
 questionView : Int -> Question -> Html Msg
