@@ -7,6 +7,7 @@ import Html.Events exposing (onClick, onInput)
 import Json.Decode as Decode exposing (Decoder, Value)
 import Json.Encode as Encode
 import Msg exposing (Msg(..))
+import Quiz exposing (..)
 
 
 type Msg
@@ -271,7 +272,7 @@ view model =
             div [ class "flex flex-col items-center mt-96 gap-12" ]
                 [ div [ class "text-3xl italic" ]
                     [ text "No questions found." ]
-                , a [ href "/quiz-page", class " text-center italic font-semibold text-xl w-48 h-16 bg-[#8419FF] focus:bg-[#FFC700] rounded-md pt-4", onClick AddQuiz ] [ text "Add Quiz" ]
+                , a [ href "/Quiz", class " text-center italic font-semibold text-xl w-48 h-16 bg-[#8419FF] focus:bg-[#FFC700] rounded-md pt-4", onClick AddQuiz ] [ text "Add Quiz" ]
                 ]
 
 
