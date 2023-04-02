@@ -40,8 +40,8 @@ type alias Model =
 port saveModel : Encode.Value -> Cmd msg
 
 
-update : Msg -> Model -> ( Model, Cmd Msg )
-update msg model =
+update : Msg -> Model -> Question -> ( Model, Cmd Msg )
+update msg model question_ =
     case msg of
         AddNewQuestion ->
             let
@@ -53,7 +53,7 @@ update msg model =
                     , answers = []
                     }
             in
-            ( { model | newQuestion = Just newQuestion }, Cmd.none )
+            ( { model | newQuestion = Just newQuestion }, saveModel (questionEncoder newQuestion) )
 
         NextQuestion ->
             let
@@ -239,67 +239,72 @@ view model =
                         [ text "Create one!" ]
 
                 Just question ->
-                    div [ class " " ]
-                        [ div [ class "  flex flex-col items-center" ]
-                            [ div [ class "mb-4" ]
-                                [ input [ type_ "text", placeholder "Enter the question text", onInput (\_ -> AddNewQuestion) ]
-                                    []
+                    div [ class "" ]
+                        [ div [ class "  flex flex-col ml-[300px] w-full   " ]
+                            [ div [ class "flex flex-col   " ]
+                                [ div [ class "mb-2  italic " ]
+                                    [ label [ class " talic text-xl " ]
+                                        [ text "text" ]
+                                    ]
+                                , div [ class "mb-4    " ]
+                                    [ input [ type_ "text", placeholder "Enter the content ", class " border border-solid border-[#F0EBF5]  h-16 text-center italic text-md text-center mt-4 hover:bg-gray-50 active:bg-gray-5 w-full  max-w-4xl rounded-md" ]
+                                        []
+                                    ]
                                 ]
-                            , div [ class "mb-4" ]
-                                [ input [ type_ "text", placeholder "Enter the correct answer", onInput (\_ -> AddNewQuestion) ]
-                                    []
+                            , div [ class "flex flex-col  " ]
+                                [ div [ class "mb-2  italic" ]
+                                    [ label [ class " talic text-xl " ]
+                                        [ text "correctAnswer" ]
+                                    ]
+                                , div [ class "mb-4 " ]
+                                    [ input [ type_ "text", placeholder "Enter the correct answer ", class " border border-solid border-[#F0EBF5]  h-16 text-center italic text-md hover:bg-gray-50 active:bg-gray-5  w-full  max-w-4xl rounded-mdtext-center mt-4" ]
+                                        []
+                                    ]
                                 ]
-                            , div [ class "flex flex-col" ]
-                                [ div [ class "mb-2" ]
-                                    [ label [ class " " ]
+                            , div [ class "flex flex-col " ]
+                                [ div [ class "mb-2  italic" ]
+                                    [ label [ class " talic text-xl" ]
                                         [ text "Option 1" ]
                                     ]
-                                , div [ class "mb-4" ]
-                                    [ input [ type_ "text", placeholder "Enter option 1", onInput (\_ -> AddNewQuestion) ]
+                                , div [ class "mb-4 " ]
+                                    [ input [ type_ "text", placeholder "Enter option 1", class "  border border-solid border-[#F0EBF5]  h-16 text-center italic text-md hover:bg-gray-50 active:bg-gray-5 w-full  max-w-4xl rounded-mdtext-center mt-4" ]
                                         []
                                     ]
                                 ]
-                            , div [ class "flex flex-col" ]
-                                [ div [ class "mb-2" ]
-                                    [ label [ class " " ]
+                            , div [ class "flex flex-col  " ]
+                                [ div [ class "mb-2  italic" ]
+                                    [ label [ class "text-xl " ]
                                         [ text "Option 2" ]
                                     ]
-                                , div [ class "mb-4" ]
-                                    [ input [ type_ "text", placeholder "Enter option 2", onInput (\_ -> AddNewQuestion) ]
+                                , div [ class "mb-4  " ]
+                                    [ input [ type_ "text", placeholder "Enter option 2", class " border border-solid border-[#F0EBF5]  h-16 text-center italic text-md hover:bg-gray-50 active:bg-gray-5 rounded-md w-full  max-w-4xl text-center mt-4" ]
                                         []
                                     ]
                                 ]
-                            , div [ class "flex flex-col" ]
-                                [ div [ class "mb-2 text-sm font-bold" ]
-                                    [ label [ class " " ]
+                            , div [ class "flex flex-col " ]
+                                [ div [ class "mb-2 text-sm  italic" ]
+                                    [ label [ class " text-xl " ]
                                         [ text "Option 3" ]
                                     ]
                                 , div [ class "mb-4" ]
-                                    [ input [ type_ "text", placeholder "Enter option 3", onInput (\_ -> AddNewQuestion) ]
+                                    [ input [ type_ "text", placeholder "Enter option 3 ", class "border border-solid border-[#F0EBF5]  h-16 text-center italic text-md hover:bg-gray-50 active:bg-gray-5 rounded-md w-full  max-w-4xl text-center mt-4" ]
                                         []
                                     ]
                                 ]
-                            , div [ class "mb-4" ]
-                                [ input [ type_ "number", placeholder "Enter the mark for this question", onInput (\_ -> AddNewQuestion) ]
-                                    []
+                            , div [ class "flex flex-col  " ]
+                                [ div [ class "mb-2  italic" ]
+                                    [ label [ class "talic text-xl " ]
+                                        [ text "mark" ]
+                                    ]
+                                , div [ class "mb-4  " ]
+                                    [ input [ type_ "number", placeholder "Enter the mark ", class " border border-solid border-[#F0EBF5] h-16 text-center italic text-md hover:bg-gray-50 active:bg-gray-50 w-full  max-w-4xl rounded-md text-center mt-4" ]
+                                        []
+                                    ]
                                 ]
-                            , div [ class "font-bold text-lg mb-2", onClick AddNewQuestion ]
-                                [ text "Add new question" ]
                             ]
+                        , div [ class " text-xl italic  mb-2 bg-[#8419FF] h-14 text-center w-full max-w-sm ml-[700px]  rounded-md  items-center text-white", onClick AddNewQuestion ]
+                            [ text "Add new question" ]
                         ]
-
-
-
---     ]
--- , div [ class "mb-4" ]
---     [ input [ type_ "number", placeholder "Enter the mark for this question", onInput (\_ -> AddNewQuestion) ] [] ]
---     ]
--- ]
-
-
-viewInput : String -> String -> String -> (String -> msg) -> Html msg
-viewInput t p v toMsg =
-    input [ type_ t, placeholder p, value v, onInput toMsg ] []
 
 
 questionView : Int -> Question -> Html Msg
