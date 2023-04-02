@@ -2,8 +2,8 @@ port module Quiz exposing (Model, Msg, init, update, view)
 
 import Browser
 import Html exposing (Html, button, div, input, label, span, text)
-import Html.Attributes exposing (checked, class, classList, disabled, id, name, type_, value)
-import Html.Events exposing (onClick)
+import Html.Attributes exposing (checked, class, classList, disabled, id, name, placeholder, type_, value)
+import Html.Events exposing (onClick, onInput)
 import Json.Decode as Decode exposing (Decoder, Value)
 import Json.Encode as Encode
 import Msg exposing (Msg(..))
@@ -23,29 +23,6 @@ type alias Question =
     , mark : Int
     , answers : List String
     }
-
-
-questions : List Question
-questions =
-    [ { text = "If M is mass of water that rises in capillary tube of radius ‘r’, then mass of water rising in a capillary tube of radius ‘2r’ is?"
-      , options = [ ( "A", "Paris" ), ( "B", "Madrid" ), ( "C", "Rome" ), ( "D", "Berlin" ) ]
-      , correctAnswer = "A"
-      , mark = 2
-      , answers = []
-      }
-    , { text = "What is the largest organ in the human body?"
-      , options = [ ( "A", "Heart" ), ( "B", "Lungs" ) ]
-      , correctAnswer = "B"
-      , mark = 2
-      , answers = []
-      }
-    , { text = "What is the largest continent?"
-      , options = [ ( "A", "assia" ), ( "B", "america" ) ]
-      , correctAnswer = "B"
-      , mark = 2
-      , answers = []
-      }
-    ]
 
 
 
@@ -232,25 +209,23 @@ view model =
                 isLastQuestion =
                     model.currentIndex == (List.length model.questions - 1)
             in
-            div [ class "flex  flex-col items-center mt-[200px] font-Rubik " ]
-                [ div [ class " font-bold text-4xl " ] [ text "Quiz" ]
-                , questionView model.currentIndex
-                    question
-                , div
-                    [ class " flex space-x-28" ]
+            div [ class "flex  flex-col items-center mt-[200px] font-Rubik" ]
+                [ div [ class "font-bold text-4xl" ] [ text "Quiz" ]
+                , questionView model.currentIndex question
+                , div [ class "flex space-x-28" ]
                     [ if model.currentIndex == 0 then
                         text ""
 
                       else
-                        button [ onClick PreviousQuestion, class "  w-48 h-16 mt-10 focus:bg-[#FFC700]" ] [ text "Previous" ]
+                        button [ onClick PreviousQuestion, class "w-48 h-16 mt-10 focus:bg-[#FFC700]" ] [ text "Previous" ]
                     , if model.currentIndex == (List.length model.questions - 1) then
-                        button [ class "  w-48 h-16 mt-10 focus:bg-[#FFC700]" ] [ text "Done" ]
+                        text ""
 
                       else
                         button [ onClick NextQuestion, disabled (not isAnswerSelected), class "bg-[#FFC700] w-48 h-16 mt-10" ] [ text "Next" ]
                     ]
                 , if isLastQuestion then
-                    div [ class "mt-10 text-2xl font-semibold italic  " ]
+                    div [ class "mt-10 text-2xl font-semibold italic" ]
                         [ text ("Your score is: " ++ String.fromInt model.score) ]
 
                   else
@@ -260,10 +235,71 @@ view model =
         Nothing ->
             case model.newQuestion of
                 Nothing ->
-                    div [ onClick AddNewQuestion ] [ text "Create one!" ]
+                    div [ onClick AddNewQuestion ]
+                        [ text "Create one!" ]
 
                 Just question ->
-                    div [] [ text "form here" ]
+                    div [ class " " ]
+                        [ div [ class "  flex flex-col items-center" ]
+                            [ div [ class "mb-4" ]
+                                [ input [ type_ "text", placeholder "Enter the question text", onInput (\_ -> AddNewQuestion) ]
+                                    []
+                                ]
+                            , div [ class "mb-4" ]
+                                [ input [ type_ "text", placeholder "Enter the correct answer", onInput (\_ -> AddNewQuestion) ]
+                                    []
+                                ]
+                            , div [ class "flex flex-col" ]
+                                [ div [ class "mb-2" ]
+                                    [ label [ class " " ]
+                                        [ text "Option 1" ]
+                                    ]
+                                , div [ class "mb-4" ]
+                                    [ input [ type_ "text", placeholder "Enter option 1", onInput (\_ -> AddNewQuestion) ]
+                                        []
+                                    ]
+                                ]
+                            , div [ class "flex flex-col" ]
+                                [ div [ class "mb-2" ]
+                                    [ label [ class " " ]
+                                        [ text "Option 2" ]
+                                    ]
+                                , div [ class "mb-4" ]
+                                    [ input [ type_ "text", placeholder "Enter option 2", onInput (\_ -> AddNewQuestion) ]
+                                        []
+                                    ]
+                                ]
+                            , div [ class "flex flex-col" ]
+                                [ div [ class "mb-2 text-sm font-bold" ]
+                                    [ label [ class " " ]
+                                        [ text "Option 3" ]
+                                    ]
+                                , div [ class "mb-4" ]
+                                    [ input [ type_ "text", placeholder "Enter option 3", onInput (\_ -> AddNewQuestion) ]
+                                        []
+                                    ]
+                                ]
+                            , div [ class "mb-4" ]
+                                [ input [ type_ "number", placeholder "Enter the mark for this question", onInput (\_ -> AddNewQuestion) ]
+                                    []
+                                ]
+                            , div [ class "font-bold text-lg mb-2", onClick AddNewQuestion ]
+                                [ text "Add new question" ]
+                            ]
+                        ]
+
+
+
+--     ]
+-- , div [ class "mb-4" ]
+--     [ input [ type_ "number", placeholder "Enter the mark for this question", onInput (\_ -> AddNewQuestion) ] [] ]
+--     ]
+-- ]
+
+
+viewInput : String -> String -> String -> (String -> msg) -> Html msg
+viewInput t p v toMsg =
+    input [ type_ t, placeholder p, value v, onInput toMsg ] []
 
 
 questionView : Int -> Question -> Html Msg

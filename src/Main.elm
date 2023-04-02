@@ -3,7 +3,7 @@ module Main exposing (main)
 import Browser exposing (Document, UrlRequest(..))
 import Browser.Navigation as Nav
 import Html exposing (..)
-import Html.Attributes exposing (href)
+import Html.Attributes exposing (class, href)
 import Json.Encode as E
 import Quiz
 import Url exposing (Url)
@@ -124,9 +124,9 @@ viewPage : Page -> Html Msg
 viewPage page =
     case page of
         HomePage ->
-            div []
-                [ h1 [] [ text "Home" ]
-                , a [ href "/quiz" ] [ text "Quiz" ]
+            div [ class "flex  gap-24  text-xl italic  bg-[#8419FF]  h-16 text-[#FFFFFF]" ]
+                [ h1 [ class "  mt-4 ml-[500px]" ] [ text "Home" ]
+                , a [ href "/quiz", class "mt-4 " ] [ text "Quiz" ]
                 ]
 
         QuizPage quizModel ->
