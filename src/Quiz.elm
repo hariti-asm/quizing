@@ -14,6 +14,8 @@ type Msg
     | PreviousQuestion
     | SelectOption Int String
     | AddNewQuestion
+    | MarkChange String
+    | OptionChange String String
 
 
 type alias Question =
@@ -40,14 +42,14 @@ type alias Model =
 port saveModel : Encode.Value -> Cmd msg
 
 
-update : Msg -> Model -> Question -> ( Model, Cmd Msg )
-update msg model question_ =
+update : Msg -> Model -> ( Model, Cmd Msg )
+update msg model =
     case msg of
         AddNewQuestion ->
             let
                 newQuestion =
                     { text = ""
-                    , options = []
+                    , options = [ ( "A", "" ), ( "B", "" ), ( "C", "" ) ]
                     , correctAnswer = ""
                     , mark = 0
                     , answers = []
@@ -127,6 +129,41 @@ update msg model question_ =
 
             else
                 ( { model | questions = question }, Cmd.none )
+
+        OptionChange optionLabel newtext ->
+            case model.newQuestion of
+                Nothing ->
+                    ( model, Cmd.none )
+
+                Just newQuestion ->
+                    let
+                        updatedNewquestion =
+                            { newQuestion
+                                | options =
+                                    List.map
+                                        (\( label_, text ) ->
+                                            if label_ == optionLabel then
+                                                ( label_, newtext )
+
+                                            else
+                                                ( label_, text )
+                                        )
+                                        newQuestion.options
+                            }
+                    in
+                    ( { model | newQuestion = Just updatedNewquestion }, Cmd.none )
+
+        MarkChange newmark ->
+            case model.newQuestion of
+                Nothing ->
+                    ( model, Cmd.none )
+
+                Just newQuestion ->
+                    let
+                        updatedNewquestion =
+                            { newQuestion | mark = String.toInt newmark |> Maybe.withDefault 0 }
+                    in
+                    ( { model | newQuestion = Just updatedNewquestion }, Cmd.none )
 
 
 init : Value -> ( Model, Cmd Msg )
@@ -267,7 +304,12 @@ view model =
                                         [ text "Option 1" ]
                                     ]
                                 , div [ class "mb-4 " ]
-                                    [ input [ type_ "text", placeholder "Enter option 1", class "  border border-solid border-[#F0EBF5]  h-16 text-center italic text-md hover:bg-gray-50 active:bg-gray-5 w-full  max-w-4xl rounded-mdtext-center mt-4" ]
+                                    [ input
+                                        [ type_ "text"
+                                        , placeholder "Enter option 1"
+                                        , onInput (OptionChange "A")
+                                        , class "  border border-solid border-[#F0EBF5]  h-16 text-center italic text-md hover:bg-gray-50 active:bg-gray-5 w-full  max-w-4xl rounded-mdtext-center mt-4"
+                                        ]
                                         []
                                     ]
                                 ]
@@ -297,7 +339,13 @@ view model =
                                         [ text "mark" ]
                                     ]
                                 , div [ class "mb-4  " ]
-                                    [ input [ type_ "number", placeholder "Enter the mark ", class " border border-solid border-[#F0EBF5] h-16 text-center italic text-md hover:bg-gray-50 active:bg-gray-50 w-full  max-w-4xl rounded-md text-center mt-4" ]
+                                    [ input
+                                        [ type_ "number"
+                                        , placeholder "Enter the mark "
+                                        , class " border border-solid border-[#F0EBF5] h-16 text-center italic text-md hover:bg-gray-50 active:bg-gray-50 w-full  max-w-4xl rounded-md text-center mt-4 "
+                                        , onInput MarkChange
+                                        , value <| String.fromInt question.mark
+                                        ]
                                         []
                                     ]
                                 ]
