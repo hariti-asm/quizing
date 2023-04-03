@@ -16,6 +16,9 @@ type Msg
     | AddNewQuestion
     | MarkChange String
     | OptionChange String String
+    | TextChange String
+    | CorrectAnserChange String
+    | StoreNewModel Model
 
 
 type alias Question =
@@ -153,6 +156,33 @@ update msg model =
                     in
                     ( { model | newQuestion = Just updatedNewquestion }, Cmd.none )
 
+        CorrectAnserChange newanswer ->
+            case model.newQuestion of
+                Nothing ->
+                    ( model, Cmd.none )
+
+                Just newQuestion ->
+                    let
+                        updatedNewquestion =
+                            { newQuestion | correctAnswer = newanswer }
+                    in
+                    ( { model | newQuestion = Just updatedNewquestion }, Cmd.none )
+
+        TextChange newtext ->
+            case model.newQuestion of
+                Nothing ->
+                    ( model, Cmd.none )
+
+                Just newQuestion ->
+                    let
+                        updatedNewquestion =
+                            { newQuestion | text = newtext }
+                    in
+                    ( { model | newQuestion = Just updatedNewquestion }, Cmd.none )
+
+        StoreNewModel newmodel ->
+            ( model, Cmd.none )
+
         MarkChange newmark ->
             case model.newQuestion of
                 Nothing ->
@@ -219,6 +249,14 @@ encodeModel model =
         [ ( "questions", Encode.list questionEncoder model.questions )
         , ( "currentIndex", Encode.int model.currentIndex )
         , ( "score", Encode.int model.score )
+        , ( "newQuestion"
+          , case model.newQuestion of
+                Just q ->
+                    questionEncoder q
+
+                Nothing ->
+                    Encode.null
+          )
         ]
 
 
@@ -228,7 +266,8 @@ decodeModel =
         (Decode.field "questions" (Decode.list questionDecoder))
         (Decode.field "currentIndex" Decode.int)
         (Decode.field "score" Decode.int)
-        (Decode.succeed Nothing)
+        -- (Decode.succeed Nothing)
+        (Decode.field "newQuestion" (Decode.nullable questionDecoder))
 
 
 view : Model -> Html Msg
@@ -284,7 +323,12 @@ view model =
                                         [ text "text" ]
                                     ]
                                 , div [ class "mb-4    " ]
-                                    [ input [ type_ "text", placeholder "Enter the content ", class " border border-solid border-[#F0EBF5]  h-16 text-center italic text-md text-center mt-4 hover:bg-gray-50 active:bg-gray-5 w-full  max-w-4xl rounded-md" ]
+                                    [ input
+                                        [ type_ "text"
+                                        , onInput TextChange
+                                        , placeholder "Enter the content "
+                                        , class " border border-solid border-[#F0EBF5]  h-16 text-center italic text-md text-center mt-4 hover:bg-gray-50 active:bg-gray-5 w-full  max-w-4xl rounded-md"
+                                        ]
                                         []
                                     ]
                                 ]
@@ -294,7 +338,12 @@ view model =
                                         [ text "correctAnswer" ]
                                     ]
                                 , div [ class "mb-4 " ]
-                                    [ input [ type_ "text", placeholder "Enter the correct answer ", class " border border-solid border-[#F0EBF5]  h-16 text-center italic text-md hover:bg-gray-50 active:bg-gray-5  w-full  max-w-4xl rounded-mdtext-center mt-4" ]
+                                    [ input
+                                        [ type_ "text"
+                                        , onInput CorrectAnserChange
+                                        , placeholder "Enter the correct answer "
+                                        , class " border border-solid border-[#F0EBF5]  h-16 text-center italic text-md hover:bg-gray-50 active:bg-gray-5  w-full  max-w-4xl rounded-mdtext-center mt-4"
+                                        ]
                                         []
                                     ]
                                 ]
@@ -319,7 +368,12 @@ view model =
                                         [ text "Option 2" ]
                                     ]
                                 , div [ class "mb-4  " ]
-                                    [ input [ type_ "text", placeholder "Enter option 2", class " border border-solid border-[#F0EBF5]  h-16 text-center italic text-md hover:bg-gray-50 active:bg-gray-5 rounded-md w-full  max-w-4xl text-center mt-4" ]
+                                    [ input
+                                        [ type_ "text"
+                                        , onInput (OptionChange "B")
+                                        , placeholder "Enter option 2"
+                                        , class " border border-solid border-[#F0EBF5]  h-16 text-center italic text-md hover:bg-gray-50 active:bg-gray-5 rounded-md w-full  max-w-4xl text-center mt-4"
+                                        ]
                                         []
                                     ]
                                 ]
@@ -329,7 +383,12 @@ view model =
                                         [ text "Option 3" ]
                                     ]
                                 , div [ class "mb-4" ]
-                                    [ input [ type_ "text", placeholder "Enter option 3 ", class "border border-solid border-[#F0EBF5]  h-16 text-center italic text-md hover:bg-gray-50 active:bg-gray-5 rounded-md w-full  max-w-4xl text-center mt-4" ]
+                                    [ input
+                                        [ type_ "text"
+                                        , onInput (OptionChange "C")
+                                        , placeholder "Enter option 3 "
+                                        , class "border border-solid border-[#F0EBF5]  h-16 text-center italic text-md hover:bg-gray-50 active:bg-gray-5 rounded-md w-full  max-w-4xl text-center mt-4"
+                                        ]
                                         []
                                     ]
                                 ]
