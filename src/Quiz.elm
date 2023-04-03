@@ -10,7 +10,6 @@ type Msg
     = AddQuestion
     | AddQuiz
     | AddOption Int
-      -- | RemoveOption Int Int
     | AddTitle String
 
 
