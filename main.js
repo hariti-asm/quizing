@@ -15,6 +15,6 @@ const flags = JSON.parse(localStorage.getItem("questions")) || {};
 console.log("initilizing app with flags: ", flags);
 const app = Elm.Main.init({ node: root, flags: flags });
 app.ports.saveModel.subscribe(function (model) {
-  console.log("saving model...");
+  console.log("saving question...");
   localStorage.setItem("questions", JSON.stringify(model));
 });

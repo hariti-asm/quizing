@@ -5,3 +5,6 @@ dist
 dist-ssr
 *.local
 src/style.build.css
+src/LinkedList.elm
+src/MyList.elm
+src/MyTuple.elm
