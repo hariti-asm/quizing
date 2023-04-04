@@ -1,11 +1,12 @@
 module Main exposing (main)
 
+import About
 import Browser exposing (Document, UrlRequest(..))
 import Browser.Navigation as Nav
 import Html exposing (..)
 import Html.Attributes exposing (class, href)
 import Json.Encode as E
-import Quiz
+import Quiz exposing (..)
 import Url exposing (Url)
 import Url.Parser as UrlParser
 
@@ -19,17 +20,20 @@ type alias Model =
 type Route
     = Home
     | Quiz
+    | About
 
 
 type Page
     = HomePage
     | QuizPage Quiz.Model
+    | AboutPage About.Model
 
 
 type Msg
     = ClickedLink UrlRequest
     | UrlChanged Url
     | QuizMsg Quiz.Msg
+    | AboutMsg About.Msg
 
 
 main : Program () Model Msg
@@ -50,6 +54,7 @@ urlToRoute url =
         (UrlParser.oneOf
             [ UrlParser.map Home UrlParser.top
             , UrlParser.map Quiz (UrlParser.s "quiz")
+            , UrlParser.map Quiz (UrlParser.s "about")
             ]
         )
         url
@@ -61,6 +66,13 @@ routeToPage route =
     case route of
         Home ->
             ( HomePage, Cmd.none )
+
+        About ->
+            let
+                ( aboutModel, cmd ) =
+                    About.init ()
+            in
+            ( AboutPage aboutModel, Cmd.map AboutMsg cmd )
 
         Quiz ->
             let
@@ -95,15 +107,11 @@ update msg model =
                 External url ->
                     ( model, Nav.load url )
 
-        UrlChanged url ->
-            let
-                ( page, cmd ) =
-                    url |> urlToRoute |> routeToPage
-            in
-            ( { model | page = page }, cmd )
-
         QuizMsg quizMsg ->
             case model.page of
+                AboutPage aboutmodel ->
+                    ( model, Cmd.none )
+
                 HomePage ->
                     ( model, Cmd.none )
 
@@ -113,6 +121,28 @@ update msg model =
                             Quiz.update quizMsg quizModel
                     in
                     ( { model | page = QuizPage newQuizModel }, Cmd.map QuizMsg cmd )
+
+        AboutMsg aboutMsg ->
+            case model.page of
+                AboutPage aboutModel ->
+                    let
+                        ( newAboutModel, cmd ) =
+                            About.update aboutMsg aboutModel
+                    in
+                    ( { model | page = AboutPage newAboutModel }, Cmd.map AboutMsg cmd )
+
+                QuizPage _ ->
+                    ( model, Cmd.none )
+
+                HomePage ->
+                    ( model, Cmd.none )
+
+        UrlChanged url ->
+            let
+                ( page, cmd ) =
+                    url |> urlToRoute |> routeToPage
+            in
+            ( { model | page = page }, cmd )
 
 
 view : Model -> Document Msg
@@ -127,7 +157,11 @@ viewPage page =
             div [ class "flex  gap-24  text-xl italic  bg-[#8419FF]  h-16 text-[#FFFFFF]" ]
                 [ h1 [ class "  mt-4 ml-[500px]" ] [ text "Home" ]
                 , a [ href "/quiz", class "mt-4 " ] [ text "Quiz" ]
+                , a [ href "/about", class "mt-4 " ] [ text "About" ]
                 ]
+
+        AboutPage aboutModel ->
+            About.view aboutModel |> Html.map AboutMsg
 
         QuizPage quizModel ->
             Quiz.view quizModel |> Html.map QuizMsg
@@ -138,6 +172,9 @@ getPageTitle page =
     case page of
         HomePage ->
             "Home"
+
+        AboutPage _ ->
+            "About"
 
         QuizPage _ ->
             "Quiz"

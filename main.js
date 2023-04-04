@@ -18,3 +18,9 @@ app.ports.saveModel.subscribe(function (model) {
   console.log("saving question...");
   localStorage.setItem("questions", JSON.stringify(model));
 });
+const flas = JSON.parse(localStorage.getItem("newquestions")) || {};
+console.log("initilizing app with flags: ", flas);
+app.ports.storeModel.subscribe(function (model) {
+  console.log("saving newquestion...");
+  localStorage.setItem("newquestions", JSON.stringify(model));
+});

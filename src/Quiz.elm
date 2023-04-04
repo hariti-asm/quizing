@@ -5,8 +5,9 @@ import Html exposing (Html, button, div, input, label, span, text)
 import Html.Attributes exposing (checked, class, classList, disabled, id, name, placeholder, type_, value)
 import Html.Events exposing (onClick, onInput)
 import Json.Decode as Decode exposing (Decoder, Value)
-import Json.Encode as Encode
+import Json.Encode as Encode exposing (encode)
 import Msg exposing (Msg(..))
+import MyList exposing (append)
 
 
 type Msg
@@ -18,7 +19,7 @@ type Msg
     | OptionChange String String
     | TextChange String
     | CorrectAnserChange String
-    | StoreNewModel Model
+    | StorageNewQ
 
 
 type alias Question =
@@ -45,6 +46,9 @@ type alias Model =
 port saveModel : Encode.Value -> Cmd msg
 
 
+port storeModel : Encode.Value -> Cmd msg
+
+
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
@@ -57,8 +61,58 @@ update msg model =
                     , mark = 0
                     , answers = []
                     }
+
+                newModel =
+                    { model | newQuestion = Just newQuestion }
+
+                encodedNewQuestion =
+                    questionEncoder newQuestion
             in
-            ( { model | newQuestion = Just newQuestion }, saveModel (questionEncoder newQuestion) )
+            ( { model | newQuestion = Just newQuestion }
+            , storeModel encodedNewQuestion
+            )
+
+        StorageNewQ ->
+            let
+                newQuestion =
+                    case model.newQuestion of
+                        Just q ->
+                            q
+
+                        Nothing ->
+                            { text = ""
+                            , options = [ ( "A", "" ), ( "B", "" ), ( "C", "" ) ]
+                            , correctAnswer = ""
+                            , mark = 0
+                            , answers = []
+                            }
+
+                question =
+                    { text = newQuestion.text
+                    , options = newQuestion.options
+                    , correctAnswer = newQuestion.correctAnswer
+                    , mark = newQuestion.mark
+                    , answers = []
+                    }
+
+                newModel =
+                    { model
+                        | newQuestion =
+                            Just
+                                { newQuestion
+                                    | text = newQuestion.text
+                                    , options = newQuestion.options
+                                    , correctAnswer = newQuestion.correctAnswer
+                                    , mark = newQuestion.mark
+                                    , answers = []
+                                }
+                        , questions = question :: model.questions
+                    }
+
+                encodedNewModel =
+                    encodeModel newModel
+            in
+            ( newModel, storeModel encodedNewModel )
 
         NextQuestion ->
             let
@@ -179,9 +233,6 @@ update msg model =
                             { newQuestion | text = newtext }
                     in
                     ( { model | newQuestion = Just updatedNewquestion }, Cmd.none )
-
-        StoreNewModel newmodel ->
-            ( model, Cmd.none )
 
         MarkChange newmark ->
             case model.newQuestion of
@@ -311,12 +362,16 @@ view model =
         Nothing ->
             case model.newQuestion of
                 Nothing ->
-                    div [ onClick AddNewQuestion ]
-                        [ text "Create one!" ]
+                    div [ class " flex flex-col items-center" ]
+                        [ div [ onClick AddNewQuestion, class " text-center mt-64 font-semibold text-2xl italic " ]
+                            [ text "No questions yet" ]
+                        , div [ onClick AddNewQuestion, class " text-center  font-semibold italic text-[#FFFFFF] bg-[#8419FF] h-16 w-full max-w-[250px] text-xl rounded-lg flex  items-center  justify-center mt-[200px]  " ]
+                            [ text "Create One!" ]
+                        ]
 
                 Just question ->
-                    div [ class "" ]
-                        [ div [ class "  flex flex-col ml-[300px] w-full   " ]
+                    div [ class " flex  flex-col " ]
+                        [ div [ class "  flex flex-col ml-[300px] w-full items center  " ]
                             [ div [ class "flex flex-col   " ]
                                 [ div [ class "mb-2  italic " ]
                                     [ label [ class " talic text-xl " ]
@@ -409,7 +464,7 @@ view model =
                                     ]
                                 ]
                             ]
-                        , div [ class " text-xl italic  mb-2 bg-[#8419FF] h-14 text-center w-full max-w-sm ml-[700px]  rounded-md  items-center text-white", onClick AddNewQuestion ]
+                        , button [ type_ "submit", class "text-center  font-semibold italic text-[#FFFFFF] bg-[#8419FF] h-16 w-full max-w-[250px] text-xl rounded-lg flex  items-center  justify-center mt-[20px] ml-[650px] ", onClick StorageNewQ ]
                             [ text "Add new question" ]
                         ]
 
