@@ -11,16 +11,12 @@ if (process.env.NODE_ENV === "development") {
 }
 
 const root = document.querySelector("#app div");
-const flags = JSON.parse(localStorage.getItem("questions")) || {};
-console.log("initilizing app with flags: ", flags);
-const app = Elm.Main.init({ node: root, flags: flags });
-app.ports.saveModel.subscribe(function (model) {
-  console.log("saving question...");
-  localStorage.setItem("questions", JSON.stringify(model));
-});
-const flas = JSON.parse(localStorage.getItem("newquestions")) || {};
+
+const flas = JSON.parse(localStorage.getItem("model")) || {};
+const app = Elm.Main.init({ node: root, flags: flas });
+
 console.log("initilizing app with flags: ", flas);
 app.ports.storeModel.subscribe(function (model) {
-  console.log("saving newquestion...");
-  localStorage.setItem("newquestions", JSON.stringify(model));
+  console.log("saving model...");
+  localStorage.setItem("model", JSON.stringify(model));
 });

@@ -49,74 +49,53 @@ port saveModel : Encode.Value -> Cmd msg
 port storeModel : Encode.Value -> Cmd msg
 
 
+emptyQuestion : Question
+emptyQuestion =
+    { text = ""
+    , options = [ ( "A", "" ), ( "B", "" ), ( "C", "" ) ]
+    , correctAnswer = ""
+    , mark = 0
+    , answers = []
+    }
+
+
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
         AddNewQuestion ->
             let
-                newQuestion =
-                    { text = ""
-                    , options = [ ( "A", "" ), ( "B", "" ), ( "C", "" ) ]
-                    , correctAnswer = ""
-                    , mark = 0
-                    , answers = []
-                    }
-
                 newModel =
-                    { model | newQuestion = Just newQuestion }
-
-                encodedNewQuestion =
-                    questionEncoder newQuestion
-            in
-            ( { model | newQuestion = Just newQuestion }
-            , storeModel encodedNewQuestion
-            )
-
-        StorageNewQ ->
-            let
-                newQuestion =
-                    case model.newQuestion of
-                        Just q ->
-                            q
-
-                        Nothing ->
-                            { text = ""
-                            , options = [ ( "A", "" ), ( "B", "" ), ( "C", "" ) ]
-                            , correctAnswer = ""
-                            , mark = 0
-                            , answers = []
-                            }
-
-                question =
-                    { text = newQuestion.text
-                    , options = newQuestion.options
-                    , correctAnswer = newQuestion.correctAnswer
-                    , mark = newQuestion.mark
-                    , answers = []
-                    }
-
-                newModel =
-                    { model
-                        | newQuestion =
-                            Just
-                                { newQuestion
-                                    | text = newQuestion.text
-                                    , options = newQuestion.options
-                                    , correctAnswer = newQuestion.correctAnswer
-                                    , mark = newQuestion.mark
-                                    , answers = []
-                                }
-                        , questions = question :: model.questions
-                    }
+                    { model | newQuestion = Just emptyQuestion }
 
                 encodedNewModel =
                     encodeModel newModel
-
-                -- storing updated questions
-                storingagain =
-                    storeModel encodedNewModel
             in
-            ( newModel, storingagain )
+            ( newModel
+            , storeModel encodedNewModel
+            )
+
+        StorageNewQ ->
+            case model.newQuestion of
+                Nothing ->
+                    ( model, Cmd.none )
+
+                Just newQuestion ->
+                    let
+                        newModel =
+                            { model
+                                | newQuestion =
+                                    Just emptyQuestion
+                                , questions = newQuestion :: model.questions
+                            }
+
+                        encodedNewModel =
+                            encodeModel newModel
+
+                        -- storing updated questions
+                        storingagain =
+                            storeModel encodedNewModel
+                    in
+                    ( newModel, storingagain )
 
         NextQuestion ->
             let
@@ -255,7 +234,11 @@ init : Value -> ( Model, Cmd Msg )
 init flags =
     let
         initialModel =
-            Decode.decodeValue decodeModel flags
+            (Debug.log " Decoded flags" <|
+                Decode.decodeValue
+                    decodeModel
+                    flags
+            )
                 |> Result.withDefault { questions = [], currentIndex = 0, score = 0, newQuestion = Nothing }
     in
     ( initialModel, saveModel (encodeModel initialModel) )
@@ -279,6 +262,9 @@ questionEncoder question =
         , ( "options", Encode.list optionEncoder question.options )
         , ( "correctAnswer", Encode.string question.correctAnswer )
         , ( "mark", Encode.int question.mark )
+        , ( "answers"
+          , Encode.list Encode.string question.answers
+          )
         ]
 
 
@@ -286,8 +272,8 @@ optionDecoder : Decoder ( String, String )
 optionDecoder =
     Decode.map2
         Tuple.pair
-        (Decode.field "labdel" Decode.string)
-        (Decode.field " value " Decode.string)
+        (Decode.field "label" Decode.string)
+        (Decode.field "value" Decode.string)
 
 
 optionEncoder : ( String, String ) -> Encode.Value

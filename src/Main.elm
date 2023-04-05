@@ -5,6 +5,7 @@ import Browser exposing (Document, UrlRequest(..))
 import Browser.Navigation as Nav
 import Html exposing (..)
 import Html.Attributes exposing (class, href)
+import Json.Decode exposing (Value)
 import Json.Encode as E
 import Quiz exposing (..)
 import Url exposing (Url)
@@ -36,7 +37,7 @@ type Msg
     | AboutMsg About.Msg
 
 
-main : Program () Model Msg
+main : Program Value Model Msg
 main =
     Browser.application
         { init = init
@@ -54,15 +55,15 @@ urlToRoute url =
         (UrlParser.oneOf
             [ UrlParser.map Home UrlParser.top
             , UrlParser.map Quiz (UrlParser.s "quiz")
-            , UrlParser.map Quiz (UrlParser.s "about")
+            , UrlParser.map About (UrlParser.s "about")
             ]
         )
         url
         |> Maybe.withDefault Home
 
 
-routeToPage : Route -> ( Page, Cmd Msg )
-routeToPage route =
+routeToPage : E.Value -> Route -> ( Page, Cmd Msg )
+routeToPage flags route =
     case route of
         Home ->
             ( HomePage, Cmd.none )
@@ -77,7 +78,7 @@ routeToPage route =
         Quiz ->
             let
                 ( quizModel, cmd ) =
-                    Quiz.init E.null
+                    Quiz.init flags
             in
             ( QuizPage quizModel, Cmd.map QuizMsg cmd )
 
@@ -87,11 +88,11 @@ subscriptions _ =
     Sub.none
 
 
-init : flags -> Url -> Nav.Key -> ( Model, Cmd Msg )
-init _ url key =
+init : E.Value -> Url -> Nav.Key -> ( Model, Cmd Msg )
+init flags url key =
     let
         ( page, cmd ) =
-            url |> urlToRoute |> routeToPage
+            url |> urlToRoute |> routeToPage flags
     in
     ( { key = key, page = page }, cmd )
 
@@ -140,7 +141,7 @@ update msg model =
         UrlChanged url ->
             let
                 ( page, cmd ) =
-                    url |> urlToRoute |> routeToPage
+                    url |> urlToRoute |> routeToPage E.null
             in
             ( { model | page = page }, cmd )
 
