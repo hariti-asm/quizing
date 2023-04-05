@@ -111,8 +111,12 @@ update msg model =
 
                 encodedNewModel =
                     encodeModel newModel
+
+                -- storing updated questions
+                storingagain =
+                    storeModel encodedNewModel
             in
-            ( newModel, storeModel encodedNewModel )
+            ( newModel, storingagain )
 
         NextQuestion ->
             let
