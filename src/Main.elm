@@ -155,8 +155,8 @@ viewPage : Page -> Html Msg
 viewPage page =
     case page of
         HomePage ->
-            div [ class "flex  gap-24  text-xl italic  bg-[#8419FF]  h-16 text-[#FFFFFF]" ]
-                [ h1 [ class "  mt-4 ml-[500px]" ] [ text "Home" ]
+            div [ class "flex justify-center gap-44  text-xl italic  bg-[#8419FF]  h-16 text-[#FFFFFF]" ]
+                [ h1 [ class "  mt-4 " ] [ text "Home" ]
                 , a [ href "/quiz", class "mt-4 " ] [ text "Quiz" ]
                 , a [ href "/about", class "mt-4 " ] [ text "About" ]
                 ]

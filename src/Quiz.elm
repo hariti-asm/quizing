@@ -91,7 +91,6 @@ update msg model =
                         encodedNewModel =
                             encodeModel newModel
 
-                        -- storing updated questions
                         storingagain =
                             storeModel encodedNewModel
                     in
@@ -342,8 +341,10 @@ view model =
                         button [ onClick NextQuestion, disabled (not isAnswerSelected), class "bg-[#FFC700] w-48 h-16 mt-10" ] [ text "Next" ]
                     ]
                 , if isLastQuestion then
-                    div [ class "mt-10 text-2xl font-semibold italic" ]
-                        [ text ("Your score is: " ++ String.fromInt model.score) ]
+                    div []
+                        [ div [ class "mt-10 text-2xl font-semibold italic" ]
+                            [ text ("Your score is: " ++ String.fromInt model.score) ]
+                        ]
 
                   else
                     text ""
@@ -353,9 +354,12 @@ view model =
             case model.newQuestion of
                 Nothing ->
                     div [ class " flex flex-col items-center" ]
-                        [ div [ onClick AddNewQuestion, class " text-center mt-64 font-semibold text-2xl italic " ]
+                        [ div [ class " text-center mt-64 font-semibold text-2xl italic " ]
                             [ text "No questions yet" ]
-                        , div [ onClick AddNewQuestion, class " text-center  font-semibold italic text-[#FFFFFF] bg-[#8419FF] h-16 w-full max-w-[250px] text-xl rounded-lg flex  items-center  justify-center mt-[200px]  " ]
+                        , div
+                            [ onClick <| Debug.log "Add button clicked!" AddNewQuestion
+                            , class " text-center  font-semibold italic text-[#FFFFFF] bg-[#8419FF] h-16 w-full max-w-[250px] text-xl rounded-lg flex  items-center  justify-center mt-[200px]  "
+                            ]
                             [ text "Create One!" ]
                         ]
 
@@ -452,10 +456,13 @@ view model =
                                         ]
                                         []
                                     ]
+                                , div
+                                    [ onClick StorageNewQ
+                                    , class " text-center  font-semibold italic text-[#FFFFFF] bg-[#8419FF] h-16 w-full max-w-[250px] text-xl rounded-lg flex  items-center  justify-center mt-[200px]  "
+                                    ]
+                                    [ text "Add !" ]
                                 ]
                             ]
-                        , button [ type_ "submit", class "text-center  font-semibold italic text-[#FFFFFF] bg-[#8419FF] h-16 w-full max-w-[250px] text-xl rounded-lg flex  items-center  justify-center mt-[20px] ml-[650px] ", onClick StorageNewQ ]
-                            [ text "Add new question" ]
                         ]
 
 
@@ -479,16 +486,18 @@ questionView index question =
         ]
 
 
-viewOption : { optionLabel : String, optionValue : String, isChecked : Bool, onSelect : String -> msg } -> Html msg
+viewOption : { a | optionLabel : String, optionValue : String, isChecked : Bool, onSelect : String -> Msg } -> Html Msg
 viewOption { optionLabel, optionValue, isChecked, onSelect } =
-    label
-        [ classList
-            [ ( "bg-[#8419FF] text-white ", isChecked )
-            , ( "border border-solid  border-1.5 solid border-[#F0EBF5]  rounded-xl gap-6 px-10 w-full py-4 focus:bg-[#8419FF]"
-              , True
-              )
+    div []
+        [ label
+            [ classList
+                [ ( "bg-[#8419FF] text-white ", isChecked )
+                , ( "border border-solid  border-1.5 solid border-[#F0EBF5]  rounded-xl gap-6 px-10 w-full py-4 focus:bg-[#8419FF]"
+                  , True
+                  )
+                ]
+            , onClick
+                (onSelect optionLabel)
             ]
-        , onClick
-            (onSelect optionLabel)
+            [ span [ class "text-[#F0EBF5]" ] [ text optionLabel ], text (" " ++ optionValue) ]
         ]
-        [ span [ class "text-[#F0EBF5]" ] [ text optionLabel ], text (" " ++ optionValue) ]
