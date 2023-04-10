@@ -1,4 +1,4 @@
-port module Quiz exposing (Model, Msg, init, update, view)
+port module EvaluateQuestion exposing (Model, Msg, init, update, view)
 
 import Browser
 import Html exposing (Html, button, div, input, label, span, text)
@@ -20,6 +20,7 @@ type Msg
     | TextChange String
     | CorrectAnserChange String
     | StorageNewQ
+    | ToggleAddingQuestions
 
 
 type alias Question =
@@ -31,15 +32,12 @@ type alias Question =
     }
 
 
-
--- add more questions
-
-
 type alias Model =
     { questions : List Question
     , currentIndex : Int
     , score : Int
     , newQuestion : Maybe Question
+    , addingQuestions : Bool
     }
 
 
@@ -216,6 +214,9 @@ update msg model =
                     in
                     ( { model | newQuestion = Just updatedNewquestion }, Cmd.none )
 
+        ToggleAddingQuestions ->
+            ( { model | addingQuestions = not model.addingQuestions }, Cmd.none )
+
         MarkChange newmark ->
             case model.newQuestion of
                 Nothing ->
@@ -238,7 +239,13 @@ init flags =
                     decodeModel
                     flags
             )
-                |> Result.withDefault { questions = [], currentIndex = 0, score = 0, newQuestion = Nothing }
+                |> Result.withDefault
+                    { questions = []
+                    , currentIndex = 0
+                    , score = 0
+                    , newQuestion = Nothing
+                    , addingQuestions = False
+                    }
     in
     ( initialModel, saveModel (encodeModel initialModel) )
 
@@ -302,12 +309,12 @@ encodeModel model =
 
 decodeModel : Decode.Decoder Model
 decodeModel =
-    Decode.map4 Model
+    Decode.map5 Model
         (Decode.field "questions" (Decode.list questionDecoder))
         (Decode.field "currentIndex" Decode.int)
         (Decode.field "score" Decode.int)
-        -- (Decode.succeed Nothing)
         (Decode.field "newQuestion" (Decode.nullable questionDecoder))
+        (Decode.succeed False)
 
 
 view : Model -> Html Msg
@@ -364,106 +371,104 @@ view model =
                         ]
 
                 Just question ->
-                    div [ class " flex  flex-col " ]
-                        [ div [ class "  flex flex-col ml-[300px] w-full items center  " ]
-                            [ div [ class "flex flex-col   " ]
-                                [ div [ class "mb-2  italic " ]
-                                    [ label [ class " talic text-xl " ]
-                                        [ text "text" ]
-                                    ]
-                                , div [ class "mb-4    " ]
-                                    [ input
-                                        [ type_ "text"
-                                        , onInput TextChange
-                                        , placeholder "Enter the content "
-                                        , class " border border-solid border-[#F0EBF5]  h-16 text-center italic text-md text-center mt-4 hover:bg-gray-50 active:bg-gray-5 w-full  max-w-4xl rounded-md"
+                    if model.addingQuestions then
+                        div [ class " flex  flex-col " ]
+                            [ div [ class "  flex flex-col ml-[300px] w-full items center  " ]
+                                [ div [ class "flex flex-col   " ]
+                                    [ div [ class "mb-2  italic " ]
+                                        [ label [ class " talic text-xl " ]
+                                            [ text "text" ]
                                         ]
-                                        []
-                                    ]
-                                ]
-                            , div [ class "flex flex-col  " ]
-                                [ div [ class "mb-2  italic" ]
-                                    [ label [ class " talic text-xl " ]
-                                        [ text "correctAnswer" ]
-                                    ]
-                                , div [ class "mb-4 " ]
-                                    [ input
-                                        [ type_ "text"
-                                        , onInput CorrectAnserChange
-                                        , placeholder "Enter the correct answer "
-                                        , class " border border-solid border-[#F0EBF5]  h-16 text-center italic text-md hover:bg-gray-50 active:bg-gray-5  w-full  max-w-4xl rounded-mdtext-center mt-4"
+                                    , div [ class "mb-4    " ]
+                                        [ input
+                                            [ type_ "text"
+                                            , placeholder "Enter the content "
+                                            , class " border border-solid border-[#F0EBF5]  h-16 text-center italic text-md text-center mt-4 hover:bg-gray-50 active:bg-gray-5 w-full  max-w-4xl rounded-md"
+                                            ]
+                                            []
                                         ]
-                                        []
                                     ]
-                                ]
-                            , div [ class "flex flex-col " ]
-                                [ div [ class "mb-2  italic" ]
-                                    [ label [ class " talic text-xl" ]
-                                        [ text "Option 1" ]
-                                    ]
-                                , div [ class "mb-4 " ]
-                                    [ input
-                                        [ type_ "text"
-                                        , placeholder "Enter option 1"
-                                        , onInput (OptionChange "A")
-                                        , class "  border border-solid border-[#F0EBF5]  h-16 text-center italic text-md hover:bg-gray-50 active:bg-gray-5 w-full  max-w-4xl rounded-mdtext-center mt-4"
+                                , div [ class "flex flex-col  " ]
+                                    [ div [ class "mb-2  italic" ]
+                                        [ label [ class " talic text-xl " ]
+                                            [ text "correctAnswer" ]
                                         ]
-                                        []
-                                    ]
-                                ]
-                            , div [ class "flex flex-col  " ]
-                                [ div [ class "mb-2  italic" ]
-                                    [ label [ class "text-xl " ]
-                                        [ text "Option 2" ]
-                                    ]
-                                , div [ class "mb-4  " ]
-                                    [ input
-                                        [ type_ "text"
-                                        , onInput (OptionChange "B")
-                                        , placeholder "Enter option 2"
-                                        , class " border border-solid border-[#F0EBF5]  h-16 text-center italic text-md hover:bg-gray-50 active:bg-gray-5 rounded-md w-full  max-w-4xl text-center mt-4"
+                                    , div [ class "mb-4 " ]
+                                        [ input
+                                            [ type_ "text"
+                                            , onInput CorrectAnserChange
+                                            , placeholder "Enter the correct answer "
+                                            , class " border border-solid border-[#F0EBF5]  h-16 text-center italic text-md hover:bg-gray-50 active:bg-gray-5  w-full  max-w-4xl rounded-mdtext-center mt-4"
+                                            ]
+                                            []
                                         ]
-                                        []
                                     ]
-                                ]
-                            , div [ class "flex flex-col " ]
-                                [ div [ class "mb-2 text-sm  italic" ]
-                                    [ label [ class " text-xl " ]
-                                        [ text "Option 3" ]
-                                    ]
-                                , div [ class "mb-4" ]
-                                    [ input
-                                        [ type_ "text"
-                                        , onInput (OptionChange "C")
-                                        , placeholder "Enter option 3 "
-                                        , class "border border-solid border-[#F0EBF5]  h-16 text-center italic text-md hover:bg-gray-50 active:bg-gray-5 rounded-md w-full  max-w-4xl text-center mt-4"
+                                , div [ class "flex flex-col " ]
+                                    [ div [ class "mb-2  italic" ]
+                                        [ label [ class " talic text-xl" ]
+                                            [ text "Option 1" ]
                                         ]
-                                        []
-                                    ]
-                                ]
-                            , div [ class "flex flex-col  " ]
-                                [ div [ class "mb-2  italic" ]
-                                    [ label [ class "talic text-xl " ]
-                                        [ text "mark" ]
-                                    ]
-                                , div [ class "mb-4  " ]
-                                    [ input
-                                        [ type_ "number"
-                                        , placeholder "Enter the mark "
-                                        , class " border border-solid border-[#F0EBF5] h-16 text-center italic text-md hover:bg-gray-50 active:bg-gray-50 w-full  max-w-4xl rounded-md text-center mt-4 "
-                                        , onInput MarkChange
-                                        , value <| String.fromInt question.mark
+                                    , div [ class "mb-4 " ]
+                                        [ input
+                                            [ type_ "text"
+                                            , placeholder "Enter option 1"
+                                            , onInput (OptionChange "A")
+                                            , class "  border border-solid border-[#F0EBF5]  h-16 text-center italic text-md hover:bg-gray-50 active:bg-gray-5 w-full  max-w-4xl rounded-mdtext-center mt-4"
+                                            ]
+                                            []
                                         ]
-                                        []
                                     ]
-                                , div
-                                    [ onClick StorageNewQ
-                                    , class " text-center  font-semibold italic text-[#FFFFFF] bg-[#8419FF] h-16 w-full max-w-[250px] text-xl rounded-lg flex  items-center  justify-center mt-[200px]  "
+                                , div [ class "flex flex-col  " ]
+                                    [ div [ class "mb-2  italic" ]
+                                        [ label [ class "text-xl " ]
+                                            [ text "Option 2" ]
+                                        ]
+                                    , div [ class "mb-4  " ]
+                                        [ input
+                                            [ type_ "text"
+                                            , onInput (OptionChange "B")
+                                            , placeholder "Enter option 2"
+                                            , class " border border-solid border-[#F0EBF5]  h-16 text-center italic text-md hover:bg-gray-50 active:bg-gray-5 rounded-md w-full  max-w-4xl text-center mt-4"
+                                            ]
+                                            []
+                                        ]
                                     ]
-                                    [ text "Add !" ]
+                                , div [ class "flex flex-col " ]
+                                    [ div [ class "mb-2 text-sm  italic" ]
+                                        [ label [ class " text-xl " ]
+                                            [ text "Option 3" ]
+                                        ]
+                                    , div [ class "mb-4" ]
+                                        [ input
+                                            [ type_ "text"
+                                            , onInput (OptionChange "C")
+                                            , placeholder "Enter option 3 "
+                                            , class "border border-solid border-[#F0EBF5]  h-16 text-center italic text-md hover:bg-gray-50 active:bg-gray-5 rounded-md w-full  max-w-4xl text-center mt-4"
+                                            ]
+                                            []
+                                        ]
+                                    ]
+                                , div [ class "flex flex-col  " ]
+                                    [ div [ class "mb-2  italic" ]
+                                        [ label [ class "talic text-xl " ]
+                                            [ text "mark" ]
+                                        ]
+                                    , div [ class "mb-4  " ]
+                                        [ input
+                                            [ type_ "number"
+                                            , placeholder "Enter the mark "
+                                            , class " border border-solid border-[#F0EBF5] h-16 text-center italic text-md hover:bg-gray-50 active:bg-gray-50 w-full  max-w-4xl rounded-md text-center mt-4 "
+                                            , onInput MarkChange
+                                            , value <| String.fromInt question.mark
+                                            ]
+                                            []
+                                        ]
+                                    ]
                                 ]
                             ]
-                        ]
+
+                    else
+                        text ""
 
 
 questionView : Int -> Question -> Html Msg

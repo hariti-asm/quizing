@@ -1,13 +1,15 @@
 module Main exposing (main)
 
+-- import EvaluateQuestion exposing (..)
+
 import About
+import Add exposing (..)
 import Browser exposing (Document, UrlRequest(..))
 import Browser.Navigation as Nav
 import Html exposing (..)
 import Html.Attributes exposing (class, href)
 import Json.Decode exposing (Value)
 import Json.Encode as E
-import Quiz exposing (..)
 import Url exposing (Url)
 import Url.Parser as UrlParser
 
@@ -20,21 +22,23 @@ type alias Model =
 
 type Route
     = Home
-    | Quiz
+      -- | Evaluate
     | About
+    | Add
 
 
 type Page
     = HomePage
-    | QuizPage Quiz.Model
+      -- | EvaluatePage EvaluateQuestion.Model
     | AboutPage About.Model
+    | AddPage Add.Model
 
 
 type Msg
     = ClickedLink UrlRequest
     | UrlChanged Url
-    | QuizMsg Quiz.Msg
     | AboutMsg About.Msg
+    | AddMsg Add.Msg
 
 
 main : Program Value Model Msg
@@ -54,8 +58,8 @@ urlToRoute url =
     UrlParser.parse
         (UrlParser.oneOf
             [ UrlParser.map Home UrlParser.top
-            , UrlParser.map Quiz (UrlParser.s "quiz")
             , UrlParser.map About (UrlParser.s "about")
+            , UrlParser.map Add (UrlParser.s "add")
             ]
         )
         url
@@ -75,12 +79,12 @@ routeToPage flags route =
             in
             ( AboutPage aboutModel, Cmd.map AboutMsg cmd )
 
-        Quiz ->
+        Add ->
             let
-                ( quizModel, cmd ) =
-                    Quiz.init flags
+                ( addModel, cmd ) =
+                    Add.init flags
             in
-            ( QuizPage quizModel, Cmd.map QuizMsg cmd )
+            ( AddPage addModel, Cmd.map AddMsg cmd )
 
 
 subscriptions : Model -> Sub Msg
@@ -108,20 +112,22 @@ update msg model =
                 External url ->
                     ( model, Nav.load url )
 
-        QuizMsg quizMsg ->
+        AddMsg addMsg ->
             case model.page of
                 AboutPage aboutmodel ->
                     ( model, Cmd.none )
 
+                -- EvaluatePage _ ->
+                --     ( model, Cmd.none )
+                AddPage addModel ->
+                    let
+                        ( newAddModel, cmd ) =
+                            Add.update addMsg addModel
+                    in
+                    ( { model | page = AddPage newAddModel }, Cmd.map AddMsg cmd )
+
                 HomePage ->
                     ( model, Cmd.none )
-
-                QuizPage quizModel ->
-                    let
-                        ( newQuizModel, cmd ) =
-                            Quiz.update quizMsg quizModel
-                    in
-                    ( { model | page = QuizPage newQuizModel }, Cmd.map QuizMsg cmd )
 
         AboutMsg aboutMsg ->
             case model.page of
@@ -132,7 +138,7 @@ update msg model =
                     in
                     ( { model | page = AboutPage newAboutModel }, Cmd.map AboutMsg cmd )
 
-                QuizPage _ ->
+                AddPage _ ->
                     ( model, Cmd.none )
 
                 HomePage ->
@@ -157,15 +163,24 @@ viewPage page =
         HomePage ->
             div [ class "flex justify-center gap-44  text-xl italic  bg-[#8419FF]  h-16 text-[#FFFFFF]" ]
                 [ h1 [ class "  mt-4 " ] [ text "Home" ]
-                , a [ href "/quiz", class "mt-4 " ] [ text "Quiz" ]
                 , a [ href "/about", class "mt-4 " ] [ text "About" ]
+                , a
+                    [ href "/add"
+                    , class " text-center  font-semibold italic text-[#FFFFFF] bg-[#8419FF] h-16 w-full max-w-[250px] text-xl rounded-lg flex  items-center  justify-center mt-[200px]  "
+                    ]
+                    [ text "Make Quiz !" ]
                 ]
+
+        AddPage addModel ->
+            Add.view addModel |> Html.map AddMsg
 
         AboutPage aboutModel ->
             About.view aboutModel |> Html.map AboutMsg
 
-        QuizPage quizModel ->
-            Quiz.view quizModel |> Html.map QuizMsg
+
+
+-- EvaluatePage quizModel ->
+--     EvaluateQuestion.view quizModel |> Html.map EvaluateQuestionMsg
 
 
 getPageTitle : Page -> String
@@ -177,5 +192,5 @@ getPageTitle page =
         AboutPage _ ->
             "About"
 
-        QuizPage _ ->
-            "Quiz"
+        AddPage _ ->
+            "Add"
