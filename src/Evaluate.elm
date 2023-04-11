@@ -1,11 +1,11 @@
-port module EvaluateQuestion exposing (Model, Msg, init, update, view)
+port module Evaluate exposing (Model, Msg, init, update, view)
 
 import Browser
-import Html exposing (Html, button, div, input, label, span, text)
-import Html.Attributes exposing (checked, class, classList, disabled, id, name, placeholder, type_, value)
+import Html exposing (Html, a, button, div, input, label, span, text)
+import Html.Attributes exposing (checked, class, classList, disabled, href, id, list, name, placeholder, type_, value)
 import Html.Events exposing (onClick, onInput)
 import Json.Decode as Decode exposing (Decoder, Value)
-import Json.Encode as Encode exposing (encode)
+import Json.Encode as Encode exposing (encode, int, object, string)
 import Msg exposing (Msg(..))
 import MyList exposing (append)
 
@@ -20,7 +20,6 @@ type Msg
     | TextChange String
     | CorrectAnserChange String
     | StorageNewQ
-    | ToggleAddingQuestions
 
 
 type alias Question =
@@ -37,14 +36,13 @@ type alias Model =
     , currentIndex : Int
     , score : Int
     , newQuestion : Maybe Question
-    , addingQuestions : Bool
     }
 
 
-port saveModel : Encode.Value -> Cmd msg
+port saveModel2 : Encode.Value -> Cmd msg
 
 
-port storeModel : Encode.Value -> Cmd msg
+port storeModel2 : Encode.Value -> Cmd msg
 
 
 emptyQuestion : Question
@@ -69,7 +67,7 @@ update msg model =
                     encodeModel newModel
             in
             ( newModel
-            , storeModel encodedNewModel
+            , storeModel2 encodedNewModel
             )
 
         StorageNewQ ->
@@ -90,7 +88,7 @@ update msg model =
                             encodeModel newModel
 
                         storingagain =
-                            storeModel encodedNewModel
+                            storeModel2 encodedNewModel
                     in
                     ( newModel, storingagain )
 
@@ -214,9 +212,6 @@ update msg model =
                     in
                     ( { model | newQuestion = Just updatedNewquestion }, Cmd.none )
 
-        ToggleAddingQuestions ->
-            ( { model | addingQuestions = not model.addingQuestions }, Cmd.none )
-
         MarkChange newmark ->
             case model.newQuestion of
                 Nothing ->
@@ -244,10 +239,9 @@ init flags =
                     , currentIndex = 0
                     , score = 0
                     , newQuestion = Nothing
-                    , addingQuestions = False
                     }
     in
-    ( initialModel, saveModel (encodeModel initialModel) )
+    ( initialModel, saveModel2 (encodeModel initialModel) )
 
 
 questionDecoder : Decoder Question
@@ -309,166 +303,21 @@ encodeModel model =
 
 decodeModel : Decode.Decoder Model
 decodeModel =
-    Decode.map5 Model
+    Decode.map4 Model
         (Decode.field "questions" (Decode.list questionDecoder))
         (Decode.field "currentIndex" Decode.int)
         (Decode.field "score" Decode.int)
         (Decode.field "newQuestion" (Decode.nullable questionDecoder))
-        (Decode.succeed False)
 
 
 view : Model -> Html Msg
 view model =
-    let
-        maybeQuestion =
-            List.head (List.drop model.currentIndex model.questions)
-    in
-    case maybeQuestion of
-        Just question ->
-            let
-                isAnswerSelected =
-                    List.length question.answers > 0
-
-                isLastQuestion =
-                    model.currentIndex == (List.length model.questions - 1)
-            in
-            div [ class "flex  flex-col items-center mt-[200px] font-Rubik" ]
-                [ div [ class "font-bold text-4xl" ] [ text "Quiz" ]
-                , questionView model.currentIndex question
-                , div [ class "flex space-x-28" ]
-                    [ if model.currentIndex == 0 then
-                        text ""
-
-                      else
-                        button [ onClick PreviousQuestion, class "w-48 h-16 mt-10 focus:bg-[#FFC700]" ] [ text "Previous" ]
-                    , if model.currentIndex == (List.length model.questions - 1) then
-                        text ""
-
-                      else
-                        button [ onClick NextQuestion, disabled (not isAnswerSelected), class "bg-[#FFC700] w-48 h-16 mt-10" ] [ text "Next" ]
-                    ]
-                , if isLastQuestion then
-                    div []
-                        [ div [ class "mt-10 text-2xl font-semibold italic" ]
-                            [ text ("Your score is: " ++ String.fromInt model.score) ]
-                        ]
-
-                  else
-                    text ""
-                ]
-
-        Nothing ->
-            case model.newQuestion of
-                Nothing ->
-                    div [ class " flex flex-col items-center" ]
-                        [ div [ class " text-center mt-64 font-semibold text-2xl italic " ]
-                            [ text "No questions yet" ]
-                        , div
-                            [ onClick <| Debug.log "Add button clicked!" AddNewQuestion
-                            , class " text-center  font-semibold italic text-[#FFFFFF] bg-[#8419FF] h-16 w-full max-w-[250px] text-xl rounded-lg flex  items-center  justify-center mt-[200px]  "
-                            ]
-                            [ text "Create One!" ]
-                        ]
-
-                Just question ->
-                    if model.addingQuestions then
-                        div [ class " flex  flex-col " ]
-                            [ div [ class "  flex flex-col ml-[300px] w-full items center  " ]
-                                [ div [ class "flex flex-col   " ]
-                                    [ div [ class "mb-2  italic " ]
-                                        [ label [ class " talic text-xl " ]
-                                            [ text "text" ]
-                                        ]
-                                    , div [ class "mb-4    " ]
-                                        [ input
-                                            [ type_ "text"
-                                            , placeholder "Enter the content "
-                                            , class " border border-solid border-[#F0EBF5]  h-16 text-center italic text-md text-center mt-4 hover:bg-gray-50 active:bg-gray-5 w-full  max-w-4xl rounded-md"
-                                            ]
-                                            []
-                                        ]
-                                    ]
-                                , div [ class "flex flex-col  " ]
-                                    [ div [ class "mb-2  italic" ]
-                                        [ label [ class " talic text-xl " ]
-                                            [ text "correctAnswer" ]
-                                        ]
-                                    , div [ class "mb-4 " ]
-                                        [ input
-                                            [ type_ "text"
-                                            , onInput CorrectAnserChange
-                                            , placeholder "Enter the correct answer "
-                                            , class " border border-solid border-[#F0EBF5]  h-16 text-center italic text-md hover:bg-gray-50 active:bg-gray-5  w-full  max-w-4xl rounded-mdtext-center mt-4"
-                                            ]
-                                            []
-                                        ]
-                                    ]
-                                , div [ class "flex flex-col " ]
-                                    [ div [ class "mb-2  italic" ]
-                                        [ label [ class " talic text-xl" ]
-                                            [ text "Option 1" ]
-                                        ]
-                                    , div [ class "mb-4 " ]
-                                        [ input
-                                            [ type_ "text"
-                                            , placeholder "Enter option 1"
-                                            , onInput (OptionChange "A")
-                                            , class "  border border-solid border-[#F0EBF5]  h-16 text-center italic text-md hover:bg-gray-50 active:bg-gray-5 w-full  max-w-4xl rounded-mdtext-center mt-4"
-                                            ]
-                                            []
-                                        ]
-                                    ]
-                                , div [ class "flex flex-col  " ]
-                                    [ div [ class "mb-2  italic" ]
-                                        [ label [ class "text-xl " ]
-                                            [ text "Option 2" ]
-                                        ]
-                                    , div [ class "mb-4  " ]
-                                        [ input
-                                            [ type_ "text"
-                                            , onInput (OptionChange "B")
-                                            , placeholder "Enter option 2"
-                                            , class " border border-solid border-[#F0EBF5]  h-16 text-center italic text-md hover:bg-gray-50 active:bg-gray-5 rounded-md w-full  max-w-4xl text-center mt-4"
-                                            ]
-                                            []
-                                        ]
-                                    ]
-                                , div [ class "flex flex-col " ]
-                                    [ div [ class "mb-2 text-sm  italic" ]
-                                        [ label [ class " text-xl " ]
-                                            [ text "Option 3" ]
-                                        ]
-                                    , div [ class "mb-4" ]
-                                        [ input
-                                            [ type_ "text"
-                                            , onInput (OptionChange "C")
-                                            , placeholder "Enter option 3 "
-                                            , class "border border-solid border-[#F0EBF5]  h-16 text-center italic text-md hover:bg-gray-50 active:bg-gray-5 rounded-md w-full  max-w-4xl text-center mt-4"
-                                            ]
-                                            []
-                                        ]
-                                    ]
-                                , div [ class "flex flex-col  " ]
-                                    [ div [ class "mb-2  italic" ]
-                                        [ label [ class "talic text-xl " ]
-                                            [ text "mark" ]
-                                        ]
-                                    , div [ class "mb-4  " ]
-                                        [ input
-                                            [ type_ "number"
-                                            , placeholder "Enter the mark "
-                                            , class " border border-solid border-[#F0EBF5] h-16 text-center italic text-md hover:bg-gray-50 active:bg-gray-50 w-full  max-w-4xl rounded-md text-center mt-4 "
-                                            , onInput MarkChange
-                                            , value <| String.fromInt question.mark
-                                            ]
-                                            []
-                                        ]
-                                    ]
-                                ]
-                            ]
-
-                    else
-                        text ""
+    div [ class "flex flex-col items-center" ]
+        [ -- , div [] [ text (String.fromInt model.score) ]
+          div [] (List.indexedMap (\index question -> questionView index question) model.questions)
+        , button [ onClick PreviousQuestion ] [ text "Previous" ]
+        , button [ onClick NextQuestion ] [ text "Next" ]
+        ]
 
 
 questionView : Int -> Question -> Html Msg

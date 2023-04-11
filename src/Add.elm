@@ -1,14 +1,13 @@
 port module Add exposing (..)
 
 import Browser
-import Html exposing (Html, button, div, input, label, span, text)
-import Html.Attributes exposing (checked, class, classList, disabled, id, name, placeholder, type_, value)
+import Evaluate exposing (..)
+import Html exposing (Html, a, button, div, input, label, span, text)
+import Html.Attributes exposing (checked, class, classList, disabled, href, id, name, placeholder, type_, value)
 import Html.Events exposing (onClick, onInput)
 import Json.Decode as Decode exposing (Decoder, Value)
 import Json.Encode as Encode exposing (encode)
 import Msg exposing (Msg(..))
-import MyList exposing (append)
-import Task
 
 
 type Msg
@@ -43,6 +42,10 @@ port saveModel : Encode.Value -> Cmd msg
 
 
 port storeModel : Encode.Value -> Cmd msg
+
+
+
+-- port emptyQuestion : Encode.Value -> Cmd msg
 
 
 emptyQuestion : Question
@@ -227,15 +230,11 @@ init flags =
     ( initialModel, saveModel (encodeModel initialModel) )
 
 
-questionDecoder : Decoder Question
-questionDecoder =
-    Decode.map5
-        Question
-        (Decode.field "text" Decode.string)
-        (Decode.field "options" (Decode.list optionDecoder))
-        (Decode.field "correctAnswer" Decode.string)
-        (Decode.field "mark" Decode.int)
-        (Decode.field "answers" (Decode.list Decode.string))
+
+-- n
+-- emptyQuestionEncoder : Encode.Value
+-- emptyQuestionEncoder =
+--     questionEncoder emptyQuestion
 
 
 questionEncoder : Question -> Encode.Value
@@ -249,6 +248,17 @@ questionEncoder question =
           , Encode.list Encode.string question.answers
           )
         ]
+
+
+questionDecoder : Decoder Question
+questionDecoder =
+    Decode.map5
+        Question
+        (Decode.field "text" Decode.string)
+        (Decode.field "options" (Decode.list optionDecoder))
+        (Decode.field "correctAnswer" Decode.string)
+        (Decode.field "mark" Decode.int)
+        (Decode.field "answers" (Decode.list Decode.string))
 
 
 optionDecoder : Decoder ( String, String )
@@ -305,7 +315,7 @@ view model =
                 [ div [ class "flex flex-col items-center " ]
                     [ div [ class "flex flex-col w-full max-w-5xl " ]
                         [ div [ class "mb-2 italic" ]
-                            [ label [ class "italic text-xl" ]
+                            [ label [ class "italic text-xl bg-[#FFFFFF]" ]
                                 [ text "text" ]
                             ]
                         , div [ class "mb-4 " ]
@@ -320,7 +330,7 @@ view model =
                         ]
                     , div [ class "flex flex-col w-full max-w-5xl" ]
                         [ div [ class "mb-2 italic" ]
-                            [ label [ class "italic text-xl" ]
+                            [ label [ class "italic text-xl bg-[#FFFFFF]" ]
                                 [ text "correctAnswer" ]
                             ]
                         , div [ class "mb-4" ]
@@ -335,10 +345,10 @@ view model =
                         ]
                     , div [ class "flex flex-col w-full max-w-5xl" ]
                         [ div [ class "mb-2 italic" ]
-                            [ label [ class "italic text-xl" ]
+                            [ label [ class "italic text-xl bg-[#FFFFFF]" ]
                                 [ text "Option 1" ]
                             ]
-                        , div [ class "mb-4" ]
+                        , div [ class "mb-4 " ]
                             [ input
                                 [ type_ "text"
                                 , placeholder "Enter option 1"
@@ -350,7 +360,7 @@ view model =
                         ]
                     , div [ class "flex flex-col w-full max-w-5xl" ]
                         [ div [ class "mb-2 italic" ]
-                            [ label [ class "italic text-xl" ]
+                            [ label [ class "italic text-xl bg-[#FFFFFF]" ]
                                 [ text "Option 2" ]
                             ]
                         , div [ class "mb-4" ]
@@ -365,7 +375,7 @@ view model =
                         ]
                     , div [ class "flex flex-col w-full max-w-5xl" ]
                         [ div [ class "mb-2 text-sm italic" ]
-                            [ label [ class "text-xl" ]
+                            [ label [ class "text-xl bg-[#FFFFFF]" ]
                                 [ text "Option 3" ]
                             ]
                         , div [ class "mb-4" ]
@@ -382,21 +392,24 @@ view model =
                         ]
                     , div [ class "flex flex-col w-full max-w-5xl  " ]
                         [ div [ class "mb-2  italic" ]
-                            [ label [ class "talic text-xl " ]
+                            [ label [ class "talic text-xl bg-[#FFFFFF]" ]
                                 [ text "mark" ]
                             ]
                         , div [ class "mb-4  " ]
                             [ input
                                 [ type_ "number"
                                 , placeholder "Enter the mark "
-                                , class " border border-solid border-[#F0EBF5] h-16 text-center italic text-md hover:bg-gray-50 active:bg-gray-50 w-full  max-w-4xl rounded-md text-center mt-4 w-full max-w-7xl "
+                                , class " border   h-16 border-[#F0EBF5]  active:border- text-center italic text-md hover:bg-gray-50 active:bg-gray-50 w-full  max-w-4xl rounded-md text-center mt-4 w-full max-w-7xl "
                                 , onInput MarkChange
                                 ]
                                 []
                             ]
                         ]
-                    , div [ onClick <| Debug.log "Add button clicked!" StorageNewQ, class "text-center font-semibold italic text-white bg-purple-600 h-16  text-xl rounded-lg flex items-center justify-center mt-[15px] w-full max-w-xl" ]
-                        [ text "Add!" ]
+                    , div [ class "flex gap-10  w-full max-w-4xl" ]
+                        [ div [ onClick <| Debug.log "Add button clicked!" StorageNewQ, class "text-center font-semibold italic text-white bg-purple-600 h-16  text-xl rounded-lg flex items-center justify-center mt-[15px] w-full max-w-5xl" ]
+                            [ text "Add!" ]
+                        , a [ href "/Evalute", class "text-center font-semibold italic text-black hover:bg-purple-600 hover:text-white h-16  text-xl rounded-lg flex items-center justify-center mt-[15px] w-full max-w-5xl " ] [ text "See Question" ]
+                        ]
                     ]
                 ]
 
@@ -404,7 +417,7 @@ view model =
             div [ class "flex flex-col items-center" ]
                 [ div [ class "text-center mt-64 font-semibold text-2xl italic" ]
                     [ text "No questions yet" ]
-                , div [ onClick <| Debug.log "Add button clicked!" StorageNewQ, class "text-center font-semibold italic text-white bg-purple-600 h-16 w-full max-w-[250px] text-xl rounded-lg flex items-center justify-center mt-[200px]" ]
+                , div [ onClick StorageNewQ, class "text-center font-semibold italic text-white bg-purple-600 h-16 w-full max-w-[250px] text-xl rounded-lg flex items-center justify-center mt-[200px] w-full max-w-5xl" ]
                     [ text "Create One!" ]
                 ]
 

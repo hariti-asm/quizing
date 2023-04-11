@@ -1,11 +1,10 @@
 module Main exposing (main)
 
--- import EvaluateQuestion exposing (..)
-
 import About
 import Add exposing (..)
 import Browser exposing (Document, UrlRequest(..))
 import Browser.Navigation as Nav
+import Evaluate exposing (..)
 import Html exposing (..)
 import Html.Attributes exposing (class, href)
 import Json.Decode exposing (Value)
@@ -22,14 +21,14 @@ type alias Model =
 
 type Route
     = Home
-      -- | Evaluate
+    | Evaluate
     | About
     | Add
 
 
 type Page
     = HomePage
-      -- | EvaluatePage EvaluateQuestion.Model
+    | EvaluatePage Evaluate.Model
     | AboutPage About.Model
     | AddPage Add.Model
 
@@ -39,6 +38,7 @@ type Msg
     | UrlChanged Url
     | AboutMsg About.Msg
     | AddMsg Add.Msg
+    | EvaluateMsg Evaluate.Msg
 
 
 main : Program Value Model Msg
@@ -60,6 +60,7 @@ urlToRoute url =
             [ UrlParser.map Home UrlParser.top
             , UrlParser.map About (UrlParser.s "about")
             , UrlParser.map Add (UrlParser.s "add")
+            , UrlParser.map Evaluate (UrlParser.s "evaluate")
             ]
         )
         url
@@ -78,6 +79,13 @@ routeToPage flags route =
                     About.init ()
             in
             ( AboutPage aboutModel, Cmd.map AboutMsg cmd )
+
+        Evaluate ->
+            let
+                ( evaluateModel, cmd ) =
+                    Evaluate.init flags
+            in
+            ( EvaluatePage evaluateModel, Cmd.map EvaluateMsg cmd )
 
         Add ->
             let
@@ -114,17 +122,36 @@ update msg model =
 
         AddMsg addMsg ->
             case model.page of
-                AboutPage aboutmodel ->
+                AboutPage _ ->
                     ( model, Cmd.none )
 
-                -- EvaluatePage _ ->
-                --     ( model, Cmd.none )
+                EvaluatePage _ ->
+                    ( model, Cmd.none )
+
                 AddPage addModel ->
                     let
                         ( newAddModel, cmd ) =
                             Add.update addMsg addModel
                     in
                     ( { model | page = AddPage newAddModel }, Cmd.map AddMsg cmd )
+
+                HomePage ->
+                    ( model, Cmd.none )
+
+        EvaluateMsg evaluateMsg ->
+            case model.page of
+                EvaluatePage evaluateModel ->
+                    let
+                        ( newEvaluateModel, cmd ) =
+                            Evaluate.update evaluateMsg evaluateModel
+                    in
+                    ( { model | page = EvaluatePage newEvaluateModel }, Cmd.map EvaluateMsg cmd )
+
+                AddPage _ ->
+                    ( model, Cmd.none )
+
+                AboutPage _ ->
+                    ( model, Cmd.none )
 
                 HomePage ->
                     ( model, Cmd.none )
@@ -139,6 +166,9 @@ update msg model =
                     ( { model | page = AboutPage newAboutModel }, Cmd.map AboutMsg cmd )
 
                 AddPage _ ->
+                    ( model, Cmd.none )
+
+                EvaluatePage _ ->
                     ( model, Cmd.none )
 
                 HomePage ->
@@ -169,6 +199,11 @@ viewPage page =
                     , class " text-center  font-semibold italic text-[#FFFFFF] bg-[#8419FF] h-16 w-full max-w-[250px] text-xl rounded-lg flex  items-center  justify-center mt-[200px]  "
                     ]
                     [ text "Make Quiz !" ]
+                , a
+                    [ href "/evaluate"
+                    , class " text-center  font-semibold italic text-[#FFFFFF] bg-[#8419FF] h-16 w-full max-w-[250px] text-xl rounded-lg flex  items-center  justify-center mt-[200px]  "
+                    ]
+                    [ text "Get Quiz !" ]
                 ]
 
         AddPage addModel ->
@@ -177,10 +212,8 @@ viewPage page =
         AboutPage aboutModel ->
             About.view aboutModel |> Html.map AboutMsg
 
-
-
--- EvaluatePage quizModel ->
---     EvaluateQuestion.view quizModel |> Html.map EvaluateQuestionMsg
+        EvaluatePage evaluateModel ->
+            Evaluate.view evaluateModel |> Html.map EvaluateMsg
 
 
 getPageTitle : Page -> String
@@ -191,6 +224,9 @@ getPageTitle page =
 
         AboutPage _ ->
             "About"
+
+        EvaluatePage _ ->
+            "Evaluate"
 
         AddPage _ ->
             "Add"

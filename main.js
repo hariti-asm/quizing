@@ -14,9 +14,14 @@ const root = document.querySelector("#app div");
 
 const flas = JSON.parse(localStorage.getItem("model")) || {};
 const app = Elm.Main.init({ node: root, flags: flas });
+// const flags = JSON.parse(localStorage.getItem("emptyQuestion")) || {};
 
 console.log("initilizing app with flags: ", flas);
 app.ports.storeModel.subscribe(function (model) {
   console.log("saving model...");
   localStorage.setItem("model", JSON.stringify(model));
 });
+// app.ports.emptyQuestion.subscribe(function (model) {
+//   console.log("saving emptyQuestion...");
+//   localStorage.setItem("emptyQuestion", JSON.stringify(model));
+// });
