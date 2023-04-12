@@ -263,7 +263,15 @@ questionEncoder question =
         , ( "answers"
           , Encode.list Encode.string question.answers
           )
-        , ( "subject", Encode.string question.subject )
+        , ( "subject", Encode.subject subjectEncoder )
+        ]
+
+
+subjectEncoder : Subject -> Encode.Value
+subjectEncoder subject =
+    Encode.object
+        [ ( "id", Encode.int subject.id )
+        , ( "name", Encode.string subject.name )
         ]
 
 
@@ -276,7 +284,15 @@ questionDecoder =
         (Decode.field "correctAnswer" Decode.string)
         (Decode.field "mark" Decode.int)
         (Decode.field "answers" (Decode.list Decode.string))
-        (Decode.field "subject" Decode.string)
+        (Decode.field "subject" subjectDecoder)
+
+
+subjectDecoder : Decoder Subject
+subjectDecoder =
+    Decode.map2
+        Subject
+        (Decode.field "id" Decode.int)
+        (Decode.field "name" Decode.string)
 
 
 optionDecoder : Decoder ( String, String )

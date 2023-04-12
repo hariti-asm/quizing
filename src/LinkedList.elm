@@ -2,7 +2,7 @@ module LinkedList exposing (..)
 
 -- struct LList {
 -- value: Int
--- next: *LList
+-- next: Quizes
 --}
 
 
