@@ -40,9 +40,6 @@ type alias Model =
     }
 
 
-port saveModel2 : Encode.Value -> Cmd msg
-
-
 port storeModel2 : Encode.Value -> Cmd msg
 
 
@@ -73,7 +70,7 @@ update msg model =
 
         DeleteQuestion index ->
             let
-                khassoYb9a =
+                newQuestions =
                     List.indexedMap
                         (\i question ->
                             if i == index then
@@ -84,8 +81,12 @@ update msg model =
                         )
                         model.questions
                         |> List.filterMap identity
+
+                --to remove the Nothings from the array
+                newModel =
+                    { model | questions = newQuestions }
             in
-            ( { model | questions = khassoYb9a }, Cmd.none )
+            ( { model | questions = newQuestions }, storeModel2 (encodeModel newModel) )
 
         StorageNewQ ->
             case model.newQuestion of
@@ -258,7 +259,7 @@ init flags =
                     , newQuestion = Nothing
                     }
     in
-    ( initialModel, saveModel2 (encodeModel initialModel) )
+    ( initialModel, storeModel2 (encodeModel initialModel) )
 
 
 questionDecoder : Decoder Question
@@ -340,7 +341,7 @@ view model =
 questionView : Int -> Question -> Html Msg
 questionView index question =
     div [ id (String.fromInt index) ]
-        [ div [ class " text-xl mb-10 text-2xl" ] [ text (String.fromInt (index + 1) ++ ") " ++ question.text) ]
+        [ div [ class " text-xl  text-2xl" ] [ text (String.fromInt (index + 1) ++ ") " ++ question.text) ]
         , button [ onClick (DeleteQuestion index), class " ml-[400px]" ] [ text "delete " ]
         , div [ class " flex flex-col  gap-6 text-xl" ]
             (List.map
@@ -363,13 +364,13 @@ viewOption { optionLabel, optionValue, isChecked, onSelect } =
     div []
         [ label
             [ classList
-                [ ( "bg-[#8419FF] text-white ", isChecked )
-                , ( "border border-solid  border-1.5 solid border-[#F0EBF5]  rounded-xl gap-6 px-10 w-full py-4 focus:bg-[#8419FF]"
+                [ ( "text-white ", isChecked )
+                , ( "  "
                   , True
                   )
                 ]
             , onClick
                 (onSelect optionLabel)
             ]
-            [ span [ class "text-[#F0EBF5]" ] [ text optionLabel ], text (" " ++ optionValue) ]
+            [ input [ type_ "radio", checked isChecked, class "text-[#F0EBF5]" ] [ text optionLabel ], text (" " ++ optionValue) ]
         ]

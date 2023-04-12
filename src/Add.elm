@@ -35,6 +35,7 @@ type alias Model =
     , currentIndex : Int
     , score : Int
     , newQuestion : Maybe Question
+    , subject : String
     }
 
 
@@ -225,6 +226,7 @@ init flags =
                     , currentIndex = 0
                     , score = 0
                     , newQuestion = Nothing
+                    , subject = ""
                     }
     in
     ( initialModel, saveModel (encodeModel initialModel) )
@@ -283,6 +285,7 @@ encodeModel model =
         [ ( "questions", Encode.list questionEncoder model.questions )
         , ( "currentIndex", Encode.int model.currentIndex )
         , ( "score", Encode.int model.score )
+        , ( "subject", Encode.string model.subject )
         , ( "newQuestion"
           , case model.newQuestion of
                 Just q ->
@@ -296,11 +299,12 @@ encodeModel model =
 
 decodeModel : Decode.Decoder Model
 decodeModel =
-    Decode.map4 Model
+    Decode.map5 Model
         (Decode.field "questions" (Decode.list questionDecoder))
         (Decode.field "currentIndex" Decode.int)
         (Decode.field "score" Decode.int)
         (Decode.field "newQuestion" (Decode.nullable questionDecoder))
+        (Decode.field "subject" Decode.string)
 
 
 view : Model -> Html Msg
