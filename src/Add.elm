@@ -19,6 +19,7 @@ type Msg
     | SelectOption Int String
     | CorrectAnserChange String
     | ResetInput
+    | SubjectChange String
 
 
 type alias Question =
@@ -27,7 +28,12 @@ type alias Question =
     , correctAnswer : String
     , mark : Int
     , answers : List String
+    , subject : Subject
     }
+
+
+type alias Subject =
+    { id : Int, name : String }
 
 
 type alias Model =
@@ -35,7 +41,6 @@ type alias Model =
     , currentIndex : Int
     , score : Int
     , newQuestion : Maybe Question
-    , subject : String
     }
 
 
@@ -45,10 +50,6 @@ port saveModel : Encode.Value -> Cmd msg
 port storeModel : Encode.Value -> Cmd msg
 
 
-
--- port emptyQuestion : Encode.Value -> Cmd msg
-
-
 emptyQuestion : Question
 emptyQuestion =
     { text = ""
@@ -56,6 +57,7 @@ emptyQuestion =
     , correctAnswer = ""
     , mark = 0
     , answers = []
+    , subject = 0 ""
     }
 
 
@@ -98,6 +100,18 @@ update msg model =
                             storeModel encodedNewModel
                     in
                     ( newModel, storingagain )
+
+        SubjectChange newSubject ->
+            case model.newQuestion of
+                Nothing ->
+                    ( model, Cmd.none )
+
+                Just newQuestion ->
+                    let
+                        updatedNewQuestion =
+                            { newQuestion | subject = newSubject }
+                    in
+                    ( { model | newQuestion = Just updatedNewQuestion }, Cmd.none )
 
         CorrectAnserChange newanswer ->
             case model.newQuestion of
@@ -226,7 +240,6 @@ init flags =
                     , currentIndex = 0
                     , score = 0
                     , newQuestion = Nothing
-                    , subject = ""
                     }
     in
     ( initialModel, saveModel (encodeModel initialModel) )
@@ -243,24 +256,27 @@ questionEncoder : Question -> Encode.Value
 questionEncoder question =
     Encode.object
         [ ( "text", Encode.string question.text )
+        , ( "subject", Encode.string question.text )
         , ( "options", Encode.list optionEncoder question.options )
         , ( "correctAnswer", Encode.string question.correctAnswer )
         , ( "mark", Encode.int question.mark )
         , ( "answers"
           , Encode.list Encode.string question.answers
           )
+        , ( "subject", Encode.string question.subject )
         ]
 
 
 questionDecoder : Decoder Question
 questionDecoder =
-    Decode.map5
+    Decode.map6
         Question
         (Decode.field "text" Decode.string)
         (Decode.field "options" (Decode.list optionDecoder))
         (Decode.field "correctAnswer" Decode.string)
         (Decode.field "mark" Decode.int)
         (Decode.field "answers" (Decode.list Decode.string))
+        (Decode.field "subject" Decode.string)
 
 
 optionDecoder : Decoder ( String, String )
@@ -285,7 +301,6 @@ encodeModel model =
         [ ( "questions", Encode.list questionEncoder model.questions )
         , ( "currentIndex", Encode.int model.currentIndex )
         , ( "score", Encode.int model.score )
-        , ( "subject", Encode.string model.subject )
         , ( "newQuestion"
           , case model.newQuestion of
                 Just q ->
@@ -299,12 +314,11 @@ encodeModel model =
 
 decodeModel : Decode.Decoder Model
 decodeModel =
-    Decode.map5 Model
+    Decode.map4 Model
         (Decode.field "questions" (Decode.list questionDecoder))
         (Decode.field "currentIndex" Decode.int)
         (Decode.field "score" Decode.int)
         (Decode.field "newQuestion" (Decode.nullable questionDecoder))
-        (Decode.field "subject" Decode.string)
 
 
 view : Model -> Html Msg
