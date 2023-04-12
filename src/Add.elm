@@ -19,7 +19,7 @@ type Msg
     | SelectOption Int String
     | CorrectAnserChange String
     | ResetInput
-    | SubjectChange String
+    | SubjectChange Subject
 
 
 type alias Question =
@@ -57,7 +57,7 @@ emptyQuestion =
     , correctAnswer = ""
     , mark = 0
     , answers = []
-    , subject = 0 ""
+    , subject = { id = 0, name = "" }
     }
 
 
@@ -263,7 +263,7 @@ questionEncoder question =
         , ( "answers"
           , Encode.list Encode.string question.answers
           )
-        , ( "subject", Encode.subject subjectEncoder )
+        , ( "subject", subjectEncoder question.subject )
         ]
 
 
