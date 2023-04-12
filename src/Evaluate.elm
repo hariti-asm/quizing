@@ -20,6 +20,7 @@ type Msg
     | TextChange String
     | CorrectAnserChange String
     | StorageNewQ
+    | DeleteQuestion Int
 
 
 type alias Question =
@@ -69,6 +70,22 @@ update msg model =
             ( newModel
             , storeModel2 encodedNewModel
             )
+
+        DeleteQuestion index ->
+            let
+                khassoYb9a =
+                    List.indexedMap
+                        (\i question ->
+                            if i == index then
+                                Nothing
+
+                            else
+                                Just question
+                        )
+                        model.questions
+                        |> List.filterMap identity
+            in
+            ( { model | questions = khassoYb9a }, Cmd.none )
 
         StorageNewQ ->
             case model.newQuestion of
@@ -313,10 +330,10 @@ decodeModel =
 view : Model -> Html Msg
 view model =
     div [ class "flex flex-col items-center" ]
-        [ -- , div [] [ text (String.fromInt model.score) ]
+        [ -- [ div [] [ text (String.fromInt model.score) ]
           div [] (List.indexedMap (\index question -> questionView index question) model.questions)
-        , button [ onClick PreviousQuestion ] [ text "Previous" ]
-        , button [ onClick NextQuestion ] [ text "Next" ]
+        , button [ onClick PreviousQuestion ] [ text "+" ]
+        , button [ onClick NextQuestion ] [ text "Go back" ]
         ]
 
 
@@ -324,6 +341,7 @@ questionView : Int -> Question -> Html Msg
 questionView index question =
     div [ id (String.fromInt index) ]
         [ div [ class " text-xl mb-10 text-2xl" ] [ text (String.fromInt (index + 1) ++ ") " ++ question.text) ]
+        , button [ onClick (DeleteQuestion index), class " ml-[400px]" ] [ text "delete " ]
         , div [ class " flex flex-col  gap-6 text-xl" ]
             (List.map
                 (\( optionLabel, optionValue ) ->
