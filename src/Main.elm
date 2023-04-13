@@ -65,7 +65,7 @@ urlToRoute url =
             , UrlParser.map About (UrlParser.s "about")
             , UrlParser.map Add (UrlParser.s "add")
             , UrlParser.map Evaluate (UrlParser.s "evaluate")
-            , UrlParser.map Evaluate (UrlParser.s "quizes")
+            , UrlParser.map Quizes (UrlParser.s "quizes")
             ]
         )
         url
@@ -132,96 +132,96 @@ update msg model =
                 External url ->
                     ( model, Nav.load url )
 
-                QuizesMsg quizesMsg ->
-                    case model.page of
-                        AboutPage _ ->
-                            ( model, Cmd.none )
+        QuizesMsg quizesMsg ->
+            case model.page of
+                AboutPage _ ->
+                    ( model, Cmd.none )
 
-                        EvaluatePage _ ->
-                            ( model, Cmd.none )
+                EvaluatePage _ ->
+                    ( model, Cmd.none )
 
-                        AddPage _ ->
-                            ( model, Cmd.none )
+                AddPage _ ->
+                    ( model, Cmd.none )
 
-                        HomePage ->
-                            ( model, Cmd.none )
+                HomePage ->
+                    ( model, Cmd.none )
 
-                        QuizesPage quizesModel ->
-                            let
-                                ( newQuizesModel, cmd ) =
-                                    Quizes.update quizesMsg quizesModel
-                            in
-                            ( { model | page = QuizesPage newQuizesModel }, Cmd.map QuizesMsg cmd )
-
-                AddMsg addMsg ->
-                    case model.page of
-                        AboutPage _ ->
-                            ( model, Cmd.none )
-
-                        EvaluatePage _ ->
-                            ( model, Cmd.none )
-
-                        AddPage addModel ->
-                            let
-                                ( newAddModel, cmd ) =
-                                    Add.update addMsg addModel
-                            in
-                            ( { model | page = AddPage newAddModel }, Cmd.map AddMsg cmd )
-
-                        HomePage ->
-                            ( model, Cmd.none )
-
-                        QuizesPage _ ->
-                            ( model, Cmd.none )
-
-                EvaluateMsg evaluateMsg ->
-                    case model.page of
-                        EvaluatePage evaluateModel ->
-                            let
-                                ( newEvaluateModel, cmd ) =
-                                    Evaluate.update evaluateMsg evaluateModel
-                            in
-                            ( { model | page = EvaluatePage newEvaluateModel }, Cmd.map EvaluateMsg cmd )
-
-                        AddPage _ ->
-                            ( model, Cmd.none )
-
-                        AboutPage _ ->
-                            ( model, Cmd.none )
-
-                        HomePage ->
-                            ( model, Cmd.none )
-
-                        QuizesPage _ ->
-                            ( model, Cmd.none )
-
-                AboutMsg aboutMsg ->
-                    case model.page of
-                        AboutPage aboutModel ->
-                            let
-                                ( newAboutModel, cmd ) =
-                                    About.update aboutMsg aboutModel
-                            in
-                            ( { model | page = AboutPage newAboutModel }, Cmd.map AboutMsg cmd )
-
-                        AddPage _ ->
-                            ( model, Cmd.none )
-
-                        EvaluatePage _ ->
-                            ( model, Cmd.none )
-
-                        HomePage ->
-                            ( model, Cmd.none )
-
-                        QuizesPage _ ->
-                            ( model, Cmd.none )
-
-                UrlChanged url ->
+                QuizesPage quizesModel ->
                     let
-                        ( page, cmd ) =
-                            url |> urlToRoute |> routeToPage E.null
+                        ( newQuizesModel, cmd ) =
+                            Quizes.update quizesMsg quizesModel
                     in
-                    ( { model | page = page }, cmd )
+                    ( { model | page = QuizesPage newQuizesModel }, Cmd.map QuizesMsg cmd )
+
+        AddMsg addMsg ->
+            case model.page of
+                AboutPage _ ->
+                    ( model, Cmd.none )
+
+                EvaluatePage _ ->
+                    ( model, Cmd.none )
+
+                AddPage addModel ->
+                    let
+                        ( newAddModel, cmd ) =
+                            Add.update addMsg addModel
+                    in
+                    ( { model | page = AddPage newAddModel }, Cmd.map AddMsg cmd )
+
+                HomePage ->
+                    ( model, Cmd.none )
+
+                QuizesPage _ ->
+                    ( model, Cmd.none )
+
+        EvaluateMsg evaluateMsg ->
+            case model.page of
+                EvaluatePage evaluateModel ->
+                    let
+                        ( newEvaluateModel, cmd ) =
+                            Evaluate.update evaluateMsg evaluateModel
+                    in
+                    ( { model | page = EvaluatePage newEvaluateModel }, Cmd.map EvaluateMsg cmd )
+
+                AddPage _ ->
+                    ( model, Cmd.none )
+
+                AboutPage _ ->
+                    ( model, Cmd.none )
+
+                HomePage ->
+                    ( model, Cmd.none )
+
+                QuizesPage _ ->
+                    ( model, Cmd.none )
+
+        AboutMsg aboutMsg ->
+            case model.page of
+                AboutPage aboutModel ->
+                    let
+                        ( newAboutModel, cmd ) =
+                            About.update aboutMsg aboutModel
+                    in
+                    ( { model | page = AboutPage newAboutModel }, Cmd.map AboutMsg cmd )
+
+                AddPage _ ->
+                    ( model, Cmd.none )
+
+                EvaluatePage _ ->
+                    ( model, Cmd.none )
+
+                HomePage ->
+                    ( model, Cmd.none )
+
+                QuizesPage _ ->
+                    ( model, Cmd.none )
+
+        UrlChanged url ->
+            let
+                ( page, cmd ) =
+                    url |> urlToRoute |> routeToPage E.null
+            in
+            ( { model | page = page }, cmd )
 
 
 view : Model -> Document Msg

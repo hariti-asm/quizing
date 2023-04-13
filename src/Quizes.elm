@@ -20,6 +20,8 @@ quizes =
     [ { id = 1, subject = "Mathematics" }
     , { id = 2, subject = "Science" }
     , { id = 3, subject = "History" }
+    , { id = 4, subject = "Physics" }
+    , { id = 5, subject = "Philosophy" }
     ]
 
 
@@ -47,11 +49,14 @@ viewQuizTable quizzes =
             tr []
                 [ td [] [ text <| String.fromInt quiz.id ]
                 , td [] [ text quiz.subject ]
+                , td []
+                    [ button [] [ text "View" ]
+                    ]
                 , td [] [ button [] [ text "Edit" ] ]
                 ]
     in
     table []
-        [ thead [] [ tr [] [ th [] [ text "ID" ], th [] [ text "Subject" ], th [] [ text "Edit" ] ] ]
+        [ thead [] [ tr [] [ th [] [ text "ID" ], th [] [ text "Subject" ], th [] [ text "view" ], th [] [ text "Edit" ] ] ]
         , tbody [] (List.map viewQuizRow quizes)
         ]
 
