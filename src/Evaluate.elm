@@ -332,9 +332,13 @@ view : Model -> Html Msg
 view model =
     div [ class "flex flex-col items-center" ]
         [ -- [ div [] [ text (String.fromInt model.score) ]
-          div [] (List.indexedMap (\index question -> questionView index question) model.questions)
-        , button [ onClick PreviousQuestion ] [ text "+" ]
-        , button [ onClick NextQuestion ] [ text "Go back" ]
+          div [ class "flex flex-row " ]
+            (List.indexedMap (\index question -> questionView index question) model.questions)
+        , div
+            [ class "flex gap-8" ]
+            [ button [ onClick PreviousQuestion ] [ text "Go back home" ]
+            , button [ onClick NextQuestion ] [ text "+" ]
+            ]
         ]
 
 
