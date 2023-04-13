@@ -1,8 +1,8 @@
 module Quizes exposing (..)
-module Main exposing (main)
 
-import Html exposing (Html, text, table, tr, th, td, tbody, button)
+import Html exposing (Html, button, div, table, tbody, td, text, th, thead, tr)
 import Html.Events exposing (onClick)
+import Msg exposing (Msg)
 
 
 type alias Quiz =
@@ -10,12 +10,34 @@ type alias Quiz =
     , subject : String
     }
 
-quizzes : List Quiz
-quizzes =
+
+type Msg
+    = EditQuiz Int
+
+
+quizes : List Quiz
+quizes =
     [ { id = 1, subject = "Mathematics" }
     , { id = 2, subject = "Science" }
     , { id = 3, subject = "History" }
     ]
+
+
+type alias Model =
+    { quizes : List Quiz
+    }
+
+
+update : Msg -> Model -> ( Model, Cmd Msg )
+update msg model =
+    case msg of
+        EditQuiz id ->
+            ( model, Cmd.none )
+
+
+init : ( Model, Cmd Msg )
+init =
+    ( { quizes = quizes }, Cmd.none )
 
 
 viewQuizTable : List Quiz -> Html msg
@@ -25,16 +47,23 @@ viewQuizTable quizzes =
             tr []
                 [ td [] [ text <| String.fromInt quiz.id ]
                 , td [] [ text quiz.subject ]
-                , td [] [ button [ onClick <| MsgEditQuiz quiz.id ] [ text "Edit" ] ]
+                , td [] [ button [] [ text "Edit" ] ]
                 ]
     in
     table []
         [ thead [] [ tr [] [ th [] [ text "ID" ], th [] [ text "Subject" ], th [] [ text "Edit" ] ] ]
-        , tbody [] (List.map viewQuizRow quizzes)
+        , tbody [] (List.map viewQuizRow quizes)
         ]
 
 
-main : Html msg
-main =
-    viewQuizTable quizzes
-
+view : Model -> Html Msg
+view model =
+    div []
+        [ div []
+            [ text "hello from quizes page" ]
+        , div
+            []
+            [ viewQuizTable
+                quizes
+            ]
+        ]
