@@ -56,17 +56,7 @@ quizes =
 
 viewQuizTable : List Quiz -> Html msg
 viewQuizTable quizzes =
-    let
-        viewQuizRow quiz =
-            tr []
-                [ td [] [ text <| String.fromInt quiz.id ]
-                , td [] [ text quiz.subject ]
-                , td []
-                    [ button [] [ text "View" ]
-                    ]
-                , td [] [ button [] [ text "Edit" ] ]
-                ]
-    in
+   
     div
         []
         [ section
@@ -109,6 +99,17 @@ viewQuizTable quizzes =
                         [ table
                             [ class "items-center bg-transparent w-full border-collapse "
                             ]
+                             let
+        viewQuizRow quiz =
+            tr []
+                [ td [] [ text <| String.fromInt quiz.id ]
+                , td [] [ text quiz.subject ]
+                , td []
+                    [ button [] [ text "View" ]
+                    ]
+                , td [] [ button [] [ text "Edit" ] ]
+                ]
+    in
                             [ thead []
                                 [ tr []
                                     [ th
