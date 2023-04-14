@@ -1,7 +1,7 @@
 module Pricing exposing (..)
 
-import Html exposing (Html, a, div, h2, img, p, span, text)
-import Html.Attributes exposing (alt, class, href, src)
+import Html exposing (Html, a, br, div, h1, h2, hr, img, node, p, span, text)
+import Html.Attributes exposing (alt, class, href, rel, src)
 
 
 type alias Model =
@@ -14,352 +14,364 @@ type Msg
 
 view : Model -> Html Msg
 view model =
-        {- component -}
-        node "link"
-        [ Attr.rel "preconnect"
-        , Attr.href "https://fonts.gstatic.com"
-        ]
-        []
-    ,     node "link"
-        [ Attr.href "https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800;900&display=swap"
-        , Attr.rel "stylesheet"
-        ]
-        []
-    ,     node "link"
-        [ Attr.href "https://fonts.googleapis.com/icon?family=Material+Icons"
-        , Attr.rel "stylesheet"
-        ]
-        []
-    ,     body
-        [ Attr.class "font-sans bg-gray-100"
-        ]
-        [ div
-            [ Attr.class "min-h-screen flex justify-center items-center"
+    div []
+        [ node "link"
+            [ rel "preconnect"
+            , href "https://fonts.gstatic.com"
+            ]
+            []
+        , node "link"
+            [ href "https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800;900&display=swap"
+            , rel "stylesheet"
+            ]
+            []
+        , node "link"
+            [ href "https://fonts.googleapis.com/icon?family=Material+Icons"
+            , rel "stylesheet"
+            ]
+            []
+        , div
+            [ class "font-sans bg-gray-100"
             ]
             [ div
-                [ Attr.class ""
+                [ class "min-h-screen flex justify-center items-center"
                 ]
                 [ div
-                    [ Attr.class "text-center font-semibold"
+                    [ class ""
                     ]
-                    [ h1
-                        [ Attr.class "text-5xl"
-                        ]
-                        [ span
-                            [ Attr.class "text-blue-700 tracking-wide"
-                            ]
-                            [ text "Flexible" ]
-                        , span []
-                            [ text "Plans" ]
-                        ]
-                    , p
-                        [ Attr.class "pt-6 text-xl text-gray-400 font-normal w-full px-8 md:w-full"
-                        ]
-                        [ text "Choose a plan that works best for you and", br []
-                            []
-                        , text "your team." ]
-                    ]
-                , div
-                    [ Attr.class "pt-24 flex flex-row"
-                    ]
-                    [                     {- Basic Card -}
-                    div
-                        [ Attr.class "w-96 p-8 bg-white text-center rounded-3xl pr-16 shadow-xl"
+                    [ div
+                        [ class "text-center font-semibold"
                         ]
                         [ h1
-                            [ Attr.class "text-black font-semibold text-2xl"
-                            ]
-                            [ text "Basic" ]
-                        , p
-                            [ Attr.class "pt-2 tracking-wide"
+                            [ class "text-5xl"
                             ]
                             [ span
-                                [ Attr.class "text-gray-400 align-top"
+                                [ class "text-[#8419FF] tracking-wide"
                                 ]
-                                [ text "$" ]
-                            , span
-                                [ Attr.class "text-3xl font-semibold"
-                                ]
-                                [ text "10" ]
-                            , span
-                                [ Attr.class "text-gray-400 font-medium"
-                                ]
-                                [ text "/ user" ]
+                                [ text "Flexible" ]
+                            , span []
+                                [ text "Plans" ]
                             ]
-                        , hr
-                            [ Attr.class "mt-4 border-1"
-                            ]
-                            []
-                        , div
-                            [ Attr.class "pt-8"
-                            ]
-                            [ p
-                                [ Attr.class "font-semibold text-gray-400 text-left"
-                                ]
-                                [ span
-                                    [ Attr.class "material-icons align-middle"
-                                    ]
-                                    [ text "done" ]
-                                , span
-                                    [ Attr.class "pl-2"
-                                    ]
-                                    [ text "Get started with", span
-                                        [ Attr.class "text-black"
-                                        ]
-                                        [ text "messaging" ]
-                                    ]
-                                ]
-                            , p
-                                [ Attr.class "font-semibold text-gray-400 text-left pt-5"
-                                ]
-                                [ span
-                                    [ Attr.class "material-icons align-middle"
-                                    ]
-                                    [ text "done" ]
-                                , span
-                                    [ Attr.class "pl-2"
-                                    ]
-                                    [ text "Flexible", span
-                                        [ Attr.class "text-black"
-                                        ]
-                                        [ text "team meetings" ]
-                                    ]
-                                ]
-                            , p
-                                [ Attr.class "font-semibold text-gray-400 text-left pt-5"
-                                ]
-                                [ span
-                                    [ Attr.class "material-icons align-middle"
-                                    ]
-                                    [ text "done" ]
-                                , span
-                                    [ Attr.class "pl-2"
-                                    ]
-                                    [ span
-                                        [ Attr.class "text-black"
-                                        ]
-                                        [ text "5 TB" ]
-                                    , text "cloud storage" ]
-                                ]
-                            , a
-                                [ Attr.href "#"
-                                , Attr.class ""
-                                ]
-                                [ p
-                                    [ Attr.class "w-full py-4 bg-blue-600 mt-8 rounded-xl text-white"
-                                    ]
-                                    [ span
-                                        [ Attr.class "font-medium"
-                                        ]
-                                        [ text "Choose Plan" ]
-                                    , span
-                                        [ Attr.class "pl-2 material-icons align-middle text-sm"
-                                        ]
-                                        [ text "east" ]
-                                    ]
-                                ]
-                            ]
-                        ]
-                    ,                     {- StartUp Card -}
-                    div
-                        [ Attr.class "w-80 p-8 bg-gray-900 text-center rounded-3xl text-white border-4 shadow-xl border-white transform scale-125"
-                        ]
-                        [ h1
-                            [ Attr.class "text-white font-semibold text-2xl"
-                            ]
-                            [ text "Startup" ]
                         , p
-                            [ Attr.class "pt-2 tracking-wide"
+                            [ class "pt-6 text-xl text-gray-400 font-normal w-full px-8 md:w-full"
                             ]
-                            [ span
-                                [ Attr.class "text-gray-400 align-top"
-                                ]
-                                [ text "$" ]
-                            , span
-                                [ Attr.class "text-3xl font-semibold"
-                                ]
-                                [ text "24" ]
-                            , span
-                                [ Attr.class "text-gray-400 font-medium"
-                                ]
-                                [ text "/ user" ]
-                            ]
-                        , hr
-                            [ Attr.class "mt-4 border-1 border-gray-600"
-                            ]
-                            []
-                        , div
-                            [ Attr.class "pt-8"
-                            ]
-                            [ p
-                                [ Attr.class "font-semibold text-gray-400 text-left"
-                                ]
-                                [ span
-                                    [ Attr.class "material-icons align-middle"
-                                    ]
-                                    [ text "done" ]
-                                , span
-                                    [ Attr.class "pl-2"
-                                    ]
-                                    [ text "All features in", span
-                                        [ Attr.class "text-white"
-                                        ]
-                                        [ text "Basic" ]
-                                    ]
-                                ]
-                            , p
-                                [ Attr.class "font-semibold text-gray-400 text-left pt-5"
-                                ]
-                                [ span
-                                    [ Attr.class "material-icons align-middle"
-                                    ]
-                                    [ text "done" ]
-                                , span
-                                    [ Attr.class "pl-2"
-                                    ]
-                                    [ text "Flexible", span
-                                        [ Attr.class "text-white"
-                                        ]
-                                        [ text "call scheduling" ]
-                                    ]
-                                ]
-                            , p
-                                [ Attr.class "font-semibold text-gray-400 text-left pt-5"
-                                ]
-                                [ span
-                                    [ Attr.class "material-icons align-middle"
-                                    ]
-                                    [ text "done" ]
-                                , span
-                                    [ Attr.class "pl-2"
-                                    ]
-                                    [ span
-                                        [ Attr.class "text-white"
-                                        ]
-                                        [ text "15 TB" ]
-                                    , text "cloud storage" ]
-                                ]
-                            , a
-                                [ Attr.href "#"
-                                , Attr.class ""
-                                ]
-                                [ p
-                                    [ Attr.class "w-full py-4 bg-blue-600 mt-8 rounded-xl text-white"
-                                    ]
-                                    [ span
-                                        [ Attr.class "font-medium"
-                                        ]
-                                        [ text "Choose Plan" ]
-                                    , span
-                                        [ Attr.class "pl-2 material-icons align-middle text-sm"
-                                        ]
-                                        [ text "east" ]
-                                    ]
-                                ]
-                            ]
-                        , div
-                            [ Attr.class "absolute top-4 right-4"
-                            ]
-                            [ p
-                                [ Attr.class "bg-blue-700 font-semibold px-4 py-1 rounded-full uppercase text-xs"
-                                ]
-                                [ text "Popular" ]
+                            [ text "Choose a plan that works best for you and"
+                            , br []
+                                []
+                            , text "your team."
                             ]
                         ]
-                    ,                     {- Enterprise Card -}
-                    div
-                        [ Attr.class "w-96 p-8 bg-white text-center rounded-3xl pl-16 shadow-xl"
+                    , div
+                        [ class "pt-24 flex flex-row"
                         ]
-                        [ h1
-                            [ Attr.class "text-black font-semibold text-2xl"
+                        [ {- Basic Card -}
+                          div
+                            [ class "w-96 p-8 bg-white text-center rounded-3xl pr-16 shadow-xl"
                             ]
-                            [ text "Enterprise" ]
-                        , p
-                            [ Attr.class "pt-2 tracking-wide"
-                            ]
-                            [ span
-                                [ Attr.class "text-gray-400 align-top"
+                            [ h1
+                                [ class "text-black font-semibold text-2xl"
                                 ]
-                                [ text "$" ]
-                            , span
-                                [ Attr.class "text-3xl font-semibold"
-                                ]
-                                [ text "35" ]
-                            , span
-                                [ Attr.class "text-gray-400 font-medium"
-                                ]
-                                [ text "/ user" ]
-                            ]
-                        , hr
-                            [ Attr.class "mt-4 border-1"
-                            ]
-                            []
-                        , div
-                            [ Attr.class "pt-8"
-                            ]
-                            [ p
-                                [ Attr.class "font-semibold text-gray-400 text-left"
-                                ]
-                                [ span
-                                    [ Attr.class "material-icons align-middle"
-                                    ]
-                                    [ text "done" ]
-                                , span
-                                    [ Attr.class "pl-2"
-                                    ]
-                                    [ text "All features in", span
-                                        [ Attr.class "text-black"
-                                        ]
-                                        [ text "Startup" ]
-                                    ]
-                                ]
+                                [ text "Basic" ]
                             , p
-                                [ Attr.class "font-semibold text-gray-400 text-left pt-5"
+                                [ class "pt-2 tracking-wide"
                                 ]
                                 [ span
-                                    [ Attr.class "material-icons align-middle"
+                                    [ class "text-gray-400 align-top"
                                     ]
-                                    [ text "done" ]
+                                    [ text "$" ]
                                 , span
-                                    [ Attr.class "pl-2"
+                                    [ class "text-3xl font-semibold"
                                     ]
-                                    [ text "Growth", span
-                                        [ Attr.class "text-black"
-                                        ]
-                                        [ text "oriented" ]
-                                    ]
-                                ]
-                            , p
-                                [ Attr.class "font-semibold text-gray-400 text-left pt-5"
-                                ]
-                                [ span
-                                    [ Attr.class "material-icons align-middle"
-                                    ]
-                                    [ text "done" ]
+                                    [ text "10" ]
                                 , span
-                                    [ Attr.class "pl-2"
+                                    [ class "text-gray-400 font-medium"
                                     ]
-                                    [ span
-                                        [ Attr.class "text-black"
-                                        ]
-                                        [ text "Unlimited" ]
-                                    , text "cloud storage" ]
+                                    [ text "/ user" ]
                                 ]
-                            , a
-                                [ Attr.href "#"
-                                , Attr.class ""
+                            , hr
+                                [ class "mt-4 border-1"
+                                ]
+                                []
+                            , div
+                                [ class "pt-8"
                                 ]
                                 [ p
-                                    [ Attr.class "w-full py-4 bg-blue-600 mt-8 rounded-xl text-white"
+                                    [ class "font-semibold text-gray-400 text-left"
                                     ]
                                     [ span
-                                        [ Attr.class "font-medium"
+                                        [ class "material-icons align-middle"
                                         ]
-                                        [ text "Choose Plan" ]
+                                        [ text "done" ]
                                     , span
-                                        [ Attr.class "pl-2 material-icons align-middle text-sm"
+                                        [ class "pl-2"
                                         ]
-                                        [ text "east" ]
+                                        [ text "Get started with"
+                                        , span
+                                            [ class "text-black"
+                                            ]
+                                            [ text "messaging" ]
+                                        ]
+                                    ]
+                                , p
+                                    [ class "font-semibold text-gray-400 text-left pt-5"
+                                    ]
+                                    [ span
+                                        [ class "material-icons align-middle"
+                                        ]
+                                        [ text "done" ]
+                                    , span
+                                        [ class "pl-2"
+                                        ]
+                                        [ text "Flexible"
+                                        , span
+                                            [ class "text-black"
+                                            ]
+                                            [ text "team meetings" ]
+                                        ]
+                                    ]
+                                , p
+                                    [ class "font-semibold text-gray-400 text-left pt-5"
+                                    ]
+                                    [ span
+                                        [ class "material-icons align-middle"
+                                        ]
+                                        [ text "done" ]
+                                    , span
+                                        [ class "pl-2"
+                                        ]
+                                        [ span
+                                            [ class "text-black"
+                                            ]
+                                            [ text "5 TB" ]
+                                        , text "cloud storage"
+                                        ]
+                                    ]
+                                , a
+                                    [ href "#"
+                                    , class ""
+                                    ]
+                                    [ p
+                                        [ class "w-full py-4 bg-[#A78BFA] mt-8 rounded-xl text-white"
+                                        ]
+                                        [ span
+                                            [ class "font-medium"
+                                            ]
+                                            [ text "Choose Plan" ]
+                                        , span
+                                            [ class "pl-2 material-icons align-middle text-sm"
+                                            ]
+                                            [ text "east" ]
+                                        ]
+                                    ]
+                                ]
+                            ]
+                        , {- StartUp Card -}
+                          div
+                            [ class "w-80 p-8 bg-gray-900 text-center rounded-3xl text-white border-4 shadow-xl border-white transform scale-125"
+                            ]
+                            [ h1
+                                [ class "text-white font-semibold text-2xl"
+                                ]
+                                [ text "Startup" ]
+                            , p
+                                [ class "pt-2 tracking-wide"
+                                ]
+                                [ span
+                                    [ class "text-gray-400 align-top"
+                                    ]
+                                    [ text "$" ]
+                                , span
+                                    [ class "text-3xl font-semibold"
+                                    ]
+                                    [ text "24" ]
+                                , span
+                                    [ class "text-gray-400 font-medium"
+                                    ]
+                                    [ text "/ user" ]
+                                ]
+                            , hr
+                                [ class "mt-4 border-1 border-gray-600"
+                                ]
+                                []
+                            , div
+                                [ class "pt-8"
+                                ]
+                                [ p
+                                    [ class "font-semibold text-gray-400 text-left"
+                                    ]
+                                    [ span
+                                        [ class "material-icons align-middle"
+                                        ]
+                                        [ text "done" ]
+                                    , span
+                                        [ class "pl-2"
+                                        ]
+                                        [ text "All features in"
+                                        , span
+                                            [ class "text-white"
+                                            ]
+                                            [ text "Basic" ]
+                                        ]
+                                    ]
+                                , p
+                                    [ class "font-semibold text-gray-400 text-left pt-5"
+                                    ]
+                                    [ span
+                                        [ class "material-icons align-middle"
+                                        ]
+                                        [ text "done" ]
+                                    , span
+                                        [ class "pl-2"
+                                        ]
+                                        [ text "Flexible"
+                                        , span
+                                            [ class "text-white"
+                                            ]
+                                            [ text "call scheduling" ]
+                                        ]
+                                    ]
+                                , p
+                                    [ class "font-semibold text-gray-400 text-left pt-5"
+                                    ]
+                                    [ span
+                                        [ class "material-icons align-middle"
+                                        ]
+                                        [ text "done" ]
+                                    , span
+                                        [ class "pl-2"
+                                        ]
+                                        [ span
+                                            [ class "text-white"
+                                            ]
+                                            [ text "15 TB" ]
+                                        , text "cloud storage"
+                                        ]
+                                    ]
+                                , a
+                                    [ href "#"
+                                    , class ""
+                                    ]
+                                    [ p
+                                        [ class "w-full py-4 bg-[#A78BFA] mt-8 rounded-xl text-white"
+                                        ]
+                                        [ span
+                                            [ class "font-medium"
+                                            ]
+                                            [ text "Choose Plan" ]
+                                        , span
+                                            [ class "pl-2 material-icons align-middle text-sm"
+                                            ]
+                                            [ text "east" ]
+                                        ]
+                                    ]
+                                ]
+                            , div
+                                [ class "absolute top-4 right-4"
+                                ]
+                                [ p
+                                    [ class "bg-[#8419FF] font-semibold px-4 py-1 rounded-full uppercase text-xs"
+                                    ]
+                                    [ text "Popular" ]
+                                ]
+                            ]
+                        , {- Enterprise Card -}
+                          div
+                            [ class "w-96 p-8 bg-white text-center rounded-3xl pl-16 shadow-xl"
+                            ]
+                            [ h1
+                                [ class "text-black font-semibold text-2xl"
+                                ]
+                                [ text "Enterprise" ]
+                            , p
+                                [ class "pt-2 tracking-wide"
+                                ]
+                                [ span
+                                    [ class "text-gray-400 align-top"
+                                    ]
+                                    [ text "$" ]
+                                , span
+                                    [ class "text-3xl font-semibold"
+                                    ]
+                                    [ text "35" ]
+                                , span
+                                    [ class "text-gray-400 font-medium"
+                                    ]
+                                    [ text "/ user" ]
+                                ]
+                            , hr
+                                [ class "mt-4 border-1"
+                                ]
+                                []
+                            , div
+                                [ class "pt-8"
+                                ]
+                                [ p
+                                    [ class "font-semibold text-gray-400 text-left"
+                                    ]
+                                    [ span
+                                        [ class "material-icons align-middle"
+                                        ]
+                                        [ text "done" ]
+                                    , span
+                                        [ class "pl-2"
+                                        ]
+                                        [ text "All features in"
+                                        , span
+                                            [ class "text-black"
+                                            ]
+                                            [ text "Startup" ]
+                                        ]
+                                    ]
+                                , p
+                                    [ class "font-semibold text-gray-400 text-left pt-5"
+                                    ]
+                                    [ span
+                                        [ class "material-icons align-middle"
+                                        ]
+                                        [ text "done" ]
+                                    , span
+                                        [ class "pl-2"
+                                        ]
+                                        [ text "Growth"
+                                        , span
+                                            [ class "text-black"
+                                            ]
+                                            [ text "oriented" ]
+                                        ]
+                                    ]
+                                , p
+                                    [ class "font-semibold text-gray-400 text-left pt-5"
+                                    ]
+                                    [ span
+                                        [ class "material-icons align-middle"
+                                        ]
+                                        [ text "done" ]
+                                    , span
+                                        [ class "pl-2"
+                                        ]
+                                        [ span
+                                            [ class "text-black"
+                                            ]
+                                            [ text "Unlimited" ]
+                                        , text "cloud storage"
+                                        ]
+                                    ]
+                                , a
+                                    [ href "#"
+                                    , class ""
+                                    ]
+                                    [ p
+                                        [ class "w-full py-4 bg-[#A78BFA] mt-8 rounded-xl text-white"
+                                        ]
+                                        [ span
+                                            [ class "font-medium"
+                                            ]
+                                            [ text "Choose Plan" ]
+                                        , span
+                                            [ class "pl-2 material-icons align-middle text-sm"
+                                            ]
+                                            [ text "east" ]
+                                        ]
                                     ]
                                 ]
                             ]
@@ -368,7 +380,8 @@ view model =
                 ]
             ]
         ]
-    
+
+
 init : () -> ( Model, Cmd Msg )
 init _ =
     ( {}, Cmd.none )
