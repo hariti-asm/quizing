@@ -16,14 +16,15 @@ type Msg
     = EditQuiz Int
 
 
-quizes : List Quiz
-quizes =
-    [ { id = 1, subject = "Mathematics" }
-    , { id = 2, subject = "Science" }
-    , { id = 3, subject = "History" }
-    , { id = 4, subject = "Physics" }
-    , { id = 5, subject = "Philosophy" }
-    ]
+
+-- quizes : List Quiz
+-- quizes =
+--     [ { id = 1, subject = "Mathematics" }
+--     , { id = 2, subject = "Science" }
+--     , { id = 3, subject = "History" }
+--     , { id = 4, subject = "Physics" }
+--     , { id = 5, subject = "Philosophy" }
+--     ]
 
 
 type alias Model =
@@ -43,6 +44,16 @@ init =
     ( { quizes = quizes }, Cmd.none )
 
 
+quizes : List Quiz
+quizes =
+    [ { id = 1, subject = "Mathematics" }
+    , { id = 2, subject = "Science" }
+    , { id = 3, subject = "History" }
+    , { id = 4, subject = "Physics" }
+    , { id = 5, subject = "Philosophy" }
+    ]
+
+
 viewQuizTable : List Quiz -> Html msg
 viewQuizTable quizzes =
     let
@@ -56,10 +67,6 @@ viewQuizTable quizzes =
                 , td [] [ button [] [ text "Edit" ] ]
                 ]
     in
-    -- table []
-    --     [ thead [] [ tr [] [ th [] [ text "ID" ], th [] [ text "Subject" ], th [] [ text "view" ], th [] [ text "Edit" ] ] ]
-    --     , tbody [] (List.map viewQuizRow quizes)
-    -- ]
     div
         []
         [ section
@@ -107,42 +114,18 @@ viewQuizTable quizzes =
                                     [ th
                                         [ class "px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left"
                                         ]
-                                        [ text "Subject" ]
+                                        [ text |> String.fromInt quiz.id ]
+                                    , th
+                                        [ class "px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left"
+                                        ]
+                                        [ text quiz.subject ]
                                     , th
                                         [ class "px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left"
                                         ]
                                         [ text "View" ]
-                                    , th
-                                        [ class "px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left"
-                                        ]
-                                        [ text "Edit" ]
                                     ]
                                 ]
-                            , tbody []
-                                [ tr []
-                                    [ th
-                                        [ class "border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left text-blueGray-700 "
-                                        ]
-                                        [ text ]
-                                    , td
-                                        [ class "border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 "
-                                        ]
-                                        [ text "View" ]
-                                    , td
-                                        [ class "border-t-0 px-6 align-center border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
-                                        ]
-                                        [ text "Edit" ]
-                                    , td
-                                        [ class "border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
-                                        ]
-                                        [ i
-                                            [ class ""
-                                            ]
-                                            []
-                                        , text ""
-                                        ]
-                                    ]
-                                ]
+                            , tbody [] (List.map viewQuizRow quizes)
                             ]
                         ]
                     , footer

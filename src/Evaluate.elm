@@ -7,7 +7,6 @@ import Html.Events exposing (onClick, onInput)
 import Json.Decode as Decode exposing (Decoder, Value)
 import Json.Encode as Encode exposing (encode, int, object, string)
 import Msg exposing (Msg(..))
-import MyList exposing (append)
 
 
 type Msg
