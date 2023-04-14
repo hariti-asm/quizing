@@ -14,154 +14,361 @@ type Msg
 
 view : Model -> Html Msg
 view model =
-    div
-        [ class "px-4 py-16 mx-auto sm:max-w-xl md:max-w-full lg:max-w-screen-xl md:px-24 lg:px-8 lg:py-20"
+        {- component -}
+        node "link"
+        [ Attr.rel "preconnect"
+        , Attr.href "https://fonts.gstatic.com"
+        ]
+        []
+    ,     node "link"
+        [ Attr.href "https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800;900&display=swap"
+        , Attr.rel "stylesheet"
+        ]
+        []
+    ,     node "link"
+        [ Attr.href "https://fonts.googleapis.com/icon?family=Material+Icons"
+        , Attr.rel "stylesheet"
+        ]
+        []
+    ,     body
+        [ Attr.class "font-sans bg-gray-100"
         ]
         [ div
-            [ class "max-w-xl mb-10 md:mx-auto sm:text-center lg:max-w-2xl md:mb-12"
-            ]
-            [ div []
-                [ p
-                    [ class "inline-block px-3 py-px mb-4 text-xs font-semibold tracking-wider text-teal-900 uppercase rounded-full bg-teal-accent-400"
-                    ]
-                    [ text "Brand new" ]
-                ]
-            , h2
-                [ class "max-w-lg mb-6 font-sans text-3xl font-bold leading-none tracking-tight text-gray-900 sm:text-4xl md:mx-auto"
-                ]
-                [ span
-                    [ class "relative inline-block"
-                    ]
-                    [ span
-                        [ class "relative"
-                        ]
-                        [ text "Choose" ]
-                    ]
-                , text "your way. Advance everyday."
-                ]
-            , p
-                [ class "text-base text-gray-700 md:text-lg"
-                ]
-                [ text "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque rem aperiam, eaque ipsa quae." ]
-            ]
-        , div
-            [ class "grid max-w-md gap-10 row-gap-8 lg:max-w-screen-lg sm:row-gap-10 lg:grid-cols-3 xl:max-w-screen-lg sm:mx-auto"
+            [ Attr.class "min-h-screen flex justify-center items-center"
             ]
             [ div
-                [ class "flex flex-col transition duration-300 bg-white rounded shadow-sm hover:shadow"
+                [ Attr.class ""
                 ]
                 [ div
-                    [ class "relative w-full h-48"
+                    [ Attr.class "text-center font-semibold"
                     ]
-                    [ img
-                        [ src "https://images.pexels.com/photos/3184305/pexels-photo-3184305.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260"
-                        , class "object-cover w-full h-full rounded-t"
-                        , alt "Plan"
+                    [ h1
+                        [ Attr.class "text-5xl"
                         ]
-                        []
+                        [ span
+                            [ Attr.class "text-blue-700 tracking-wide"
+                            ]
+                            [ text "Flexible" ]
+                        , span []
+                            [ text "Plans" ]
+                        ]
+                    , p
+                        [ Attr.class "pt-6 text-xl text-gray-400 font-normal w-full px-8 md:w-full"
+                        ]
+                        [ text "Choose a plan that works best for you and", br []
+                            []
+                        , text "your team." ]
                     ]
                 , div
-                    [ class "flex flex-col justify-between flex-grow p-8 border border-t-0 rounded-b"
+                    [ Attr.class "pt-24 flex flex-row"
                     ]
-                    [ div []
-                        [ div
-                            [ class "text-lg font-semibold"
+                    [                     {- Basic Card -}
+                    div
+                        [ Attr.class "w-96 p-8 bg-white text-center rounded-3xl pr-16 shadow-xl"
+                        ]
+                        [ h1
+                            [ Attr.class "text-black font-semibold text-2xl"
                             ]
                             [ text "Basic" ]
                         , p
-                            [ class "text-sm text-gray-900"
+                            [ Attr.class "pt-2 tracking-wide"
                             ]
-                            [ text "Sed ut perspiciatis unde omnis iste natus error sit voluptatem doloremque." ]
+                            [ span
+                                [ Attr.class "text-gray-400 align-top"
+                                ]
+                                [ text "$" ]
+                            , span
+                                [ Attr.class "text-3xl font-semibold"
+                                ]
+                                [ text "10" ]
+                            , span
+                                [ Attr.class "text-gray-400 font-medium"
+                                ]
+                                [ text "/ user" ]
+                            ]
+                        , hr
+                            [ Attr.class "mt-4 border-1"
+                            ]
+                            []
                         , div
-                            [ class "mt-1 mb-4 mr-1 text-4xl font-bold sm:text-5xl"
+                            [ Attr.class "pt-8"
                             ]
-                            [ text "$12" ]
-                        ]
-                    , a
-                        [ href "/"
-                        , class "inline-flex items-center justify-center w-full h-12 px-6 font-medium tracking-wide text-white transition duration-200 rounded shadow-md bg-deep-purple-accent-400 hover:bg-deep-purple-accent-700 focus:shadow-outline focus:outline-none"
-                        ]
-                        [ text "Buy Basic" ]
-                    ]
-                ]
-            , div
-                [ class "flex flex-col transition duration-300 bg-white rounded shadow-sm hover:shadow"
-                ]
-                [ div
-                    [ class "relative w-full h-48"
-                    ]
-                    [ img
-                        [ src "https://images.pexels.com/photos/3183181/pexels-photo-3183181.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260"
-                        , class "object-cover w-full h-full rounded-t"
-                        , alt "Plan"
-                        ]
-                        []
-                    ]
-                , div
-                    [ class "flex flex-col justify-between flex-grow p-8 border border-t-0 rounded-b"
-                    ]
-                    [ div []
-                        [ div
-                            [ class "text-lg font-semibold"
+                            [ p
+                                [ Attr.class "font-semibold text-gray-400 text-left"
+                                ]
+                                [ span
+                                    [ Attr.class "material-icons align-middle"
+                                    ]
+                                    [ text "done" ]
+                                , span
+                                    [ Attr.class "pl-2"
+                                    ]
+                                    [ text "Get started with", span
+                                        [ Attr.class "text-black"
+                                        ]
+                                        [ text "messaging" ]
+                                    ]
+                                ]
+                            , p
+                                [ Attr.class "font-semibold text-gray-400 text-left pt-5"
+                                ]
+                                [ span
+                                    [ Attr.class "material-icons align-middle"
+                                    ]
+                                    [ text "done" ]
+                                , span
+                                    [ Attr.class "pl-2"
+                                    ]
+                                    [ text "Flexible", span
+                                        [ Attr.class "text-black"
+                                        ]
+                                        [ text "team meetings" ]
+                                    ]
+                                ]
+                            , p
+                                [ Attr.class "font-semibold text-gray-400 text-left pt-5"
+                                ]
+                                [ span
+                                    [ Attr.class "material-icons align-middle"
+                                    ]
+                                    [ text "done" ]
+                                , span
+                                    [ Attr.class "pl-2"
+                                    ]
+                                    [ span
+                                        [ Attr.class "text-black"
+                                        ]
+                                        [ text "5 TB" ]
+                                    , text "cloud storage" ]
+                                ]
+                            , a
+                                [ Attr.href "#"
+                                , Attr.class ""
+                                ]
+                                [ p
+                                    [ Attr.class "w-full py-4 bg-blue-600 mt-8 rounded-xl text-white"
+                                    ]
+                                    [ span
+                                        [ Attr.class "font-medium"
+                                        ]
+                                        [ text "Choose Plan" ]
+                                    , span
+                                        [ Attr.class "pl-2 material-icons align-middle text-sm"
+                                        ]
+                                        [ text "east" ]
+                                    ]
+                                ]
                             ]
-                            [ text "Advanced" ]
+                        ]
+                    ,                     {- StartUp Card -}
+                    div
+                        [ Attr.class "w-80 p-8 bg-gray-900 text-center rounded-3xl text-white border-4 shadow-xl border-white transform scale-125"
+                        ]
+                        [ h1
+                            [ Attr.class "text-white font-semibold text-2xl"
+                            ]
+                            [ text "Startup" ]
                         , p
-                            [ class "text-sm text-gray-900"
+                            [ Attr.class "pt-2 tracking-wide"
                             ]
-                            [ text "A flower in my garden, a mystery in my panties. Heart attack never was so close." ]
+                            [ span
+                                [ Attr.class "text-gray-400 align-top"
+                                ]
+                                [ text "$" ]
+                            , span
+                                [ Attr.class "text-3xl font-semibold"
+                                ]
+                                [ text "24" ]
+                            , span
+                                [ Attr.class "text-gray-400 font-medium"
+                                ]
+                                [ text "/ user" ]
+                            ]
+                        , hr
+                            [ Attr.class "mt-4 border-1 border-gray-600"
+                            ]
+                            []
                         , div
-                            [ class "mt-1 mb-4 mr-1 text-4xl font-bold sm:text-5xl"
+                            [ Attr.class "pt-8"
                             ]
-                            [ text "$38" ]
-                        ]
-                    , a
-                        [ href "/"
-                        , class "inline-flex items-center justify-center w-full h-12 px-6 font-medium tracking-wide text-white transition duration-200 rounded shadow-md bg-deep-purple-accent-400 hover:bg-deep-purple-accent-700 focus:shadow-outline focus:outline-none"
-                        ]
-                        [ text "Buy Advanced" ]
-                    ]
-                ]
-            , div
-                [ class "flex flex-col transition duration-300 bg-white rounded shadow-sm hover:shadow"
-                ]
-                [ div
-                    [ class "relative w-full h-48"
-                    ]
-                    [ img
-                        [ src "https://images.pexels.com/photos/3182743/pexels-photo-3182743.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260"
-                        , class "object-cover w-full h-full rounded-t"
-                        , alt "Plan"
-                        ]
-                        []
-                    ]
-                , div
-                    [ class "flex flex-col justify-between flex-grow p-8 border border-t-0 rounded-b"
-                    ]
-                    [ div []
-                        [ div
-                            [ class "text-lg font-semibold"
+                            [ p
+                                [ Attr.class "font-semibold text-gray-400 text-left"
+                                ]
+                                [ span
+                                    [ Attr.class "material-icons align-middle"
+                                    ]
+                                    [ text "done" ]
+                                , span
+                                    [ Attr.class "pl-2"
+                                    ]
+                                    [ text "All features in", span
+                                        [ Attr.class "text-white"
+                                        ]
+                                        [ text "Basic" ]
+                                    ]
+                                ]
+                            , p
+                                [ Attr.class "font-semibold text-gray-400 text-left pt-5"
+                                ]
+                                [ span
+                                    [ Attr.class "material-icons align-middle"
+                                    ]
+                                    [ text "done" ]
+                                , span
+                                    [ Attr.class "pl-2"
+                                    ]
+                                    [ text "Flexible", span
+                                        [ Attr.class "text-white"
+                                        ]
+                                        [ text "call scheduling" ]
+                                    ]
+                                ]
+                            , p
+                                [ Attr.class "font-semibold text-gray-400 text-left pt-5"
+                                ]
+                                [ span
+                                    [ Attr.class "material-icons align-middle"
+                                    ]
+                                    [ text "done" ]
+                                , span
+                                    [ Attr.class "pl-2"
+                                    ]
+                                    [ span
+                                        [ Attr.class "text-white"
+                                        ]
+                                        [ text "15 TB" ]
+                                    , text "cloud storage" ]
+                                ]
+                            , a
+                                [ Attr.href "#"
+                                , Attr.class ""
+                                ]
+                                [ p
+                                    [ Attr.class "w-full py-4 bg-blue-600 mt-8 rounded-xl text-white"
+                                    ]
+                                    [ span
+                                        [ Attr.class "font-medium"
+                                        ]
+                                        [ text "Choose Plan" ]
+                                    , span
+                                        [ Attr.class "pl-2 material-icons align-middle text-sm"
+                                        ]
+                                        [ text "east" ]
+                                    ]
+                                ]
                             ]
-                            [ text "Pro" ]
+                        , div
+                            [ Attr.class "absolute top-4 right-4"
+                            ]
+                            [ p
+                                [ Attr.class "bg-blue-700 font-semibold px-4 py-1 rounded-full uppercase text-xs"
+                                ]
+                                [ text "Popular" ]
+                            ]
+                        ]
+                    ,                     {- Enterprise Card -}
+                    div
+                        [ Attr.class "w-96 p-8 bg-white text-center rounded-3xl pl-16 shadow-xl"
+                        ]
+                        [ h1
+                            [ Attr.class "text-black font-semibold text-2xl"
+                            ]
+                            [ text "Enterprise" ]
                         , p
-                            [ class "text-sm text-gray-900"
+                            [ Attr.class "pt-2 tracking-wide"
                             ]
-                            [ text "We never had the chance to. Maybe it was the eleven months he spent in the womb." ]
+                            [ span
+                                [ Attr.class "text-gray-400 align-top"
+                                ]
+                                [ text "$" ]
+                            , span
+                                [ Attr.class "text-3xl font-semibold"
+                                ]
+                                [ text "35" ]
+                            , span
+                                [ Attr.class "text-gray-400 font-medium"
+                                ]
+                                [ text "/ user" ]
+                            ]
+                        , hr
+                            [ Attr.class "mt-4 border-1"
+                            ]
+                            []
                         , div
-                            [ class "mt-1 mb-4 mr-1 text-4xl font-bold sm:text-5xl"
+                            [ Attr.class "pt-8"
                             ]
-                            [ text "$78" ]
+                            [ p
+                                [ Attr.class "font-semibold text-gray-400 text-left"
+                                ]
+                                [ span
+                                    [ Attr.class "material-icons align-middle"
+                                    ]
+                                    [ text "done" ]
+                                , span
+                                    [ Attr.class "pl-2"
+                                    ]
+                                    [ text "All features in", span
+                                        [ Attr.class "text-black"
+                                        ]
+                                        [ text "Startup" ]
+                                    ]
+                                ]
+                            , p
+                                [ Attr.class "font-semibold text-gray-400 text-left pt-5"
+                                ]
+                                [ span
+                                    [ Attr.class "material-icons align-middle"
+                                    ]
+                                    [ text "done" ]
+                                , span
+                                    [ Attr.class "pl-2"
+                                    ]
+                                    [ text "Growth", span
+                                        [ Attr.class "text-black"
+                                        ]
+                                        [ text "oriented" ]
+                                    ]
+                                ]
+                            , p
+                                [ Attr.class "font-semibold text-gray-400 text-left pt-5"
+                                ]
+                                [ span
+                                    [ Attr.class "material-icons align-middle"
+                                    ]
+                                    [ text "done" ]
+                                , span
+                                    [ Attr.class "pl-2"
+                                    ]
+                                    [ span
+                                        [ Attr.class "text-black"
+                                        ]
+                                        [ text "Unlimited" ]
+                                    , text "cloud storage" ]
+                                ]
+                            , a
+                                [ Attr.href "#"
+                                , Attr.class ""
+                                ]
+                                [ p
+                                    [ Attr.class "w-full py-4 bg-blue-600 mt-8 rounded-xl text-white"
+                                    ]
+                                    [ span
+                                        [ Attr.class "font-medium"
+                                        ]
+                                        [ text "Choose Plan" ]
+                                    , span
+                                        [ Attr.class "pl-2 material-icons align-middle text-sm"
+                                        ]
+                                        [ text "east" ]
+                                    ]
+                                ]
+                            ]
                         ]
-                    , a
-                        [ href "/"
-                        , class "inline-flex items-center justify-center w-full h-12 px-6 font-medium tracking-wide text-white transition duration-200 rounded shadow-md bg-deep-purple-accent-400 hover:bg-deep-purple-accent-700 focus:shadow-outline focus:outline-none"
-                        ]
-                        [ text "Buy Pro" ]
                     ]
                 ]
             ]
         ]
-
-
+    
 init : () -> ( Model, Cmd Msg )
 init _ =
     ( {}, Cmd.none )
