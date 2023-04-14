@@ -103,6 +103,63 @@ viewQuizTable quizzes =
                     ]
                 ]
             ]
+                div
+        [ Attr.class "flex flex-col"
+        ]
+        [ div
+            [ Attr.class "overflow-x-auto sm:-mx-6 lg:-mx-8"
+            ]
+            [ div
+                [ Attr.class "inline-block min-w-full py-2 sm:px-6 lg:px-8"
+                ]
+                [ div
+                    [ Attr.class "overflow-hidden"
+                    ]
+                    [ table
+                        [ Attr.class "min-w-full text-left text-sm font-light"
+                        ]
+                        [ thead
+                            [ Attr.class "border-b font-medium dark:border-neutral-500"
+                            ]
+                            [ tr []
+                                [ th
+                                    [ Attr.scope "col"
+                                    , Attr.class "px-6 py-4"
+                                    ]
+                                    [ text "#" ]
+                                , th
+                                    [ Attr.scope "col"
+                                    , Attr.class "px-6 py-4"
+                                    ]
+                                    [ text "Subject" ]
+                                , th
+                                    [ Attr.scope "col"
+                                    , Attr.class "px-6 py-4"
+                                    ]
+                                    [ text "View" ]
+                                , th
+                                    [ Attr.scope "col"
+                                    , Attr.class "px-6 py-4"
+                                    ]
+                                    [ text "Edit" ]
+                                ]
+                            ]
+                        , tbody []
+                            [ tr
+                                [ Attr.class "border-b transition duration-300 ease-in-out hover:bg-neutral-100 dark:border-neutral-500 dark:hover:bg-neutral-600"
+                                ]
+                                [ td
+                                    [ Attr.class "whitespace-nowrap px-6 py-4 font-medium"
+                                    ]
+                                    [ text "2" ]
+                                ]
+                            ]
+                        ]
+                    ]
+                ]
+            ]
+        ]
+    
         , footer
             [ class "relative pt-8 pb-6 mt-16"
             ]
