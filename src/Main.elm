@@ -9,6 +9,7 @@ import Html exposing (..)
 import Html.Attributes exposing (class, href)
 import Json.Decode exposing (Value)
 import Json.Encode as E
+import Pricing exposing (..)
 import Quizes exposing (Msg, init, update, view)
 import Url exposing (Url)
 import Url.Parser as UrlParser
@@ -26,6 +27,7 @@ type Route
     | About
     | Add
     | Quizes
+    | Pricing
 
 
 type Page
@@ -34,6 +36,7 @@ type Page
     | AboutPage About.Model
     | AddPage Add.Model
     | QuizesPage Quizes.Model
+    | PricingPage Pricing.Model
 
 
 type Msg
@@ -43,6 +46,7 @@ type Msg
     | AddMsg Add.Msg
     | EvaluateMsg Evaluate.Msg
     | QuizesMsg Quizes.Msg
+    | PricingMsg Pricing.Msg
 
 
 main : Program Value Model Msg
@@ -66,6 +70,7 @@ urlToRoute url =
             , UrlParser.map Add (UrlParser.s "add")
             , UrlParser.map Evaluate (UrlParser.s "evaluate")
             , UrlParser.map Quizes (UrlParser.s "quizes")
+            , UrlParser.map Pricing (UrlParser.s "pricing")
             ]
         )
         url
@@ -84,6 +89,13 @@ routeToPage flags route =
                     About.init ()
             in
             ( AboutPage aboutModel, Cmd.map AboutMsg cmd )
+
+        Pricing ->
+            let
+                ( pricingModel, cmd ) =
+                    Pricing.init ()
+            in
+            ( PricingPage pricingModel, Cmd.map PricingMsg cmd )
 
         Quizes ->
             let
@@ -140,6 +152,9 @@ update msg model =
                 EvaluatePage _ ->
                     ( model, Cmd.none )
 
+                PricingPage _ ->
+                    ( model, Cmd.none )
+
                 AddPage _ ->
                     ( model, Cmd.none )
 
@@ -152,6 +167,30 @@ update msg model =
                             Quizes.update quizesMsg quizesModel
                     in
                     ( { model | page = QuizesPage newQuizesModel }, Cmd.map QuizesMsg cmd )
+
+        PricingMsg pricingMsg ->
+            case model.page of
+                AboutPage _ ->
+                    ( model, Cmd.none )
+
+                HomePage ->
+                    ( model, Cmd.none )
+
+                PricingPage pricingModel ->
+                    let
+                        ( newPricingModel, cmd ) =
+                            Pricing.update pricingMsg pricingModel
+                    in
+                    ( { model | page = PricingPage newPricingModel }, Cmd.map PricingMsg cmd )
+
+                AddPage _ ->
+                    ( model, Cmd.none )
+
+                EvaluatePage _ ->
+                    ( model, Cmd.none )
+
+                QuizesPage _ ->
+                    ( model, Cmd.none )
 
         AddMsg addMsg ->
             case model.page of
@@ -171,6 +210,9 @@ update msg model =
                 HomePage ->
                     ( model, Cmd.none )
 
+                PricingPage _ ->
+                    ( model, Cmd.none )
+
                 QuizesPage _ ->
                     ( model, Cmd.none )
 
@@ -182,6 +224,9 @@ update msg model =
                             Evaluate.update evaluateMsg evaluateModel
                     in
                     ( { model | page = EvaluatePage newEvaluateModel }, Cmd.map EvaluateMsg cmd )
+
+                PricingPage _ ->
+                    ( model, Cmd.none )
 
                 AddPage _ ->
                     ( model, Cmd.none )
@@ -214,6 +259,9 @@ update msg model =
                     ( model, Cmd.none )
 
                 QuizesPage _ ->
+                    ( model, Cmd.none )
+
+                PricingPage _ ->
                     ( model, Cmd.none )
 
         UrlChanged url ->
@@ -261,6 +309,9 @@ viewPage page =
         QuizesPage quizesModel ->
             Quizes.view quizesModel |> Html.map QuizesMsg
 
+        PricingPage pricingModel ->
+            Pricing.view pricingModel |> Html.map PricingMsg
+
 
 getPageTitle : Page -> String
 getPageTitle page =
@@ -279,3 +330,6 @@ getPageTitle page =
 
         QuizesPage _ ->
             "Quizes"
+
+        PricingPage _ ->
+            "pricing"
