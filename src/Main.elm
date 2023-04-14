@@ -236,6 +236,7 @@ viewPage page =
             div [ class "flex justify-center gap-44  text-xl italic  bg-[#8419FF]  h-16 text-[#FFFFFF]" ]
                 [ h1 [ class "  mt-4 " ] [ text "Home" ]
                 , a [ href "/about", class "mt-4 " ] [ text "About" ]
+                , a [ href "/pricing", class "mt-4" ] [ text "Pricing" ]
                 , a
                     [ href "/quizes"
                     , class " text-center  font-semibold italic text-[#FFFFFF] bg-[#8419FF] h-16 w-full max-w-[250px] text-xl rounded-lg flex  items-center  justify-center mt-[200px]  "
