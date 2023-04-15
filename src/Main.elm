@@ -281,21 +281,25 @@ viewPage : Page -> Html Msg
 viewPage page =
     case page of
         HomePage ->
-            div [ class "flex justify-center gap-44  text-xl italic  bg-[#8419FF]  h-16 text-[#FFFFFF]" ]
-                [ h1 [ class "  mt-4 " ] [ text "Home" ]
-                , a [ href "/about", class "mt-4 " ] [ text "About" ]
-                , a [ href "/pricing", class "mt-4" ] [ text "Pricing" ]
-                , div [ class "flex justify-center gap-24 " ]
-                    [ a
-                        [ href "/quizes"
-                        , class " text-center  font-semibold italic text-[#FFFFFF] bg-[#8419FF] h-16 w-full max-w-[250px] text-xl rounded-lg flex  items-center  justify-center mt-[400px]  "
+            div [ class "    " ]
+                [ div [ class "  flex text-xl justify-end italic h-16 text-[#FFFFFF] bg-[#111B27]" ]
+                    [ h1 [ class "  mt-4  " ] [ text "Home" ]
+                    , a [ href "/about", class "mt-4  px-10" ] [ text "About" ]
+                    , a [ href "/pricing", class "mt-4 px-10" ] [ text "Pricing" ]
+                    ]
+                , div [ class "bg-black  " ]
+                    [ div [ class " flex " ]
+                        [ a
+                            [ href "/quizes"
+                            , class " text-center  font-semibold italic text-[#FFFFFF] bg-[#8419FF] h-16 w-full max-w-[250px] text-xl rounded-lg flex  items-center  justify-center   "
+                            ]
+                            [ text "Make Quiz !" ]
+                        , a
+                            [ href "/evaluate"
+                            , class " text-center  font-semibold italic text-[#FFFFFF] bg-[#8419FF] h-16 w-full max-w-[250px] text-xl rounded-lg flex  items-center  justify-center   "
+                            ]
+                            [ text "Get Quiz !" ]
                         ]
-                        [ text "Make Quiz !" ]
-                    , a
-                        [ href "/evaluate"
-                        , class " text-center  font-semibold italic text-[#FFFFFF] bg-[#8419FF] h-16 w-full max-w-[250px] text-xl rounded-lg flex  items-center  justify-center mt-[400px]  "
-                        ]
-                        [ text "Get Quiz !" ]
                     ]
                 ]
 

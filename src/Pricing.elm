@@ -14,356 +14,373 @@ type Msg
 
 view : Model -> Html Msg
 view model =
-      section
-        [ Attr.class "py-20 dark:bg-gray-800 dark:text-gray-100"
-        ]
-        [ div
-            [ Attr.class "container px-4 mx-auto"
+    div []
+        [ node "link"
+            [ rel "preconnect"
+            , href "https://fonts.gstatic.com"
+            ]
+            []
+        , node "link"
+            [ href "https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800;900&display=swap"
+            , rel "stylesheet"
+            ]
+            []
+        , node "link"
+            [ href "https://fonts.googleapis.com/icon?family=Material+Icons"
+            , rel "stylesheet"
+            ]
+            []
+        , div
+            [ class "font-sans bg-gray-100"
             ]
             [ div
-                [ Attr.class "max-w-2xl mx-auto mb-16 text-center"
-                ]
-                [ span
-                    [ Attr.class "font-bold tracking-wider uppercase dark:text-violet-400"
-                    ]
-                    [ text "Pricing" ]
-                , h2
-                    [ Attr.class "text-4xl font-bold lg:text-5xl"
-                    ]
-                    [ text "Choose your best plan" ]
-                ]
-            , div
-                [ Attr.class "flex flex-wrap items-stretch -mx-4"
+                [ class "min-h-screen flex justify-center items-center"
                 ]
                 [ div
-                    [ Attr.class "flex w-full mb-8 sm:px-4 md:w-1/2 lg:w-1/3 lg:mb-0"
+                    [ class ""
                     ]
                     [ div
-                        [ Attr.class "flex flex-col p-6 space-y-6 rounded shadow sm:p-8 dark:bg-gray-900"
+                        [ class "text-center font-semibold"
                         ]
-                        [ div
-                            [ Attr.class "space-y-2"
+                        [ h1
+                            [ class "text-5xl"
                             ]
-                            [ h4
-                                [ Attr.class "text-2xl font-bold"
+                            [ span
+                                [ class "text-[#A78BFA] tracking-wide"
                                 ]
-                                [ text "Beginner" ]
-                            , span
-                                [ Attr.class "text-6xl font-bold"
-                                ]
-                                [ text "Free" ]
+                                [ text "Flexible" ]
+                            , span []
+                                [ text "Plans" ]
                             ]
                         , p
-                            [ Attr.class "mt-3 leading-relaxed dark:text-gray-400"
+                            [ class "pt-6 text-xl text-gray-400 font-normal w-full px-8 md:w-full"
                             ]
-                            [ text "Etiam ac convallis enim, eget euismod dolor." ]
-                        , ul
-                            [ Attr.class "flex-1 mb-6 dark:text-gray-400"
+                            [ text "Choose a plan that works best for you and"
+                            , br []
+                                []
+                            , text "your team."
                             ]
-                            [ li
-                                [ Attr.class "flex mb-2 space-x-2"
-                                ]
-                                [ svg
-                                    [ SvgAttr.viewBox "0 0 20 20"
-                                    , SvgAttr.fill "currentColor"
-                                    , SvgAttr.class "flex-shrink-0 w-6 h-6 dark:text-violet-400"
-                                    ]
-                                    [ path
-                                        [ SvgAttr.fillRule "evenodd"
-                                        , SvgAttr.d "M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                                        , SvgAttr.clipRule "evenodd"
-                                        ]
-                                        []
-                                    ]
-                                , span []
-                                    [ text "Aenean quis" ]
-                                ]
-                            , li
-                                [ Attr.class "flex mb-2 space-x-2"
-                                ]
-                                [ svg
-                                    [ SvgAttr.viewBox "0 0 20 20"
-                                    , SvgAttr.fill "currentColor"
-                                    , SvgAttr.class "flex-shrink-0 w-6 h-6 dark:text-violet-400"
-                                    ]
-                                    [ path
-                                        [ SvgAttr.fillRule "evenodd"
-                                        , SvgAttr.d "M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                                        , SvgAttr.clipRule "evenodd"
-                                        ]
-                                        []
-                                    ]
-                                , span []
-                                    [ text "Morbi semper" ]
-                                ]
-                            , li
-                                [ Attr.class "flex mb-2 space-x-2"
-                                ]
-                                [ svg
-                                    [ SvgAttr.viewBox "0 0 20 20"
-                                    , SvgAttr.fill "currentColor"
-                                    , SvgAttr.class "flex-shrink-0 w-6 h-6 dark:text-violet-400"
-                                    ]
-                                    [ path
-                                        [ SvgAttr.fillRule "evenodd"
-                                        , SvgAttr.d "M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                                        , SvgAttr.clipRule "evenodd"
-                                        ]
-                                        []
-                                    ]
-                                , span []
-                                    [ text "Tristique enim nec" ]
-                                ]
-                            ]
-                        , button
-                            [ Attr.type_ "button"
-                            , Attr.class "inline-block px-5 py-3 font-semibold tracking-wider text-center rounded dark:bg-violet-400 dark:text-gray-900"
-                            ]
-                            [ text "Get Started" ]
                         ]
-                    ]
-                , div
-                    [ Attr.class "flex w-full mb-8 sm:px-4 md:w-1/2 lg:w-1/3 lg:mb-0"
-                    ]
-                    [ div
-                        [ Attr.class "flex flex-col p-6 space-y-6 rounded shadow sm:p-8 dark:bg-violet-400 dark:text-gray-900"
+                    , div
+                        [ class "pt-24 flex flex-row"
                         ]
-                        [ div
-                            [ Attr.class "space-y-2"
+                        [ {- Basic Card -}
+                          div
+                            [ class "w-96 p-8 bg-white text-center rounded-3xl pr-16 shadow-xl"
                             ]
-                            [ h4
-                                [ Attr.class "text-2xl font-bold"
+                            [ h1
+                                [ class "text-black font-semibold text-2xl"
                                 ]
-                                [ text "Pro" ]
-                            , span
-                                [ Attr.class "text-6xl font-bold"
+                                [ text "Basic" ]
+                            , p
+                                [ class "pt-2 tracking-wide"
                                 ]
-                                [ text "$24", span
-                                    [ Attr.class "text-sm tracking-wide"
+                                [ span
+                                    [ class "text-gray-400 align-top"
                                     ]
-                                    [ text "/month" ]
-                                ]
-                            ]
-                        , p
-                            [ Attr.class "leading-relaxed"
-                            ]
-                            [ text "Morbi cursus ut sapien sit amet consectetur." ]
-                        , ul
-                            [ Attr.class "flex-1 space-y-2"
-                            ]
-                            [ li
-                                [ Attr.class "flex items-center space-x-2"
-                                ]
-                                [ svg
-                                    [ SvgAttr.viewBox "0 0 20 20"
-                                    , SvgAttr.fill "currentColor"
-                                    , SvgAttr.class "flex-shrink-0 w-6 h-6"
+                                    [ text "$" ]
+                                , span
+                                    [ class "text-3xl font-semibold"
                                     ]
-                                    [ path
-                                        [ SvgAttr.fillRule "evenodd"
-                                        , SvgAttr.d "M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                                        , SvgAttr.clipRule "evenodd"
+                                    [ text "10" ]
+                                , span
+                                    [ class "text-gray-400 font-medium"
+                                    ]
+                                    [ text "/ user" ]
+                                ]
+                            , hr
+                                [ class "mt-4 border-1"
+                                ]
+                                []
+                            , div
+                                [ class "pt-8"
+                                ]
+                                [ p
+                                    [ class "font-semibold text-gray-400 text-left"
+                                    ]
+                                    [ span
+                                        [ class "material-icons align-middle"
                                         ]
-                                        []
-                                    ]
-                                , span []
-                                    [ text "Everything in Free" ]
-                                ]
-                            , li
-                                [ Attr.class "flex items-center space-x-2"
-                                ]
-                                [ svg
-                                    [ SvgAttr.viewBox "0 0 20 20"
-                                    , SvgAttr.fill "currentColor"
-                                    , SvgAttr.class "flex-shrink-0 w-6 h-6"
-                                    ]
-                                    [ path
-                                        [ SvgAttr.fillRule "evenodd"
-                                        , SvgAttr.d "M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                                        , SvgAttr.clipRule "evenodd"
+                                        [ text "done" ]
+                                    , span
+                                        [ class "pl-2"
                                         ]
-                                        []
-                                    ]
-                                , span []
-                                    [ text "Phasellus tellus" ]
-                                ]
-                            , li
-                                [ Attr.class "flex items-center space-x-2"
-                                ]
-                                [ svg
-                                    [ SvgAttr.viewBox "0 0 20 20"
-                                    , SvgAttr.fill "currentColor"
-                                    , SvgAttr.class "flex-shrink-0 w-6 h-6"
-                                    ]
-                                    [ path
-                                        [ SvgAttr.fillRule "evenodd"
-                                        , SvgAttr.d "M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                                        , SvgAttr.clipRule "evenodd"
+                                        [ text "Get started with"
+                                        , span
+                                            [ class "text-black"
+                                            ]
+                                            [ text "messaging" ]
                                         ]
-                                        []
                                     ]
-                                , span []
-                                    [ text "Praesent faucibus" ]
-                                ]
-                            , li
-                                [ Attr.class "flex items-center space-x-2"
-                                ]
-                                [ svg
-                                    [ SvgAttr.viewBox "0 0 20 20"
-                                    , SvgAttr.fill "currentColor"
-                                    , SvgAttr.class "flex-shrink-0 w-6 h-6"
+                                , p
+                                    [ class "font-semibold text-gray-400 text-left pt-5"
                                     ]
-                                    [ path
-                                        [ SvgAttr.fillRule "evenodd"
-                                        , SvgAttr.d "M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                                        , SvgAttr.clipRule "evenodd"
+                                    [ span
+                                        [ class "material-icons align-middle"
                                         ]
-                                        []
+                                        [ text "done" ]
+                                    , span
+                                        [ class "pl-2"
+                                        ]
+                                        [ text "Flexible"
+                                        , span
+                                            [ class "text-black"
+                                            ]
+                                            [ text "team meetings" ]
+                                        ]
                                     ]
-                                , span []
-                                    [ text "Aenean et lectus blandit" ]
+                                , p
+                                    [ class "font-semibold text-gray-400 text-left pt-5"
+                                    ]
+                                    [ span
+                                        [ class "material-icons align-middle"
+                                        ]
+                                        [ text "done" ]
+                                    , span
+                                        [ class "pl-2"
+                                        ]
+                                        [ span
+                                            [ class "text-black"
+                                            ]
+                                            [ text "5 TB" ]
+                                        , text "cloud storage"
+                                        ]
+                                    ]
+                                , a
+                                    [ href "#"
+                                    , class ""
+                                    ]
+                                    [ p
+                                        [ class "w-full py-4 bg-[#A78BFA] mt-8 rounded-xl text-white"
+                                        ]
+                                        [ span
+                                            [ class "font-medium"
+                                            ]
+                                            [ text "Choose Plan" ]
+                                        , span
+                                            [ class "pl-2 material-icons align-middle text-sm"
+                                            ]
+                                            [ text "east" ]
+                                        ]
+                                    ]
                                 ]
                             ]
-                        , a
-                            [ Attr.rel "noopener noreferrer"
-                            , Attr.href "#"
-                            , Attr.class "inline-block w-full px-5 py-3 font-bold tracking-wider text-center rounded dark:bg-gray-800 dark:text-violet-400"
+                        , {- StartUp Card -}
+                          div
+                            [ class "w-80 p-8 bg-gray-900 text-center rounded-3xl text-white border-4 shadow-xl border-white transform scale-125"
                             ]
-                            [ text "Get Started" ]
-                        ]
-                    ]
-                , div
-                    [ Attr.class "w-full mb-8 sm:px-4 md:w-1/2 lg:w-1/3 lg:mb-0"
-                    ]
-                    [ div
-                        [ Attr.class "p-6 space-y-6 rounded shadow sm:p-8 dark:bg-gray-900"
-                        ]
-                        [ div
-                            [ Attr.class "space-y-2"
-                            ]
-                            [ h4
-                                [ Attr.class "text-2xl font-bold"
+                            [ h1
+                                [ class "text-white font-semibold text-2xl"
                                 ]
-                                [ text "Team" ]
-                            , span
-                                [ Attr.class "text-6xl font-bold"
+                                [ text "Startup" ]
+                            , p
+                                [ class "pt-2 tracking-wide"
                                 ]
-                                [ text "$72", span
-                                    [ Attr.class "text-sm tracking-wide"
+                                [ span
+                                    [ class "text-gray-400 align-top"
                                     ]
-                                    [ text "/month" ]
-                                ]
-                            ]
-                        , p
-                            [ Attr.class "leading-relaxed dark:text-gray-400"
-                            ]
-                            [ text "Phasellus ultrices bibendum nibh in vehicula." ]
-                        , ul
-                            [ Attr.class "space-y-2 dark:text-gray-400"
-                            ]
-                            [ li
-                                [ Attr.class "flex items-start space-x-2"
-                                ]
-                                [ svg
-                                    [ SvgAttr.viewBox "0 0 20 20"
-                                    , SvgAttr.fill "currentColor"
-                                    , SvgAttr.class "flex-shrink-0 w-6 h-6 dark:text-violet-400"
+                                    [ text "$" ]
+                                , span
+                                    [ class "text-3xl font-semibold"
                                     ]
-                                    [ path
-                                        [ SvgAttr.fillRule "evenodd"
-                                        , SvgAttr.d "M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                                        , SvgAttr.clipRule "evenodd"
+                                    [ text "24" ]
+                                , span
+                                    [ class "text-gray-400 font-medium"
+                                    ]
+                                    [ text "/ user" ]
+                                ]
+                            , hr
+                                [ class "mt-4 border-1 border-gray-600"
+                                ]
+                                []
+                            , div
+                                [ class "pt-8"
+                                ]
+                                [ p
+                                    [ class "font-semibold text-gray-400 text-left"
+                                    ]
+                                    [ span
+                                        [ class "material-icons align-middle"
                                         ]
-                                        []
-                                    ]
-                                , span []
-                                    [ text "Everything in Pro" ]
-                                ]
-                            , li
-                                [ Attr.class "flex items-start space-x-2"
-                                ]
-                                [ svg
-                                    [ SvgAttr.viewBox "0 0 20 20"
-                                    , SvgAttr.fill "currentColor"
-                                    , SvgAttr.class "flex-shrink-0 w-6 h-6 dark:text-violet-400"
-                                    ]
-                                    [ path
-                                        [ SvgAttr.fillRule "evenodd"
-                                        , SvgAttr.d "M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                                        , SvgAttr.clipRule "evenodd"
+                                        [ text "done" ]
+                                    , span
+                                        [ class "pl-2"
                                         ]
-                                        []
-                                    ]
-                                , span []
-                                    [ text "Fusce sem ligula" ]
-                                ]
-                            , li
-                                [ Attr.class "flex items-start space-x-2"
-                                ]
-                                [ svg
-                                    [ SvgAttr.viewBox "0 0 20 20"
-                                    , SvgAttr.fill "currentColor"
-                                    , SvgAttr.class "flex-shrink-0 w-6 h-6 dark:text-violet-400"
-                                    ]
-                                    [ path
-                                        [ SvgAttr.fillRule "evenodd"
-                                        , SvgAttr.d "M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                                        , SvgAttr.clipRule "evenodd"
+                                        [ text "All features in"
+                                        , span
+                                            [ class "text-white"
+                                            ]
+                                            [ text "Basic" ]
                                         ]
-                                        []
                                     ]
-                                , span []
-                                    [ text "Curabitur dictum" ]
-                                ]
-                            , li
-                                [ Attr.class "flex items-start space-x-2"
-                                ]
-                                [ svg
-                                    [ SvgAttr.viewBox "0 0 20 20"
-                                    , SvgAttr.fill "currentColor"
-                                    , SvgAttr.class "flex-shrink-0 w-6 h-6 dark:text-violet-400"
+                                , p
+                                    [ class "font-semibold text-gray-400 text-left pt-5"
                                     ]
-                                    [ path
-                                        [ SvgAttr.fillRule "evenodd"
-                                        , SvgAttr.d "M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                                        , SvgAttr.clipRule "evenodd"
+                                    [ span
+                                        [ class "material-icons align-middle"
                                         ]
-                                        []
-                                    ]
-                                , span []
-                                    [ text "Duis odio eros" ]
-                                ]
-                            , li
-                                [ Attr.class "flex items-start space-x-2"
-                                ]
-                                [ svg
-                                    [ SvgAttr.viewBox "0 0 20 20"
-                                    , SvgAttr.fill "currentColor"
-                                    , SvgAttr.class "flex-shrink-0 w-6 h-6 dark:text-violet-400"
-                                    ]
-                                    [ path
-                                        [ SvgAttr.fillRule "evenodd"
-                                        , SvgAttr.d "M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                                        , SvgAttr.clipRule "evenodd"
+                                        [ text "done" ]
+                                    , span
+                                        [ class "pl-2"
                                         ]
-                                        []
+                                        [ text "Flexible"
+                                        , span
+                                            [ class "text-white"
+                                            ]
+                                            [ text "call scheduling" ]
+                                        ]
                                     ]
-                                , span []
-                                    [ text "Vivamus ut lectus ex" ]
+                                , p
+                                    [ class "font-semibold text-gray-400 text-left pt-5"
+                                    ]
+                                    [ span
+                                        [ class "material-icons align-middle"
+                                        ]
+                                        [ text "done" ]
+                                    , span
+                                        [ class "pl-2"
+                                        ]
+                                        [ span
+                                            [ class "text-white"
+                                            ]
+                                            [ text "15 TB" ]
+                                        , text "cloud storage"
+                                        ]
+                                    ]
+                                , a
+                                    [ href "#"
+                                    , class ""
+                                    ]
+                                    [ p
+                                        [ class "w-full py-4 bg-[#A78BFA] mt-8 rounded-xl text-white"
+                                        ]
+                                        [ span
+                                            [ class "font-medium"
+                                            ]
+                                            [ text "Choose Plan" ]
+                                        , span
+                                            [ class "pl-2 material-icons align-middle text-sm"
+                                            ]
+                                            [ text "east" ]
+                                        ]
+                                    ]
+                                ]
+                            , div
+                                [ class "absolute top-4 right-4"
+                                ]
+                                [ p
+                                    [ class "bg-[#8419FF] font-semibold px-4 py-1 rounded-full uppercase text-xs"
+                                    ]
+                                    [ text "Popular" ]
                                 ]
                             ]
-                        , a
-                            [ Attr.rel "noopener noreferrer"
-                            , Attr.href "#"
-                            , Attr.class "inline-block w-full px-5 py-3 font-semibold tracking-wider text-center rounded dark:bg-violet-400 dark:text-gray-900"
+                        , {- Enterprise Card -}
+                          div
+                            [ class "w-96 p-8 bg-white text-center rounded-3xl pl-16 shadow-xl"
                             ]
-                            [ text "Get Started" ]
+                            [ h1
+                                [ class "text-black font-semibold text-2xl"
+                                ]
+                                [ text "Enterprise" ]
+                            , p
+                                [ class "pt-2 tracking-wide"
+                                ]
+                                [ span
+                                    [ class "text-gray-400 align-top"
+                                    ]
+                                    [ text "$" ]
+                                , span
+                                    [ class "text-3xl font-semibold"
+                                    ]
+                                    [ text "35" ]
+                                , span
+                                    [ class "text-gray-400 font-medium"
+                                    ]
+                                    [ text "/ user" ]
+                                ]
+                            , hr
+                                [ class "mt-4 border-1"
+                                ]
+                                []
+                            , div
+                                [ class "pt-8"
+                                ]
+                                [ p
+                                    [ class "font-semibold text-gray-400 text-left"
+                                    ]
+                                    [ span
+                                        [ class "material-icons align-middle"
+                                        ]
+                                        [ text "done" ]
+                                    , span
+                                        [ class "pl-2"
+                                        ]
+                                        [ text "All features in"
+                                        , span
+                                            [ class "text-black"
+                                            ]
+                                            [ text "Startup" ]
+                                        ]
+                                    ]
+                                , p
+                                    [ class "font-semibold text-gray-400 text-left pt-5"
+                                    ]
+                                    [ span
+                                        [ class "material-icons align-middle"
+                                        ]
+                                        [ text "done" ]
+                                    , span
+                                        [ class "pl-2"
+                                        ]
+                                        [ text "Growth"
+                                        , span
+                                            [ class "text-black"
+                                            ]
+                                            [ text "oriented" ]
+                                        ]
+                                    ]
+                                , p
+                                    [ class "font-semibold text-gray-400 text-left pt-5"
+                                    ]
+                                    [ span
+                                        [ class "material-icons align-middle"
+                                        ]
+                                        [ text "done" ]
+                                    , span
+                                        [ class "pl-2"
+                                        ]
+                                        [ span
+                                            [ class "text-black"
+                                            ]
+                                            [ text "Unlimited" ]
+                                        , text "cloud storage"
+                                        ]
+                                    ]
+                                , a
+                                    [ href "#"
+                                    , class ""
+                                    ]
+                                    [ p
+                                        [ class "w-full py-4 bg-[#A78BFA] mt-8 rounded-xl text-white"
+                                        ]
+                                        [ span
+                                            [ class "font-medium"
+                                            ]
+                                            [ text "Choose Plan" ]
+                                        , span
+                                            [ class "pl-2 material-icons align-middle text-sm"
+                                            ]
+                                            [ text "east" ]
+                                        ]
+                                    ]
+                                ]
+                            ]
                         ]
                     ]
                 ]
             ]
         ]
-    
+
 
 init : () -> ( Model, Cmd Msg )
 init _ =
