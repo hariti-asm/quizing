@@ -127,8 +127,9 @@ viewQuizTable quizzes =
                     [ div
                         [ class "w-full md:w-6/12 px-4 mx-auto text-center"
                         ]
-                        [ button
+                        [ a
                             [ class "text-sm text-blueGray-500 font-semibold py-1 font-bold text-5xl"
+                            , href "/add"
                             ]
                             [ text "Add your Quiz"
                             ]

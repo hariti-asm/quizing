@@ -10,7 +10,7 @@ import Html.Attributes exposing (class, href)
 import Json.Decode exposing (Value)
 import Json.Encode as E
 import Pricing exposing (..)
-import Quizes exposing (Msg, init, update, view)
+import Quizes exposing (Msg, init, quizes, update, view)
 import Url exposing (Url)
 import Url.Parser as UrlParser
 
@@ -282,77 +282,43 @@ viewPage page =
     case page of
         HomePage ->
             div
-                [ class "bg-[#111B27] min-h-screen"
-                ]
-                [ div
-                    [ class "flex text-2xl justify-end font-bold p-3 h-16 text-gray-900  bg-violet-400"
-                    ]
-                    [ h1
-                        [ class "mt-4"
-                        ]
-                        [ text "Home"
-                        ]
+                [ class "bg-[#111B27] min-h-screen" ]
+                [ div [ class "flex text-2xl justify-end font-semibold p-3 h-24 text-gray-900  bg-violet-400  " ]
+                    [ h1 [ class "mt-4" ]
+                        [ text "Home" ]
                     , a
-                        [ href "/about"
-                        , class "mt-4 px-10"
-                        ]
-                        [ text "About"
-                        ]
+                        [ href "/about", class "mt-4 px-10" ]
+                        [ text "About" ]
                     , a
-                        [ href "/pricing"
-                        , class "mt-4 px-10"
-                        ]
-                        [ text "Pricing"
-                        ]
+                        [ href "/pricing", class "mt-4 px-10" ]
+                        [ text "Pricing" ]
                     ]
                 , section [ class "px-6 pt-8 pb-12 sm:pt-20 md:pb-16 lg:pb-0 2xl:pt-28" ]
                     [ div [ class "container flex flex-col justify-center mx-auto lg:flex-row lg:justify-between" ]
-                        [ div
-                            [ class "flex flex-col justify-center " ]
-                            div
-                            [ class "flex flex-col justify-center p-6 text-center rounded-sm lg:flex-1 lg:max-w-xl lg:text-left bg-white sm:bg-[#111B27] "
-                            ]
-                            [ h1
-                                [ class "text-5xl font-bold leading-none sm:text-7xl"
-                                ]
-                                [ text " Kickstart your next"
-                                , span
-                                    [ class "text-violet-400"
+                        [ div [ class "flex flex-col justify-center" ]
+                            [ div [ class "flex flex-col justify-center p-6 text-center rounded-sm lg:flex-1 lg:max-w-xl lg:text-left  sm:bg-[#111B27] " ]
+                                [ h1 [ class "text-5xl font-bold leading-none sm:text-7xl text-white" ]
+                                    [ text " Kickstart your next"
+                                    , span [ class "text-violet-400 pl-4" ]
+                                        [ text "quizzes" ]
+                                    , span
+                                        []
+                                        [ text " in minute" ]
                                     ]
-                                    [ text "websites"
-                                    ]
-                                , span
-                                    []
-                                    [ text " in minute"
-                                    ]
-                                ]
-                            , p
-                                [ class "mt-6 mb-8 text-lg sm:mb-12"
-                                ]
-                                [ text "Mamba UI is a free, open-source collection of UI components"
-                                ]
-                            , br
-                                [ class "hidden md:inline"
-                                ]
-                                [ text "and templates based on Tailwind CSS."
-                                ]
-                            , div
-                                [ class "flex-1"
-                                ]
-                                [ div
-                                    [ class "flex gap-24"
-                                    ]
-                                    [ a
-                                        [ href "/quizes"
-                                        , class "text-center font-semibold italic text-gray-900 bg-[#A78BFA] h-16 w-full max-w-[250px] text-xl rounded-lg flex items-center justify-center"
-                                        ]
-                                        [ text "Make Quiz !"
-                                        ]
-                                    , a
-                                        [ href "/evaluate"
-                                        , class "text-center font-semibold italic text-gray-900 bg-[#A78BFA] h-16 w-full max-w-[250px] text-xl rounded-lg flex items-center justify-center"
-                                        ]
-                                        [ text "Get Quiz !"
+                                , p
+                                    [ class "mt-6 mb-8 text-2xl text-white sm:mb-12" ]
+                                    [ text "Quizy is a free, open-source collection of UI components" ]
+                                , br
+                                    [ class "hidden md:inline" ]
+                                    [ text "and templates based on Tailwind CSS." ]
+                                , div
+                                    [ class "flex-1  sm:flex-col  " ]
+                                    [ div [ class "flex gap-28   " ]
+                                        [ a [ href "/quizes", class "text-center font-semibold italic text-gray-900 bg-[#A78BFA] h-16 w-full max-w-[250px] text-xl rounded-lg flex items-center justify-center md:flex-none" ]
+                                            [ text "Make Quiz !" ]
+                                        , a
+                                            [ href "/evaluate", class "text-center font-semibold italic text-gray-900 bg-[#A78BFA] h-16 w-full max-w-[250px] text-xl rounded-lg flex items-center justify-center md:flex-none" ]
+                                            [ text "Get Quiz !" ]
                                         ]
                                     ]
                                 ]
