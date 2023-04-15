@@ -281,24 +281,28 @@ viewPage : Page -> Html Msg
 viewPage page =
     case page of
         HomePage ->
-            div [ class "    " ]
-                [ div [ class "  flex text-xl justify-end italic h-16 text-[#FFFFFF] bg-[#111B27]" ]
-                    [ h1 [ class "  mt-4  " ] [ text "Home" ]
-                    , a [ href "/about", class "mt-4  px-10" ] [ text "About" ]
+            div [ class "flex flex-col min-h-screen" ]
+                [ div [ class "flex text-2xl justify-end font-bold p-3 h-16 text-gray-900  bg-violet-400" ]
+                    [ h1 [ class "mt-4" ] [ text "Home" ]
+                    , a [ href "/about", class "mt-4 px-10" ] [ text "About" ]
                     , a [ href "/pricing", class "mt-4 px-10" ] [ text "Pricing" ]
                     ]
-                , div [ class "bg-black  " ]
-                    [ div [ class " flex " ]
-                        [ a
-                            [ href "/quizes"
-                            , class " text-center  font-semibold italic text-[#FFFFFF] bg-[#8419FF] h-16 w-full max-w-[250px] text-xl rounded-lg flex  items-center  justify-center   "
+                , div [ class "flex flex-col justify-center p-6 text-center rounded-sm lg:flex-1 lg:max-w-xl lg:text-left bg-[#111B27]" ]
+                    [ h1
+                        [ class "text-5xl font-bold leading-none sm:text-7xl" ]
+                        [ text " Kickstart your next" ]
+                    , span [ class "text-violet-400" ] [ text "websites" ]
+                    , span [] [ text " in minute" ]
+                    , p [ class "mt-6 mb-8 text-lg sm:mb-12" ] [ text "Mamba UI is a free, open-source collection of UI components" ]
+                    , br [ class "hidden md:inline" ] [ text "and templates based on Tailwind CSS." ]
+                    , div [ class "flex-1 " ]
+                        [ div [ class "flex gap-24" ]
+                            [ a [ href "/quizes", class "text-center font-semibold italic text-gray-900 bg-[#A78BFA] h-16 w-full max-w-[250px] text-xl rounded-lg flex items-center justify-center" ]
+                                [ text "Make Quiz !" ]
+                            , a
+                                [ href "/evaluate", class "text-center font-semibold italic text-gray-900 bg-[#A78BFA] h-16 w-full max-w-[250px] text-xl rounded-lg flex items-center justify-center" ]
+                                [ text "Get Quiz !" ]
                             ]
-                            [ text "Make Quiz !" ]
-                        , a
-                            [ href "/evaluate"
-                            , class " text-center  font-semibold italic text-[#FFFFFF] bg-[#8419FF] h-16 w-full max-w-[250px] text-xl rounded-lg flex  items-center  justify-center   "
-                            ]
-                            [ text "Get Quiz !" ]
                         ]
                     ]
                 ]
