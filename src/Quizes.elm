@@ -58,12 +58,14 @@ viewQuizTable quizzes =
     let
         viewQuizRow quiz =
             tr []
-                [ td [ class "px-6 py-4" ] [ text <| String.fromInt quiz.id ]
-                , td [ class "px-6 py-4" ] [ text quiz.subject ]
+                [ td [ class "px-6 py-4 text-xm " ] [ text <| String.fromInt quiz.id ]
+                , td [ class "px-6 py-4 text-xm" ] [ text quiz.subject ]
                 , td [ class "px-6 py-4" ]
-                    [ button [] [ text "View" ]
+                    [ a [ href "/evaluate", class " focus:outline-none focus:text-indigo-600  w-14 bg-[#A78BFA]  text-md py-3 rounded-sm px-4 cursor-pointer hover:text-white" ] [ text "View" ]
                     ]
-                , td [ class " px-6 py-4" ] [ button [] [ text "Edit" ] ]
+                , td [ class " px-6 py-4  " ]
+                    [ a [ href "", class " focus:outline-none focus:text-indigo-600 text-m w-14 bg-[#A78BFA]  py-3 rounded-sm px-4 cursor-pointer hover:text-white" ] [ text "Edit" ]
+                    ]
                 ]
     in
     div
@@ -102,13 +104,13 @@ viewQuizTable quizzes =
                                     [ text "View" ]
                                 , th
                                     [ scope "col"
-                                    , class "px-6 py-4"
+                                    , class "px-6 py-4 focus:outline-none focus:text-indigo-600 "
                                     ]
                                     [ text "Edit" ]
                                 ]
                             ]
                         , tbody
-                            [ class "border-b transition px-6 py-4 duration-300 ease-in-out hover:bg-neutral-100 dark:border-neutral-500 dark:hover:bg-neutral-600"
+                            [ class "border-b transition px-6 py-4 duration-300 ease-in-out dark:border-neutral-500 dark:hover:bg-neutral-600"
                             ]
                             (List.map viewQuizRow quizzes)
                         ]
@@ -128,7 +130,7 @@ viewQuizTable quizzes =
                         [ class "w-full md:w-6/12 px-4 mx-auto text-center"
                         ]
                         [ a
-                            [ class "text-sm text-blueGray-500 font-semibold py-1 font-bold text-5xl"
+                            [ class "text-center font-semibold italic text-gray-900 bg-[#A78BFA] h-16 w-full max-w-[250px] text-xl  e rounded-lg flex items-center justify-center md:flex-none m-auto"
                             , href "/add"
                             ]
                             [ text "Add your Quiz"
