@@ -308,10 +308,7 @@ viewPage page =
 
                                 -- , -- hamburger menu icon here
                                 ]
-                            ]
-                        ]
-                    ]
-                , div
+                                 , div
                     [ class "hidden md:block md:flex md:items-center md:justify-end md:px-10" ]
                     [ ul [ class "flex flex-col md:flex-row list-none md:ml-auto" ]
                         [ li [ class "mt-4" ] [ a [ href "#" ] [ text "Home" ] ]
@@ -319,6 +316,10 @@ viewPage page =
                         , li [ class "mt-4 px-10" ] [ a [ href "/pricing" ] [ text "Pricing" ] ]
                         ]
                     ]
+                            ]
+                        ]
+                    ]
+               
                 , section
                     [ class "px-6 pt-8 pb-12 sm:pt-20 md:pb-16 lg:pb-0 2xl:pt-28" ]
                     [ div [ class "container flex flex-col justify-center mx-auto lg:flex-row lg:justify-between" ]
