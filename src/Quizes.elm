@@ -57,7 +57,7 @@ quizes =
 viewQuizTable quizzes =
     let
         viewQuizRow quiz =
-            tr []
+            tr [ class "" ]
                 [ td [ class "px-6 py-4 text-xm " ] [ text <| String.fromInt quiz.id ]
                 , td [ class "px-6 py-4 text-xm" ] [ text quiz.subject ]
                 , td [ class "px-6 py-4" ]
@@ -69,7 +69,7 @@ viewQuizTable quizzes =
                 ]
     in
     div
-        [ class "flex flex-col"
+        [ class "flex flex-col "
         ]
         [ div
             [ class "overflow-x-auto sm:-mx-6 lg:-mx-8"

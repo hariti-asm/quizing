@@ -13,11 +13,14 @@ import Pricing exposing (..)
 import Quizes exposing (Msg, init, quizes, update, view)
 import Url exposing (Url)
 import Url.Parser as UrlParser
+import Html.Attributes exposing (classList)
+import Html.Events exposing (onClick)
 
 
 type alias Model =
     { key : Nav.Key
     , page : Page
+    , isMenuOpen : Bool
     }
 
 
@@ -47,6 +50,7 @@ type Msg
     | EvaluateMsg Evaluate.Msg
     | QuizesMsg Quizes.Msg
     | PricingMsg Pricing.Msg
+    | ToggleMenu
 
 
 main : Program Value Model Msg
@@ -130,12 +134,15 @@ init flags url key =
         ( page, cmd ) =
             url |> urlToRoute |> routeToPage flags
     in
-    ( { key = key, page = page }, cmd )
+    ( { key = key, page = page, isMenuOpen = False }, cmd )
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
+        ToggleMenu ->
+            ( { model | isMenuOpen = not model.isMenuOpen }, Cmd.none )
+
         ClickedLink urlRequest ->
             case urlRequest of
                 Internal url ->
@@ -284,7 +291,50 @@ viewPage page =
             div
                 [ class "bg-[#111B27] min-h-screen" ]
                 [ div [ class "flex text-2xl justify-end font-semibold p-3 h-24 text-gray-900  bg-violet-400  " ]
-                    [ h1 [ class "mt-4" ]
+                    -- [ div
+                    --     [ class "space-y-2"
+                    --     ]
+                    --     [ div
+                    --         [ class "w-8 h-0.5 bg-gray-600"
+                    --         ]
+                    --         []
+                    --     , div
+                    --         [ class "w-8 h-0.5 bg-gray-600"
+                    --         ]
+                    --         []
+                    --     , div
+                    --         [ class "w-8 h-0.5 bg-gray-600"
+                    --         ]
+                    --         []
+                    --     ]
+                    [ nav [ class "flex items-center justify-between flex-wrap bg-gray-800 p-6" ]
+        [ h1 [ class "flex items-center text-white text-xl font-bold" ]
+            [ text "My Website" ]
+        , button
+            [ classList
+                [ ("flex md:hidden items-center px-3 py-2 border rounded text-gray-200 border-gray-400 hover:text-white hover:border-white", True)
+                , ("menu-icon", True)
+                ]
+            , onClick ToggleMenu
+            ]
+            [ span [ class "sr-only" ] [ text "Toggle menu" ]
+            -- , svg
+            --     [ class "h-6 w-6 fill-current" ]
+            --     [ path [ d "M0 0h6v6H0zM0 10h6v6H0zM0 20h6v6H0z" ]
+                ]
+             ]
+        , ul
+            [ classList
+                [ ("menu md:flex md:items-center md:justify-end text-base pt-4 md:pt-0", True)
+                , ("hidden", model.isMenuOpen)
+                ]
+            ]
+            [ li [ class "text-gray-300 hover:text-white px-4 py-2" ] [ a [ href "#" ] [ text "Home" ] ]
+            , li [ class "text-gray-300 hover:text-white px-4 py-2" ] [ a [ href "#" ] [ text "About" ] ]
+            , li [ class "text-gray-300 hover:text-white px-4 py-2" ] [ a [ href "#" ] [ text "Pricing" ] ]
+            ]
+        ]]
+                    , h1 [ class "mt-4" ]
                         [ text "Home" ]
                     , a
                         [ href "/about", class "mt-4 px-10" ]

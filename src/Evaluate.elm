@@ -335,7 +335,9 @@ view model =
             (List.indexedMap (\index question -> questionView index question) model.questions)
         , div
             [ class "flex gap-8" ]
-            [ button [ onClick PreviousQuestion ] [ text "Go back home" ]
+            [ a
+                [ href "/home", class "text-center font-semibold italic text-gray-900 bg-[#A78BFA] h-16 w-full max-w-[250px] text-xl rounded-lg flex items-center justify-center md:flex-none" ]
+                [ text "Go back home" ]
             , button [ onClick NextQuestion ] [ text "+" ]
             ]
         ]
