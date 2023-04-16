@@ -6,15 +6,14 @@ import Browser exposing (Document, UrlRequest(..))
 import Browser.Navigation as Nav
 import Evaluate exposing (..)
 import Html exposing (..)
-import Html.Attributes exposing (class, href)
+import Html.Attributes exposing (class, classList, href, type_)
+import Html.Events exposing (onClick)
 import Json.Decode exposing (Value)
 import Json.Encode as E
 import Pricing exposing (..)
 import Quizes exposing (Msg, init, quizes, update, view)
 import Url exposing (Url)
 import Url.Parser as UrlParser
-import Html.Attributes exposing (classList)
-import Html.Events exposing (onClick)
 
 
 type alias Model =
@@ -290,60 +289,38 @@ viewPage page =
         HomePage ->
             div
                 [ class "bg-[#111B27] min-h-screen" ]
-                [ div [ class "flex text-2xl justify-end font-semibold p-3 h-24 text-gray-900  bg-violet-400  " ]
-                    -- [ div
-                    --     [ class "space-y-2"
-                    --     ]
-                    --     [ div
-                    --         [ class "w-8 h-0.5 bg-gray-600"
-                    --         ]
-                    --         []
-                    --     , div
-                    --         [ class "w-8 h-0.5 bg-gray-600"
-                    --         ]
-                    --         []
-                    --     , div
-                    --         [ class "w-8 h-0.5 bg-gray-600"
-                    --         ]
-                    --         []
-                    --     ]
-                    [ nav [ class "flex items-center justify-between flex-wrap bg-gray-800 p-6" ]
-        [ h1 [ class "flex items-center text-white text-xl font-bold" ]
-            [ text "My Website" ]
-        , button
-            [ classList
-                [ ("flex md:hidden items-center px-3 py-2 border rounded text-gray-200 border-gray-400 hover:text-white hover:border-white", True)
-                , ("menu-icon", True)
-                ]
-            , onClick ToggleMenu
-            ]
-            [ span [ class "sr-only" ] [ text "Toggle menu" ]
-            -- , svg
-            --     [ class "h-6 w-6 fill-current" ]
-            --     [ path [ d "M0 0h6v6H0zM0 10h6v6H0zM0 20h6v6H0z" ]
-                ]
-             ]
-        , ul
-            [ classList
-                [ ("menu md:flex md:items-center md:justify-end text-base pt-4 md:pt-0", True)
-                , ("hidden", model.isMenuOpen)
-                ]
-            ]
-            [ li [ class "text-gray-300 hover:text-white px-4 py-2" ] [ a [ href "#" ] [ text "Home" ] ]
-            , li [ class "text-gray-300 hover:text-white px-4 py-2" ] [ a [ href "#" ] [ text "About" ] ]
-            , li [ class "text-gray-300 hover:text-white px-4 py-2" ] [ a [ href "#" ] [ text "Pricing" ] ]
-            ]
-        ]]
-                    , h1 [ class "mt-4" ]
-                        [ text "Home" ]
-                    , a
-                        [ href "/about", class "mt-4 px-10" ]
-                        [ text "About" ]
-                    , a
-                        [ href "/pricing", class "mt-4 px-10" ]
-                        [ text "Pricing" ]
+                [ nav
+                    [ class "bg-gray-800 shadow" ]
+                    [ div
+                        [ class "px-4 mx-auto max-w-7xl sm:px-6 lg:px-8" ]
+                        [ div
+                            [ class "flex items-center justify-between h-16" ]
+                            [ h1 [ class "text-white text-xl font-bold" ]
+                                [ text "Logo" ]
+                            , div
+                                [ class "flex -mr-2 md:hidden" ]
+                                [ button
+                                    [ class "inline-flex items-center justify-center p-2 text-gray-400 rounded-md hover:text-white hover:bg-gray-700 focus:outline-none focus:bg-gray-700 focus:text-white transition duration-150 ease-in-out"
+                                    , type_ "button"
+                                    , onClick ToggleMenu
+                                    ]
+                                    [ span [ class "sr-only" ] [ text "Open main menu" ] ]
+
+                                -- , -- hamburger menu icon here
+                                ]
+                            ]
+                        ]
                     ]
-                , section [ class "px-6 pt-8 pb-12 sm:pt-20 md:pb-16 lg:pb-0 2xl:pt-28" ]
+                , div
+                    [ class "hidden md:block md:flex md:items-center md:justify-end md:px-10" ]
+                    [ ul [ class "flex flex-col md:flex-row list-none md:ml-auto" ]
+                        [ li [ class "mt-4" ] [ a [ href "#" ] [ text "Home" ] ]
+                        , li [ class "mt-4 px-10" ] [ a [ href "/about" ] [ text "About" ] ]
+                        , li [ class "mt-4 px-10" ] [ a [ href "/pricing" ] [ text "Pricing" ] ]
+                        ]
+                    ]
+                , section
+                    [ class "px-6 pt-8 pb-12 sm:pt-20 md:pb-16 lg:pb-0 2xl:pt-28" ]
                     [ div [ class "container flex flex-col justify-center mx-auto lg:flex-row lg:justify-between" ]
                         [ div [ class "flex flex-col justify-center" ]
                             [ div [ class "flex flex-col justify-center p-6 text-center rounded-sm lg:flex-1 lg:max-w-xl lg:text-left  sm:bg-[#111B27] " ]
@@ -361,15 +338,15 @@ viewPage page =
                                 , br
                                     [ class "hidden md:inline" ]
                                     [ text "and templates based on Tailwind CSS." ]
-                                , div
-                                    [ class "flex-1  sm:flex-col  " ]
-                                    [ div [ class "flex gap-28   " ]
-                                        [ a [ href "/quizes", class "text-center font-semibold italic text-gray-900 bg-[#A78BFA] h-16 w-full max-w-[250px] text-xl rounded-lg flex items-center justify-center md:flex-none" ]
-                                            [ text "Make Quiz !" ]
-                                        , a
-                                            [ href "/evaluate", class "text-center font-semibold italic text-gray-900 bg-[#A78BFA] h-16 w-full max-w-[250px] text-xl rounded-lg flex items-center justify-center md:flex-none" ]
-                                            [ text "Get Quiz !" ]
-                                        ]
+                                ]
+                            , div
+                                [ class "flex-1  sm:flex-col  " ]
+                                [ div [ class "flex gap-28   " ]
+                                    [ a [ href "/quizes", class "text-center font-semibold italic text-gray-900 bg-[#A78BFA] h-16 w-full max-w-[250px] text-xl rounded-lg flex items-center justify-center md:flex-none" ]
+                                        [ text "Make Quiz !" ]
+                                    , a
+                                        [ href "/evaluate", class "text-center font-semibold italic text-gray-900 bg-[#A78BFA] h-16 w-full max-w-[250px] text-xl rounded-lg flex items-center justify-center md:flex-none" ]
+                                        [ text "Get Quiz !" ]
                                     ]
                                 ]
                             ]
