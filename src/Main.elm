@@ -290,12 +290,12 @@ viewPage page =
             div
                 [ class "bg-[#111B27]  min-h-screen" ]
                 [ nav
-                    [ class "bg-[#A78BFA] shadow h-20 " ]
+                    [ class "bg-[#A78BFA] shadow h-24 " ]
                     [ div
-                        [ class "px-4 mx-auto max-w-7xl sm:px-6 lg:px-8" ]
+                        [ class "" ]
                         [ div
                             [ class "flex items-center justify-between h-16" ]
-                            [ h1 [ class "text-white text-xl font-bold" ]
+                            [ h1 [ class "text-white text-xl font-bold mt-6" ]
                                 [ text "Menu" ]
                             , div
                                 [ class "flex -mr-2 md:hidden" ]
@@ -310,10 +310,10 @@ viewPage page =
                                 ]
                             , div
                                 [ class "hidden md:block md:flex md:items-center  md:px-10 " ]
-                                [ ul [ class " flex flex-col md:flex-row list-none md:ml-auto text-2xl font-bold  lg:justify-end" ]
-                                    [ li [ class "mt-4 px-10 mt-2 " ] [ a [ href "#" ] [ text "Home" ] ]
-                                    , li [ class "mt-4 px-10 mt-2" ] [ a [ href "/about" ] [ text "About" ] ]
-                                    , li [ class "mt-4 px-10 mt-2" ] [ a [ href "/pricing" ] [ text "Pricing" ] ]
+                                [ ul [ class " flex flex-col md:flex-row list-none md:ml-auto text-2xl font-semibold  lg:justify-end" ]
+                                    [ li [ class "mt-6 px-10  " ] [ a [ href "#" ] [ text "Home" ] ]
+                                    , li [ class "mt-6 px-10" ] [ a [ href "/about" ] [ text "About" ] ]
+                                    , li [ class "mt-6 px-10 " ] [ a [ href "/pricing" ] [ text "Pricing" ] ]
                                     ]
                                 ]
                             ]
@@ -330,11 +330,11 @@ viewPage page =
                                         [ text "quizzes" ]
                                     , span
                                         []
-                                        [ text " in minute" ]
+                                        [ text " in minutes" ]
                                     ]
                                 , p
                                     [ class "mt-6 mb-8 text-2xl text-white sm:mb-12" ]
-                                    [ text "Quizy is a free, open-source collection of UI components" ]
+                                    [ text "Quizy is an easy application, make , pass your exams and get higher ." ]
                                 , br
                                     [ class "hidden md:inline" ]
                                     [ text "and templates based on Tailwind CSS." ]
