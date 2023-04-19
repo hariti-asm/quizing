@@ -16,7 +16,7 @@ const flas = JSON.parse(localStorage.getItem("model")) || {};
 const app = Elm.Main.init({ node: root, flags: flas });
 
 console.log("initilizing app with flags: ", flas);
-app.ports.storeModel2.subscribe(function (model) {
+app.ports.storeModel.subscribe(function (model) {
   console.log("saving model...");
   localStorage.setItem("model", JSON.stringify(model));
 });

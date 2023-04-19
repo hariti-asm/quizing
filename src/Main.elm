@@ -288,38 +288,37 @@ viewPage page =
     case page of
         HomePage ->
             div
-                [ class "bg-[#111B27] min-h-screen" ]
+                [ class "bg-[#111B27]  min-h-screen" ]
                 [ nav
-                    [ class "bg-gray-800 shadow" ]
+                    [ class "bg-[#A78BFA] shadow h-20 " ]
                     [ div
                         [ class "px-4 mx-auto max-w-7xl sm:px-6 lg:px-8" ]
                         [ div
                             [ class "flex items-center justify-between h-16" ]
                             [ h1 [ class "text-white text-xl font-bold" ]
-                                [ text "Logo" ]
+                                [ text "Menu" ]
                             , div
                                 [ class "flex -mr-2 md:hidden" ]
                                 [ button
-                                    [ class "inline-flex items-center justify-center p-2 text-gray-400 rounded-md hover:text-white hover:bg-gray-700 focus:outline-none focus:bg-gray-700 focus:text-white transition duration-150 ease-in-out"
+                                    [ class "inline-flex items-center justify-end  text-gray-400 rounded-md hover:text-white hover:bg-gray-700 focus:outline-none focus:bg-gray-700 focus:text-white transition duration-150 ease-in-out"
                                     , type_ "button"
                                     , onClick ToggleMenu
                                     ]
-                                    [ span [ class "sr-only" ] [ text "Open main menu" ] ]
+                                    []
 
                                 -- , -- hamburger menu icon here
                                 ]
-                                 , div
-                    [ class "hidden md:block md:flex md:items-center md:justify-end md:px-10" ]
-                    [ ul [ class "flex flex-col md:flex-row list-none md:ml-auto" ]
-                        [ li [ class "mt-4" ] [ a [ href "#" ] [ text "Home" ] ]
-                        , li [ class "mt-4 px-10" ] [ a [ href "/about" ] [ text "About" ] ]
-                        , li [ class "mt-4 px-10" ] [ a [ href "/pricing" ] [ text "Pricing" ] ]
-                        ]
-                    ]
+                            , div
+                                [ class "hidden md:block md:flex md:items-center  md:px-10 " ]
+                                [ ul [ class " flex flex-col md:flex-row list-none md:ml-auto text-2xl font-bold  lg:justify-end" ]
+                                    [ li [ class "mt-4 px-10 mt-2 " ] [ a [ href "#" ] [ text "Home" ] ]
+                                    , li [ class "mt-4 px-10 mt-2" ] [ a [ href "/about" ] [ text "About" ] ]
+                                    , li [ class "mt-4 px-10 mt-2" ] [ a [ href "/pricing" ] [ text "Pricing" ] ]
+                                    ]
+                                ]
                             ]
                         ]
                     ]
-               
                 , section
                     [ class "px-6 pt-8 pb-12 sm:pt-20 md:pb-16 lg:pb-0 2xl:pt-28" ]
                     [ div [ class "container flex flex-col justify-center mx-auto lg:flex-row lg:justify-between" ]

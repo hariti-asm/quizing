@@ -33,7 +33,7 @@ type alias Question =
 
 
 type alias Subject =
-    { id : Int, name : String }
+    { id : String, name : String }
 
 
 type alias Model =
@@ -42,9 +42,6 @@ type alias Model =
     , score : Int
     , newQuestion : Maybe Question
     }
-
-
-port saveModel : Encode.Value -> Cmd msg
 
 
 port storeModel : Encode.Value -> Cmd msg
@@ -57,7 +54,7 @@ emptyQuestion =
     , correctAnswer = ""
     , mark = 0
     , answers = []
-    , subject = { id = 0, name = "" }
+    , subject = { id = "", name = "" }
     }
 
 
@@ -242,14 +239,7 @@ init flags =
                     , newQuestion = Nothing
                     }
     in
-    ( initialModel, saveModel (encodeModel initialModel) )
-
-
-
--- n
--- emptyQuestionEncoder : Encode.Value
--- emptyQuestionEncoder =
---     questionEncoder emptyQuestion
+    ( initialModel, storeModel (encodeModel initialModel) )
 
 
 questionEncoder : Question -> Encode.Value
@@ -270,7 +260,7 @@ questionEncoder question =
 subjectEncoder : Subject -> Encode.Value
 subjectEncoder subject =
     Encode.object
-        [ ( "id", Encode.int subject.id )
+        [ ( "id", Encode.string subject.id )
         , ( "name", Encode.string subject.name )
         ]
 
@@ -291,7 +281,7 @@ subjectDecoder : Decoder Subject
 subjectDecoder =
     Decode.map2
         Subject
-        (Decode.field "id" Decode.int)
+        (Decode.field "id" Decode.string)
         (Decode.field "name" Decode.string)
 
 
@@ -343,7 +333,7 @@ view model =
         maybeQuestion =
             List.head (List.drop model.currentIndex model.questions)
     in
-    case maybeQuestion of
+    case model.newQuestion of
         Just question ->
             div [ class "flex flex-col " ]
                 [ div [ class "flex flex-col items-center " ]
@@ -451,7 +441,7 @@ view model =
             div [ class "flex flex-col items-center" ]
                 [ div [ class "text-center mt-64 font-semibold text-2xl italic" ]
                     [ text "No questions yet" ]
-                , div [ onClick StorageNewQ, class "text-center font-semibold italic text-white bg-purple-600 h-16 w-full max-w-[250px] text-xl rounded-lg flex items-center justify-center mt-[200px] w-full max-w-5xl" ]
+                , div [ onClick AddNewQuestion, class "text-center font-semibold italic text-white bg-purple-600 h-16 w-full max-w-[250px] text-xl rounded-lg flex items-center justify-center mt-[200px] w-full max-w-5xl" ]
                     [ text "Create One!" ]
                 ]
 
