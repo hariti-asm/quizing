@@ -340,8 +340,8 @@ viewPage page =
                                     [ text "and templates based on Tailwind CSS." ]
                                 ]
                             , div
-                                [ class "flex-1  sm:flex-col  " ]
-                                [ div [ class "flex gap-28   " ]
+                                [ class "flex-1    " ]
+                                [ div [ class "flex  gap-28   " ]
                                     [ a [ href "/quizes", class "text-center font-semibold italic text-gray-900 bg-[#A78BFA] h-16 w-full max-w-[250px] text-xl rounded-lg flex items-center justify-center md:flex-none" ]
                                         [ text "Make Quiz !" ]
                                     , a

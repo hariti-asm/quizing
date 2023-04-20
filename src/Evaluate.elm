@@ -334,11 +334,11 @@ view model =
           div [ class "flex flex-row " ]
             (List.indexedMap (\index question -> questionView index question) model.questions)
         , div
-            [ class "flex gap-8" ]
+            [ class "flex  gap-8" ]
             [ a
-                [ href "/home", class "text-center font-semibold italic text-gray-900 bg-[#A78BFA] h-16 w-full max-w-[250px] text-xl rounded-lg flex items-center justify-center md:flex-none" ]
-                [ text "Go back home" ]
-            , button [ onClick NextQuestion ] [ text "+" ]
+                [ href "/home", class "text-center font-semibold italic text-gray-900 bg-[#A78BFA] h-16 w-full max-w-[300px] text-xl rounded-lg flex items-center justify-center md:flex-none" ]
+                [ text "Go home" ]
+            , a [ href "/add", onClick NextQuestion, class " font-bold text-3xl mt-4 text-purple-500 " ] [ text "+" ]
             ]
         ]
 

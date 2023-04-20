@@ -1,8 +1,8 @@
 module Quizes exposing (..)
 
-import Html exposing (Html, a, button, div, footer, h3, i, node, section, table, tbody, td, text, th, thead, tr)
-import Html.Attributes exposing (class, href, rel, scope, target, type_)
-import Html.Events exposing (onClick)
+import Html exposing (Html, a, button, div, footer, h3, i, input, node, section, table, tbody, td, text, th, thead, tr)
+import Html.Attributes exposing (class, href, placeholder, rel, scope, target, type_)
+import Html.Events exposing (onClick, onInput)
 import Msg exposing (Msg)
 
 
@@ -14,34 +14,29 @@ type alias Quiz =
 
 type Msg
     = EditQuiz Int
-
-
-
--- quizes : List Quiz
--- quizes =
---     [ { id = 1, subject = "Mathematics" }
---     , { id = 2, subject = "Science" }
---     , { id = 3, subject = "History" }
---     , { id = 4, subject = "Physics" }
---     , { id = 5, subject = "Philosophy" }
---     ]
+    | QuizTitleInput String
 
 
 type alias Model =
     { quizes : List Quiz
+    , quizTitle : String
+    , editingQuizId : Maybe Int
     }
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
+        QuizTitleInput newquizTitle ->
+            ( model, Cmd.none )
+
         EditQuiz id ->
             ( model, Cmd.none )
 
 
 init : ( Model, Cmd Msg )
 init =
-    ( { quizes = quizes }, Cmd.none )
+    ( { quizes = quizes, quizTitle = "", editingQuizId = Nothing }, Cmd.none )
 
 
 quizes : List Quiz
@@ -107,6 +102,7 @@ viewQuizTable quizzes =
                                     , class "px-6 py-4 focus:outline-none focus:text-indigo-600 "
                                     ]
                                     [ text "Edit" ]
+                                , th [ scope "col", class "px-6 py-4" ] [ input [ type_ "text", placeholder "Quiz title", onInput QuizTitleInput ] [] ]
                                 ]
                             ]
                         , tbody
@@ -131,7 +127,7 @@ viewQuizTable quizzes =
                         ]
                         [ a
                             [ class "text-center font-semibold italic text-gray-900 bg-[#A78BFA] h-16 w-full max-w-[250px] text-xl  e rounded-lg flex items-center justify-center md:flex-none m-auto"
-                            , href "/add"
+                            , href ""
                             ]
                             [ text "Add your Quiz"
                             ]
